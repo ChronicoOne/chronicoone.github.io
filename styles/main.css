@@ -1,0 +1,58 @@
+
+
+html {
+	background-color: #000000;
+}
+
+main {
+	padding-left: 10pt; 
+}
+
+body {
+	background-color: #222222;
+	margin: 0;
+	padding: 0;
+	height: 100vh;
+}
+
+	        
+h1, h2{
+	color: #EEEEEE;
+}
+
+header {
+	
+	background-color: #000000;	
+}
+
+
+header h1{
+
+	text-align: center;	
+	color: white;
+	margin-top: 0pt;
+	font-size: 8vh;
+
+}
+
+p {
+	color: white;
+}
+
+.logo_main {
+	        height: 7%;
+	        position: absolute;
+	        right: 15pt;
+	        top: 5pt;	
+}
+
+@media (max-height: 500px) {
+	header h1{
+		font-size: 2.2em;	
+	}
+
+	.logo_main {
+		top: 3pt;
+		height: 25pt; 
+	}
+}
