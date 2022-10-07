@@ -5,7 +5,7 @@ html {
 }
 
 main {
-	padding-left: 10pt; 
+	padding-left: 10px; 
 }
 
 body {
@@ -42,8 +42,8 @@ p {
 .logo_main {
 	        height: 7%;
 	        position: absolute;
-	        right: 15pt;
-	        top: 5pt;	
+	        right: 15px;
+	        top: 5px;	
 }
 
 @media (max-height: 500px) {
@@ -52,8 +52,8 @@ p {
 	}
 
 	.logo_main {
-		top: 3pt;
-		height: 25pt; 
+		top: 3px;
+		height: 25px; 
 	}
 }
 
@@ -76,7 +76,7 @@ header nav li{
 
 header nav li a{
 	display: block;
-	padding: 8pt 16pt;
+	padding: 8px 16px;
 	color: #EEEEEE;
 	text-decoration: none;
 }
