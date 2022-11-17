@@ -38,7 +38,33 @@ header h1{
 }
 
 p {
-	color: white;
+	color: #EEEEEE;
+}
+
+p a {
+	color: #FF82C6;
+	text-decoration: underline;
+
+}
+
+p a:visited {
+	color: #CF5296; 
+}
+
+
+p a::after {
+	display: inline-block;
+	padding-left: 2px;
+	text-decoration: underline #82c3cb;
+	content: "⛴";
+}
+
+p a:hover {
+	color: #EEEEEE;
+}
+
+p a:hover::after {
+	text-decoration: underline #EEEEEE;
 }
 
 .logo_main {
@@ -85,4 +111,13 @@ header nav li a{
 
 header nav li a:hover{
 	background-color: #444444;
+}
+
+footer {
+	position: fixed;
+	background-color: #000000;
+	bottom: 0;
+	left: 0;
+	width: 100%;
+	text-align: center;
 }
