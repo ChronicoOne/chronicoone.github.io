@@ -1,17 +1,21 @@
-
+* {
+	font-family: serif;
+	font-size: 20px;
+}
 
 html {
 	margin: 0;
 	padding: 0;
-	background-color: #000000;
+	background-color: #222222;
 }
 
 main {
-	padding-left: 10px; 
+	margin-left: 120px;
+	padding-left: 25px;
 }
 
 body {
-	background-color: #222222;
+
 	margin: 0;
 	padding: 0;
 	height: 100vh;
@@ -20,6 +24,9 @@ body {
 	        
 h1, h2{
 	color: #EEEEEE;
+	font-size: 2em;
+	margin-top: 15px;
+	margin-bottom: 5px;
 }
 
 header {
@@ -85,31 +92,31 @@ p a:hover::after {
 	}
 }
 
-header nav{
-	margin: 0;
-	padding: 0;	
-	background-color: #2B2B2B;
+nav{
 }
 
-header nav ul{
+nav ul{
   list-style-type: none;
   margin: 0;
   padding: 0;
+  background-color: #2B2B2B;
+  position: fixed;
   overflow: hidden;  
+  height: 100%;
+  width: 120px;
 }
 
-header nav li{
-	float: left;
+nav li{
 }
 
-header nav li a{
+nav li a{
 	display: block;
-	padding: 8px 16px;
+	padding: 20px 20px;
 	color: #EEEEEE;
 	text-decoration: none;
 }
 
-header nav li a:hover{
+nav li a:hover{
 	background-color: #444444;
 }
 
@@ -120,4 +127,9 @@ footer {
 	left: 0;
 	width: 100%;
 	text-align: center;
+}
+
+footer p{
+	margin: 15px 0px;
+	font-size: 18px;
 }

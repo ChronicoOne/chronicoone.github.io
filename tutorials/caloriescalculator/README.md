@@ -5,4 +5,4 @@ This code is made to accompany a tutorial created by Connor Bowman, which is ava
 
 ## Data
 
-The "ABBREV.csv" file was [uploaded to Kaggle](https://www.kaggle.com/datasets/thedevastator/the-nutritional-content-of-food-a-comprehensive) by user The Devastator. It was originally compiled by United States Department of Agriculture.
+The "ABBREV.csv" file was [uploaded to Kaggle](https://www.kaggle.com/datasets/thedevastator/the-nutritional-content-of-food-a-comprehensive) by user The Devastator. It was originally compiled by the United States Department of Agriculture.
