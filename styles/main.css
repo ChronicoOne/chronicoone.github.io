@@ -10,15 +10,15 @@ html {
 }
 
 main {
+	margin-top: 3em;
 	margin-left: 120px;
+	padding-top: 15px;
 	padding-left: 25px;
 }
 
 body {
-
 	margin: 0;
 	padding: 0;
-	height: 100vh;
 }
 
 	        
@@ -30,17 +30,20 @@ h1, h2{
 }
 
 header {
-	
+	top: 0;
+	margin:0;
+	padding: 0;
 	background-color: #000000;	
+	position: fixed;
+	width: 100%;
 }
 
 
 header h1{
-
 	text-align: center;	
 	color: white;
 	margin: 0;
-	font-size: 8vh;
+	font-size: 3em;
 
 }
 
@@ -75,7 +78,7 @@ p a:hover::after {
 }
 
 .logo_main {
-	        height: 7%;
+	        height: 3em;
 	        position: absolute;
 	        right: 15px;
 	        top: 5px;	
@@ -93,20 +96,24 @@ p a:hover::after {
 }
 
 nav{
+
 }
 
 nav ul{
   list-style-type: none;
   margin: 0;
   padding: 0;
+  top: 0;
   background-color: #2B2B2B;
-  position: fixed;
+  float: left;
   overflow: hidden;  
   height: 100%;
   width: 120px;
+  position: fixed;
 }
 
-nav li{
+nav ul:first-child{
+	margin-top: calc(3em + 10px);
 }
 
 nav li a{
