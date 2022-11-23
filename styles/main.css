@@ -1,6 +1,7 @@
 * {
 	font-family: serif;
 	font-size: 20px;
+	color: #EEEEEE;
 }
 
 html {
@@ -11,9 +12,14 @@ html {
 
 main {
 	margin-top: 4em;
-	margin-left: 130px;
+	margin-left: 90px;
+	margin-right: 0px;
+	margin-bottom: 0;
 	padding-top: 15px;
 	padding-left: 25px;
+	padding-right: 25px;
+	padding-bottom: 55px;
+	min-height: calc(100vh - 4em - 130px);
 }
 
 body {
@@ -41,7 +47,7 @@ header {
 
 header h1{
 	text-align: center;	
-	color: white;
+	color: #EEEEEE;
 	margin: 0;
 	font-size: 4em;
 
@@ -84,17 +90,6 @@ p a:hover::after {
 	        top: 5px;	
 }
 
-@media (max-height: 500px) {
-	header h1{
-		font-size: 2.4em;	
-	}
-
-	.logo_main {
-		top: 3px;
-		height: 25px; 
-	}
-}
-
 nav{
 
 }
@@ -104,11 +99,11 @@ nav ul{
   margin: 0;
   padding: 0;
   top: 0;
-  background-color: #2B2B2B;
+  background-color: #000000;
   float: left;
   overflow: hidden;  
   height: 100%;
-  width: 130px;
+  width: 90px;
   position: fixed;
 }
 
@@ -118,10 +113,19 @@ nav ul:first-child{
 
 nav li a{
 	display: block;
-	padding: 20px 20px;
+	padding: 20px 0px;
 	color: #EEEEEE;
 	text-decoration: none;
-	font-size: 24px;
+	text-align: center;
+	font-size: 16px;
+}
+
+nav li a svg{
+	margin: 0px 20px 2px 20px;
+}
+
+.active{
+	background-color: #444444;
 }
 
 nav li a:hover{
@@ -129,7 +133,6 @@ nav li a:hover{
 }
 
 footer {
-	position: fixed;
 	background-color: #000000;
 	bottom: 0;
 	left: 0;
@@ -138,6 +141,45 @@ footer {
 }
 
 footer p{
-	margin: 15px 0px;
+	margin: 0 0 0 90px;
+	padding: 15px 0px;
 	font-size: 18px;
 }
+
+.article-body{
+	display: block;
+	background-color: #171717;
+	margin-top: 5px;
+	margin-bottom: 10px;
+	padding: 15px;
+}
+
+.article-head{
+	display: block;
+	background-color: #171717;
+	margin-top: -5px;
+	margin-bottom: 0px;
+	margin-left: -25px;
+	margin-right: -25px;
+	padding: 15px;
+}
+
+.article-desc{
+	display: block;
+	background-color: #1A1A1A;
+	margin-top: 0;
+	margin-left: -25px;
+	margin-right: -25px;
+	margin-bottom: 10px;
+	padding: 10px 15px 10px 15px;
+	
+}
+
+.article-body p{
+	margin-bottom: 0;
+}
+
+.article-body p:first-child{
+	margin-top: 0;
+}
+
