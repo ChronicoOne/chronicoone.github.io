@@ -11,7 +11,7 @@ html {
 }
 
 main {
-	margin-top: 4em;
+	margin-top: calc(4em + 12px);
 	margin-left: 90px;
 	margin-right: 0px;
 	margin-bottom: 0;
@@ -19,7 +19,7 @@ main {
 	padding-left: 25px;
 	padding-right: 25px;
 	padding-bottom: 55px;
-	min-height: calc(100vh - 4em - 130px);
+	min-height: calc(100vh - 4em - 140px);
 }
 
 body {
@@ -43,6 +43,7 @@ header {
 	position: fixed;
 	width: 100%;
 }
+
 
 
 header h1{
@@ -87,7 +88,8 @@ p a:hover::after {
 	        height: 4em;
 	        position: absolute;
 	        right: 15px;
-	        top: 5px;	
+	        top: 5px;
+			bottom: 5px;
 }
 
 nav{
@@ -133,17 +135,18 @@ nav li a:hover{
 }
 
 footer {
+	width: 100%;
 	background-color: #000000;
 	bottom: 0;
 	left: 0;
-	width: 100%;
 	text-align: center;
+
 }
 
 footer p{
-	margin: 0 0 0 90px;
-	padding: 15px 0px;
 	font-size: 18px;
+	margin: 0;
+	padding: 15px 0 15px 90px;
 }
 
 .article-body{
