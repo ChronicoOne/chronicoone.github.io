@@ -198,7 +198,7 @@
 									
 									if (score > highScore) {
 										highScore = score;
-										localStorage.setItem('highScore', '0');
+										localStorage.setItem('highScore', highScore.toString());
 										updateHighScore();
 									}
 									
