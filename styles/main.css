@@ -15,11 +15,11 @@ main {
 	margin-left: 90px;
 	margin-right: 0px;
 	margin-bottom: 0;
-	padding-top: 15px;
+	padding-top: 0px;
 	padding-left: 25px;
 	padding-right: 25px;
 	padding-bottom: 55px;
-	min-height: calc(100vh - 4em - 140px);
+	min-height: calc(100vh - 4em - 122px);
 }
 
 body {
@@ -56,12 +56,13 @@ header h1{
 
 p {
 	color: #EEEEEE;
+	font-size: 1em;
 }
 
 p a {
 	color: #FF82C6;
 	text-decoration: underline;
-
+	font-size: 1em;
 }
 
 p a:visited {
@@ -160,7 +161,7 @@ footer p{
 .article-head{
 	display: block;
 	background-color: #171717;
-	margin-top: -5px;
+	margin-top: 0px;
 	margin-bottom: 0px;
 	margin-left: -25px;
 	margin-right: -25px;

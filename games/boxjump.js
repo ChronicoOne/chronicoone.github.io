@@ -252,6 +252,7 @@
 		
 		document.addEventListener('pointerdown', (event) => {
 			startGrow();
+			trackMouse(event);
 		});
 		
 		document.addEventListener('pointerup', (event) => {
