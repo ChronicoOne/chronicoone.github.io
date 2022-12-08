@@ -180,7 +180,11 @@
 											fallingVerts[0].div.remove();
 											fallingVerts.shift();
 										}
+										
+										localStorage.setItem('highScore', highScore.toString());
+										
 										restart();
+										
 									}
 
 									if (health <= 0 || posX < -55 || posX > 55 || posY < -55 || posY > 55) { growing = false; running = false; }
@@ -198,7 +202,6 @@
 									
 									if (score > highScore) {
 										highScore = score;
-										localStorage.setItem('highScore', highScore.toString());
 										updateHighScore();
 									}
 									
