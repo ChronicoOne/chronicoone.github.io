@@ -1,7 +1,11 @@
-#Player {
-      -webkit-user-select: none; /* Safari */
+* {
+	  -webkit-user-select: none; /* Safari */
       -ms-user-select: none; /* IE 10 and IE 11 */
       user-select: none; /* Standard syntax */
+}
+
+#Player {
+
 	background-color:red;
 	display: block;
 	height: 10vh;
@@ -12,9 +16,6 @@
 }
 
 #Arrow {
-	-webkit-user-select: none; /* Safari */
-      -ms-user-select: none; /* IE 10 and IE 11 */
-      user-select: none; /* Standard syntax */
 	height: 20vh;
 	width: 20vh;
 	position: fixed;
@@ -51,9 +52,6 @@
 }
 
 .fallingVert {
-	-webkit-user-select: none; /* Safari */
-      -ms-user-select: none; /* IE 10 and IE 11 */
-      user-select: none; /* Standard syntax */
 	background-color: black;
 	height: 10vh;
 	width: 1vh;
@@ -63,10 +61,6 @@
 }
 
 .ui {
-  -webkit-user-select: none; /* Safari */
-  -ms-user-select: none; /* IE 10 and IE 11 */
-  user-select: none; /* Standard syntax */
-  
   background-color: #EEEEEE;
   padding: 0 20px;
   text-align: center;
