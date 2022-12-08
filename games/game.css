@@ -75,7 +75,7 @@ body {
 
 .logo_main {
 	        height: 4em;
-	        position: absolute;
+	        position: fixed;
 	        right: 15px;
 	        top: 5px;
 			bottom: 5px;

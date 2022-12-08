@@ -12,12 +12,12 @@
 		
 		let highScore = 0;
 		
-		let cookieValue = document.cookie.split('; ').find((row) => row.startsWith('highScore='))?.split('=')[1];
+		const scoreCookie = localStorage.getItem('highScore');
 		
-		if (typeof cookieValue === 'undefined') {
-			document.cookie = 'highScore=0';
+		if (typeof localStorage.getItem('highScore') === 'undefined') {
+			localStorage.setItem('highScore', '0');
 		} else {
-			highScore = +(cookieValue);
+			highScore = +(scoreCookie);
 			updateHighScore();
 		}
 		
@@ -116,7 +116,8 @@
 				if (vert.y > 100) { 
 					fallingVerts.splice(i, 1);
 					vert.div.remove();
-				} else if ( Math.abs(vert.x - (posX + 49.5)) < 4 && Math.abs(vert.y - (posY + 45)) < 9){
+				//collision detection
+				} else if ( Math.abs(vert.x - (posX + 50)) < ( 5 * (vh/vw)) && Math.abs(vert.y - (posY + 45)) < 9){
 					fallingVerts.splice(i, 1);
 					vert.div.remove();
 					if (running) {
@@ -197,7 +198,7 @@
 									
 									if (score > highScore) {
 										highScore = score;
-										document.cookie = 'highScore=' + highScore;
+										localStorage.setItem('highScore', '0');
 										updateHighScore();
 									}
 									
