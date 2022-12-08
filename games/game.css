@@ -1,4 +1,7 @@
 #Player {
+      -webkit-user-select: none; /* Safari */
+      -ms-user-select: none; /* IE 10 and IE 11 */
+      user-select: none; /* Standard syntax */
 	background-color:red;
 	display: block;
 	height: 10vh;
@@ -9,6 +12,9 @@
 }
 
 #Arrow {
+	-webkit-user-select: none; /* Safari */
+      -ms-user-select: none; /* IE 10 and IE 11 */
+      user-select: none; /* Standard syntax */
 	height: 20vh;
 	width: 20vh;
 	position: fixed;
@@ -40,10 +46,14 @@
 }
 
 #BottomBox {
-	right: 0;
-	top: 0;
+	left: 0;
+	bottom: 0;
 }
+
 .fallingVert {
+	-webkit-user-select: none; /* Safari */
+      -ms-user-select: none; /* IE 10 and IE 11 */
+      user-select: none; /* Standard syntax */
 	background-color: black;
 	height: 10vh;
 	width: 1vh;
