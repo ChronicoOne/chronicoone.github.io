@@ -49,12 +49,15 @@
 		
 		let highScore = 0;
 		
-		if (document.cookie === '') {
+		let cookieValue = document.cookie.split('; ').find((row) => row.startsWith('highScore='))?.split('=')[1];
+		
+		if (typeof cookieValue === 'undefined') {
 			document.cookie = 'highScore=0';
 		} else {
-			highScore = +(document.cookie.split('; ').find((row) => row.startsWith('highScore='))?.split('=')[1]);
+			highScore = +(cookieValue);
 		}
 		
+		console.log(cookieValue);
 		
 		let maxVerts = 5;
 		let dropInterval = 10000;
