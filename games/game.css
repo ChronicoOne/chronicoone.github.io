@@ -1,0 +1,70 @@
+#Player {
+	background-color:red;
+	display: block;
+	height: 10vh;
+	width: 10vh;
+	position: fixed;
+	top: 45vh;
+	left: calc(50vw - 5vh);
+}
+
+#Arrow {
+	height: 20vh;
+	width: 20vh;
+	position: fixed;
+	bottom: 35vh;
+	left: 40vw;
+	transform: rotate(0rad);
+}
+
+#HeartCoin {
+	width: 5vh;
+	height: 5vh;
+}
+
+#Score {
+	color: #22FF22;
+}
+
+#Health {
+	color: #FF2222;
+}
+
+#HighScore {
+	color: #FF22FF;
+}
+
+#TopBox {
+	top: 0;
+	left: 0;
+}
+
+#BottomBox {
+	right: 0;
+	top: 0;
+}
+.fallingVert {
+	background-color: black;
+	height: 10vh;
+	width: 1vh;
+	position: fixed;
+	bottom: 0px;
+	left: 0px;
+}
+
+.ui {
+  -webkit-user-select: none; /* Safari */
+  -ms-user-select: none; /* IE 10 and IE 11 */
+  user-select: none; /* Standard syntax */
+  
+  background-color: #EEEEEE;
+  padding: 0 20px;
+  text-align: center;
+  position: fixed;
+}
+
+.ui-p {
+	color: black;
+	font-size: 50px;
+	margin: 0;
+}
