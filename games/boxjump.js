@@ -2,6 +2,10 @@
 		const G = 0.02;
 		const player = document.getElementById('Player');
 		const arrow = document.getElementById('Arrow');
+		const halfWidth = 5;
+		
+		const halfVertWidth = 0.5;
+		const halfVertLength = 10;
 		
 		const fallingVerts = [];
 		const fallingHearts = [];
@@ -9,6 +13,17 @@
 		const scoreBox = document.getElementById('Score');
 		const healthBox = document.getElementById('Health');
 		const highScoreBox = document.getElementById('HighScore');
+		
+		let vh = window.innerHeight;
+		let vw = window.innerWidth;
+		let playerUnits = '';
+		
+		if (vw > vh) {
+			playerUnits = 'vh';
+		}
+		else {
+			playerUnits = 'vw';
+		}
 		
 		let highScore = 0;
 		
@@ -23,7 +38,7 @@
 		
 		
 		let maxVerts = 5;
-		let dropInterval = 10000;
+		let dropWait = 10000;
 		let health = 10;
 		let posX = 0;
 		let posY = 0;
@@ -44,12 +59,9 @@
 		let growing = false;
 		let running = true;
 		
-		let vh = window.innerHeight;
-		let vw = window.innerWidth;
-		
 		function restart(){
 			maxVerts = 5;
-			dropInterval = 10000;
+			dropWait = 10000;
 			health = 10;
 			posX = 0;
 			posY = 0;
@@ -102,7 +114,7 @@
 					fallingVerts.push({div : vert, x : vertSpawnX, y : vertSpawnY, velY : 0});
 					document.body.append(vert);
 				}
-			}, refresh * Math.random() * dropInterval);
+			}, refresh * Math.random() * dropWait);
 		}
 		
 		function updateVerts() {
@@ -117,13 +129,27 @@
 					fallingVerts.splice(i, 1);
 					vert.div.remove();
 				//collision detection
-				} else if ( Math.abs(vert.x - (posX + 50)) < ( 5 * (vh/vw)) && Math.abs(vert.y - (posY + 45)) < 9){
-					fallingVerts.splice(i, 1);
-					vert.div.remove();
-					if (running) {
-						health--;
+				} else {
+					
+					if ( playerUnits == 'vh' ){
+						if ( Math.abs(vert.x - (posX + 50) + halfVertWidth) < ( halfWidth * (vh/vw)) && Math.abs(vert.y - (posY + 50) + halfWidth) < (halfWidth * 2)){
+							fallingVerts.splice(i, 1);
+							vert.div.remove();
+							if (running) {
+								health--;
+							}
+						}
+					} else {
+						if ( Math.abs(vert.x - (posX + 50) + halfVertWidth) < halfWidth && Math.abs(vert.y - (posY + 50) + (halfWidth * (vw / vh))) < halfVertLength){
+							fallingVerts.splice(i, 1);
+							vert.div.remove();
+							if (running) {
+								health--;
+							}
+						}
 					}
 				}
+				
 				i++;
 			}
 		}
@@ -148,6 +174,14 @@
 									vh = window.innerHeight;
 									vw = window.innerWidth;
 									
+									if (vw > vh) {
+										playerUnits = 'vh';
+									}
+									else {
+										playerUnits = 'vw';
+									}
+									
+									document.body.style.fontSize = "7" + playerUnits;
 									
 									tilt = Math.atan((cursorY - posY - 50) / (cursorX - posX - 49.99)) + 1.57;
 									
@@ -167,8 +201,8 @@
 										growArrow();
 										updateVerts();
 										
-										if (dropInterval > 100) {
-											dropInterval -= 1;
+										if (dropWait > 100) {
+											dropWait -= 1;
 										}
 										
 										if (maxVerts < 5000) {
@@ -187,18 +221,20 @@
 										
 									}
 
-									if (health <= 0 || posX < -55 || posX > 55 || posY < -55 || posY > 55) { growing = false; running = false; }
+									if (health <= 0 || posX < -50 - (halfWidth) || posX > 50 + (halfWidth) || posY < -50 - (halfWidth) || posY > 50 + (halfWidth)) { growing = false; running = false; }
 									
-									player.style.left = "calc(50vw - 5vh + " + posX.toString() + "vw";
-									player.style.top = "calc(45vh + " + posY.toString() + "vh"; 
+									player.style.left = "calc(50vw - " + halfWidth + playerUnits + " + " + posX + "vw";
+									player.style.top = "calc(50vh - " + halfWidth + playerUnits + " + " + posY + "vh"; 
+									player.style.width = (halfWidth * 2) + playerUnits;
+									player.style.height = (halfWidth * 2) + playerUnits;
+									 
+									arrow.style.height = arrowHeight + playerUnits;
+									arrow.style.width = arrowWidth + playerUnits;
 									
-									arrow.style.height = arrowHeight.toString() + "vh";
-									arrow.style.width = arrowWidth.toString() + "vh";
+									arrow.style.left = "calc(50vw - " + arrowOffsetX + playerUnits + " + " + posX + "vw";
+									arrow.style.top = "calc(50vh - " + arrowOffsetY + playerUnits + " + " + posY + "vh"; 
 									
-									arrow.style.left = "calc(50vw - " + arrowOffsetX.toString() + "vh + " + posX.toString() + "vw";
-									arrow.style.top = "calc(50vh - " + arrowOffsetY.toString() + "vh + " + posY.toString() + "vh"; 
-									
-									arrow.style.transform = "rotate(" + tilt.toString() + "rad)";
+									arrow.style.transform = "rotate(" + tilt + "rad)";
 									
 									if (score > highScore) {
 										highScore = score;

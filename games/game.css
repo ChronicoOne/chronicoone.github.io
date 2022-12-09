@@ -69,12 +69,12 @@ body {
 
 .ui-p {
 	color: black;
-	font-size: 50px;
+	font-size: 1em;
 	margin: 0;
 }
 
 .logo_main {
-	        height: 4em;
+	        height: 2em;
 	        position: fixed;
 	        right: 15px;
 	        top: 5px;
