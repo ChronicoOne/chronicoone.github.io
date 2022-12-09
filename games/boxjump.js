@@ -3,12 +3,13 @@
 		const player = document.getElementById('Player');
 		const arrow = document.getElementById('Arrow');
 		const halfWidth = 5;
-		
+		const initialHealth = 3;
 		const halfVertWidth = 0.5;
 		const halfVertLength = 10;
 		
 		const fallingVerts = [];
 		const fallingHearts = [];
+		
 		
 		const scoreBox = document.getElementById('Score');
 		const healthBox = document.getElementById('Health');
@@ -39,7 +40,7 @@
 		
 		let maxVerts = 5;
 		let dropWait = 10000;
-		let health = 10;
+		let health = initialHealth;
 		let posX = 0;
 		let posY = 0;
 		let velX = 0;
@@ -62,7 +63,7 @@
 		function restart(){
 			maxVerts = 5;
 			dropWait = 10000;
-			health = 10;
+			health = initialHealth;
 			posX = 0;
 			posY = 0;
 			velX = 0;
@@ -182,7 +183,7 @@
 									
 									document.body.style.fontSize = "7" + playerUnits;
 									
-									tilt = Math.atan((cursorY - posY - 50) / (cursorX - posX - 49.99)) + 1.57;
+									tilt = Math.atan((cursorY - posY - 50) / (cursorX - posX - 50.00001)) + 1.57;
 									
 									
 									if(cursorX - posX - 50 < 0){
