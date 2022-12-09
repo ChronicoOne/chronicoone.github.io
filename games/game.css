@@ -55,7 +55,7 @@ body {
 }
 
 .fallingVert {
-	background-color: black;
+	background-color: #333333;
 	height: 10vh;
 	width: 1vh;
 	position: fixed;

@@ -1,5 +1,5 @@
 		const refresh = 16;
-		const G = 0.02;
+		const G = 0.01;
 		const player = document.getElementById('Player');
 		const arrow = document.getElementById('Arrow');
 		const halfWidth = 5;
@@ -18,8 +18,8 @@
 		const healthBox = document.getElementById('Health');
 		const highScoreBox = document.getElementById('HighScore');
 		
-		const gradientTopInitial = [96, 96, 149];
-		const gradientBottomInitial = [100, 100, 154];
+		const gradientTopInitial = [45, 45, 154];
+		const gradientBottomInitial = [45, 45, 154];
 		
 		const gradientTop = [0, 0, 0];
 		const gradientBottom = [0, 0, 0];
@@ -29,7 +29,8 @@
 				gradientBottom[i] = gradientBottomInitial[i];
 			}
 			
-		const gradientSpeed = 3;
+		const gradientSpeed = 20;
+		const gradientInc = [0.75 , 0.5, 1];
 		
 		let vh = window.innerHeight;
 		let vw = window.innerWidth;
@@ -191,16 +192,28 @@
 		function gradientLoop() {
 			setTimeout(() => {
 				document.body.style.backgroundImage = ("linear-gradient(rgb(" + 
-													   (100 + gradientTop[0]) + ", " + (100 + gradientTop[1]) + ", " + (100 + gradientTop[2]) + "), " +
-													   "rgb( " + (100 + gradientBottom[0]) + ", " + (100 + gradientBottom[1]) + ", " + (100 + gradientBottom[2]) + ")" + ")");
+													   (200 + gradientTop[0]) + ", " + (200 + gradientTop[1]) + ", " + (100 + gradientTop[2]) + "), " +
+													   "rgb( " + (200 + gradientBottom[0]) + ", " + (200 + gradientBottom[1]) + ", " + (100 + gradientBottom[2]) + ")" + ")");
 			
-				gradientTop[0] = (gradientTop[0] - 0.1) % 155;
-				gradientTop[1] = (gradientTop[1] - 0.1) % 155;
-				gradientTop[2] = (gradientTop[2] - 0.01) % 155;
+				gradientTop[0] = (gradientTop[0] - gradientInc[0]);
+				gradientTop[1] = (gradientTop[1] - gradientInc[1]);
+				//gradientTop[2] = (gradientTop[2] - gradientInc[2]);
 				
-				gradientBottom[0] = (gradientBottom[0] - 0.1) % 155;
-				gradientBottom[1] = (gradientBottom[1] - 0.1) % 155;
-				gradientBottom[2] = (gradientBottom[2] - 0.01) % 155;
+				gradientBottom[0] = (gradientBottom[0] - gradientInc[0]);
+				gradientBottom[1] = (gradientBottom[1] - gradientInc[1]);
+				//gradientBottom[2] = (gradientBottom[2] - gradientInc[2]);
+
+				if(Math.abs(gradientTop[0]) >= 54){
+					gradientInc[0] = -gradientInc[0];
+				}
+				
+				if(Math.abs(gradientTop[1]) >= 54){
+					gradientInc[1] = -gradientInc[1];
+				}
+				
+				if(Math.abs(gradientTop[2]) >= 154){
+					gradientInc[2] = -gradientInc[2];
+				}
 				
 				gradientLoop();
 				
