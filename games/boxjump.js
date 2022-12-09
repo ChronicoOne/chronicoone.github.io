@@ -11,7 +11,7 @@
 		const dropWait = 10000;
 		
 		const launchMin = 2;
-		const launchPoint = 400;
+		const launchPoint = 355;
 		
 		const fallingVerts = [];
 		const fallingHearts = [];
