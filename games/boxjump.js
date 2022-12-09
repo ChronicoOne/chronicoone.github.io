@@ -1,4 +1,4 @@
-		const refresh = 17;
+		const refresh = 16;
 		const G = 0.02;
 		const player = document.getElementById('Player');
 		const arrow = document.getElementById('Arrow');
@@ -7,6 +7,9 @@
 		const halfVertWidth = 0.5;
 		const halfVertLength = 10;
 		
+		const launchMin = 1.5;
+		const launchPoint = 120;
+		
 		const fallingVerts = [];
 		const fallingHearts = [];
 		
@@ -14,7 +17,20 @@
 		const scoreBox = document.getElementById('Score');
 		const healthBox = document.getElementById('Health');
 		const highScoreBox = document.getElementById('HighScore');
-
+		
+		const gradientTopInitial = [96, 96, 149];
+		const gradientBottomInitial = [100, 100, 154];
+		
+		const gradientTop = [0, 0, 0];
+		const gradientBottom = [0, 0, 0];
+		
+		for(let i = 0; i < 3; i++){
+				gradientTop[i] = gradientTopInitial[i];
+				gradientBottom[i] = gradientBottomInitial[i];
+			}
+			
+		const gradientSpeed = 3;
+		
 		let vh = window.innerHeight;
 		let vw = window.innerWidth;
 		let playerUnits = '';
@@ -45,7 +61,7 @@
 		let posY = 0;
 		let velX = 0;
 		let velY = 0;
-		let launch = 50;
+		let launch = launchMin;
 		let score = 0;
 		let cursorX = 0;
 		let cursorY = 0;
@@ -68,7 +84,7 @@
 			posY = 0;
 			velX = 0;
 			velY = 0;
-			launch = 50;
+			launch = launchMin;
 			score = 0;
 			arrowHeight = 20;
 			arrowWidth = 20;
@@ -76,7 +92,12 @@
 			arrowOffsetX = 10;
 			vertSpawnX = 50;
 			vertSpawnY = -10;
-		
+			
+			for(let i = 0; i < 3; i++){
+				gradientTop[i] = gradientTopInitial[i];
+				gradientBottom[i] = gradientBottomInitial[i];
+			}
+
 			setTimeout( () => {running = true; }, refresh * 10)
 		}
 		
@@ -93,9 +114,9 @@
 		}
 			
 		function growArrow() {
-			if(growing === true && (launch < 200)){
+			if(growing === true && (launch < launchPoint)){
 				arrowHeight += 2;
-				launch = launch + refresh;
+				launch *= 2;
 			} else {
 				growing = false;
 			}	
@@ -165,6 +186,25 @@
 		
 		function updateHighScore(){
 			highScoreBox.textContent = Math.trunc(highScore).toString();
+		}
+		
+		function gradientLoop() {
+			setTimeout(() => {
+				document.body.style.backgroundImage = ("linear-gradient(rgb(" + 
+													   (100 + gradientTop[0]) + ", " + (100 + gradientTop[1]) + ", " + (100 + gradientTop[2]) + "), " +
+													   "rgb( " + (100 + gradientBottom[0]) + ", " + (100 + gradientBottom[1]) + ", " + (100 + gradientBottom[2]) + ")" + ")");
+			
+				gradientTop[0] = (gradientTop[0] - 0.1) % 155;
+				gradientTop[1] = (gradientTop[1] - 0.1) % 155;
+				gradientTop[2] = (gradientTop[2] - 0.01) % 155;
+				
+				gradientBottom[0] = (gradientBottom[0] - 0.1) % 155;
+				gradientBottom[1] = (gradientBottom[1] - 0.1) % 155;
+				gradientBottom[2] = (gradientBottom[2] - 0.01) % 155;
+				
+				gradientLoop();
+				
+			}, refresh * gradientSpeed)
 		}
 		
 		function gameLoop(){
@@ -254,7 +294,7 @@
 		}
 		
 		function startGrow() {
-			if (launch === 50){
+			if (launch === launchMin){
 				growing = true;
 			} 
 		}
@@ -263,7 +303,7 @@
 			velY = ( Math.sin(tilt - 1.57) * (launch / 200) );
 			velX = ( Math.cos(tilt - 1.57) * (launch / 200) );
 				
-			launch = 50;
+			launch = launchMin;
 			arrowHeight = 20;
 			arrowWidth = 20;
 			
@@ -277,7 +317,7 @@
 				running = false;
 			}
 
-			if (name == "Space" && launch < 200){
+			if (name == "Space" && launch < launchPoint){
 				startGrow();
 			}
 			
@@ -303,4 +343,5 @@
 		
 		document.addEventListener('pointermove', trackMouse);
 		
+		gradientLoop();
 		gameLoop();
