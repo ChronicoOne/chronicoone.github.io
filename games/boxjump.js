@@ -13,7 +13,7 @@
 		const scoreBox = document.getElementById('Score');
 		const healthBox = document.getElementById('Health');
 		const highScoreBox = document.getElementById('HighScore');
-		
+
 		let vh = window.innerHeight;
 		let vw = window.innerWidth;
 		let playerUnits = '';
@@ -154,7 +154,6 @@
 			}
 		}
 		
-		
 		function updateScore(){
 			scoreBox.textContent = Math.trunc(score).toString();
 		}
@@ -185,9 +184,10 @@
 									
 									tilt = Math.atan((cursorY - posY - 50) / (cursorX - posX - 49.99)) + 1.57;
 									
-									if(cursorX - posX - 49.99 < 0){
+									
+									if(cursorX - posX - 50 < 0){
 										tilt = 3.14 + tilt;
-									}
+									} 
 									
 									if (running) {
 										gravity();
@@ -227,7 +227,8 @@
 									player.style.top = "calc(50vh - " + halfWidth + playerUnits + " + " + posY + "vh"; 
 									player.style.width = (halfWidth * 2) + playerUnits;
 									player.style.height = (halfWidth * 2) + playerUnits;
-									 
+									player.style.transform = "rotate(" + Math.sin(tilt) + "rad)";
+									
 									arrow.style.height = arrowHeight + playerUnits;
 									arrow.style.width = arrowWidth + playerUnits;
 									
