@@ -1,14 +1,17 @@
 		const refresh = 16;
-		const G = 0.01;
+		const initialG = 0.015;
+		const gIncreaseRate = 0.000001;
+		const gMax = 0.05;
 		const player = document.getElementById('Player');
 		const arrow = document.getElementById('Arrow');
 		const halfWidth = 5;
 		const initialHealth = 3;
 		const halfVertWidth = 0.5;
-		const halfVertLength = 10;
+		const halfVertLength = 10;	
+		const dropWait = 10000;
 		
-		const launchMin = 1.5;
-		const launchPoint = 120;
+		const launchMin = 2;
+		const launchPoint = 400;
 		
 		const fallingVerts = [];
 		const fallingHearts = [];
@@ -27,7 +30,7 @@
 		for(let i = 0; i < 3; i++){
 				gradientTop[i] = gradientTopInitial[i];
 				gradientBottom[i] = gradientBottomInitial[i];
-			}
+		}
 			
 		const gradientSpeed = 20;
 		const gradientInc = [0.75 , 0.5, 1];
@@ -54,9 +57,8 @@
 			updateHighScore();
 		}
 		
-		
+		let G = initialG;
 		let maxVerts = 5;
-		let dropWait = 10000;
 		let health = initialHealth;
 		let posX = 0;
 		let posY = 0;
@@ -78,8 +80,8 @@
 		let running = true;
 		
 		function restart(){
+			G = initialG;
 			maxVerts = 5;
-			dropWait = 10000;
 			health = initialHealth;
 			posX = 0;
 			posY = 0;
@@ -105,7 +107,7 @@
 		function gravity() {
 			velY += G;
 			for (const vert of fallingVerts) {
-				vert.velY += G;
+				vert.velY += G * 2;
 			}
 		}
 		
@@ -115,9 +117,9 @@
 		}
 			
 		function growArrow() {
-			if(growing === true && (launch < launchPoint)){
+			if(growing === true && (launch * 1.8 < launchPoint)){
 				arrowHeight += 2;
-				launch *= 2;
+				launch *= 1.8;
 			} else {
 				growing = false;
 			}	
@@ -255,12 +257,12 @@
 										growArrow();
 										updateVerts();
 										
-										if (dropWait > 100) {
-											dropWait -= 1;
-										}
-										
 										if (maxVerts < 5000) {
 											maxVerts += 0.003;
+										}
+										
+										if (G < gMax) {
+											G += gIncreaseRate;
 										}
 										
 									} else {
