@@ -54,6 +54,7 @@ header h1{
 
 }
 
+
 p {
 	color: #EEEEEE;
 	font-size: 1em;
@@ -192,3 +193,10 @@ footer p{
 	margin-top: 0;
 }
 
+#pwd {
+	color: #EEEEEE;
+	font-family: "Courier New";
+	position: absolute;
+	top: 1em;
+	left: 20px;
+}
