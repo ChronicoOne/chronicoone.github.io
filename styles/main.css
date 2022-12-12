@@ -200,7 +200,7 @@ footer p{
 	background-color:#171717;
 	width: calc(100%- 25px);
 	min-height: 150px;
-	padding: 0px 0px 10px 20px;
+	padding: 0px 10px 10px 20px;
 	text-decoration: none;
 }
 
