@@ -200,7 +200,7 @@ footer p{
 	background-color:#171717;
 	width: calc(100%- 25px);
 	min-height: 150px;
-	padding: 0px 0px 0px 20px;
+	padding: 0px 0px 10px 20px;
 	text-decoration: none;
 }
 
@@ -212,7 +212,7 @@ footer p{
 	width: 130px;
 	height: 130px;
 	float: left;
-	padding-top: 10px;
+	padding-top: 15px;
 	margin-right: 10px;
 	margin-top: 0px;
 }
@@ -221,7 +221,7 @@ footer p{
 	display: block;
 	font-size: 1.2em;
 	margin: 0;
-	padding-top: 10px;
+	padding-top: 15px;
 	padding-bottom: 5px;
 	font-weight: bold;
 }
