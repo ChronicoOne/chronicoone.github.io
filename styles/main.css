@@ -11,15 +11,15 @@ html {
 }
 
 main {
-	margin-top: calc(4em + 12px);
-	margin-left: 90px;
-	margin-right: 0px;
+	margin-top: 3em;
+	margin-left: 70px;
+	margin-right: 0;
 	margin-bottom: 0;
 	padding-top: 0px;
 	padding-left: 25px;
 	padding-right: 25px;
 	padding-bottom: 55px;
-	min-height: calc(100vh - 4em - 122px);
+	min-height: calc(100vh - 3em - 110px);
 }
 
 body {
@@ -30,17 +30,19 @@ body {
 	        
 h1, h2{
 	color: #EEEEEE;
-	font-size: 2em;
+	font-size: 1.5em;
 	margin-top: 15px;
 	margin-bottom: 5px;
 }
 
 header {
+	display: block;
 	top: 0;
 	margin:0;
 	padding: 0;
 	background-color: #000000;	
 	position: fixed;
+	height: 3em;
 	width: 100%;
 }
 
@@ -50,7 +52,8 @@ header h1{
 	text-align: center;	
 	color: #EEEEEE;
 	margin: 0;
-	font-size: 4em;
+	font-size: 2em;
+	padding: 0.2em 0;
 
 }
 
@@ -87,11 +90,10 @@ p a:hover::after {
 }
 
 .logo_main {
-	        height: 4em;
+	        height: 2.5em;
 	        position: fixed;
-	        right: 15px;
-	        top: 5px;
-			bottom: 5px;
+	        right: 0.5em;
+	        top: 0.2em;
 }
 
 nav{
@@ -107,25 +109,25 @@ nav ul{
   float: left;
   overflow: hidden;  
   height: 100%;
-  width: 90px;
+  width: 70px;
   position: fixed;
 }
 
 nav ul:first-child{
-	margin-top: calc(4em + 10px);
+	margin-top: 3em;
 }
 
 nav li a{
 	display: block;
-	padding: 20px 0px;
+	padding: 10px 0px;
 	color: #EEEEEE;
 	text-decoration: none;
 	text-align: center;
-	font-size: 16px;
+	font-size: 15px;
 }
 
 nav li a svg{
-	margin: 0px 20px 2px 20px;
+	margin: 0px 10px 1px 10px;
 }
 
 .active{
@@ -166,7 +168,7 @@ footer p{
 	margin-bottom: 0px;
 	margin-left: -25px;
 	margin-right: -25px;
-	padding: 15px;
+	padding: 12px 15px;
 }
 
 .article-desc{
@@ -193,10 +195,48 @@ footer p{
 	margin-top: 0;
 }
 
+
+.dir {
+	position: absolute;
+	top: 0.5em;
+	left: 20px;
+	width: 18%;
+}
+
+.game-card{
+	display: block;
+	background-color:#171717;
+	width: calc(100%- 25px);
+	min-height: 150px;
+	padding: 0px 0px 0px 20px;
+	text-decoration: none;
+}
+
+.game-card:hover {
+	background-color: #444444;
+}
+
+.game-icon {
+	width: 130px;
+	height: 130px;
+	float: left;
+	padding-top: 10px;
+	margin-right: 10px;
+	margin-top: 0px;
+}
+
+.game-title {
+	display: block;
+	font-size: 1.2em;
+	margin: 0;
+	padding-top: 10px;
+	padding-bottom: 5px;
+	font-weight: bold;
+}
+
 #pwd {
 	color: #EEEEEE;
 	font-family: "Courier New";
-	position: absolute;
-	top: 1em;
-	left: 20px;
+	font-size: 14px;
+	overflow-x: hidden;
 }
