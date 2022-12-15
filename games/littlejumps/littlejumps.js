@@ -7,15 +7,25 @@
 		const halfWidth = 5;
 		const initialHealth = 3;
 		const halfVertWidth = 0.5;
-		const halfVertLength = 10;	
+		const halfVertHeight = 5;	
 		const dropWait = 10000;
 		
 		const launchMin = 2;
 		const launchPoint = 355;
 		
-		const fallingVerts = [];
-		const fallingHearts = [];
 		
+		const heartCoinDropMin = -30;
+		const heartCoinDropVariation = 10;
+		const heartCoinDropOffsetInitial = -10;
+		
+		const halfHeartHeight = 4;
+		const halfHeartWidth = 4;
+		const heartCoinElem = document.getElementById("HeartCoin");
+		
+		const heartCoin = {elem : heartCoinElem, x : Math.random() * 100, y : heartCoinDropMin + heartCoinDropOffsetInitial, w : halfHeartWidth * 2, h : halfHeartHeight * 2, tag : "HeartCoin", velY : 0};
+		
+		const fallingVerts = [];
+		const fallingItems = [heartCoin];
 		
 		const scoreBox = document.getElementById('Score');
 		const healthBox = document.getElementById('Health');
@@ -46,6 +56,9 @@
 			playerUnits = 'vw';
 		}
 		
+		heartCoinElem.style.width = (halfHeartWidth * 2) + playerUnits;
+		heartCoinElem.style.height = (halfHeartHeight * 2) + playerUnits;
+		
 		let highScore = 0;
 		
 		const scoreCookie = localStorage.getItem('highScore');
@@ -60,8 +73,8 @@
 		let G = initialG;
 		let maxVerts = 5;
 		let health = initialHealth;
-		let posX = 0;
-		let posY = 0;
+		let posX = 50;
+		let posY = 50;
 		let velX = 0;
 		let velY = 0;
 		let launch = launchMin;
@@ -75,16 +88,25 @@
 		let arrowOffsetX = 10;
 		let vertSpawnX = 50;
 		let vertSpawnY = -10;
+		let heartCoinDropOffset = heartCoinDropOffsetInitial;
 		
 		let growing = false;
 		let running = true;
+		
+		function vRatio(v){
+				if (playerUnits == "vh") {
+					return vh / v ;
+				} else {
+					return vw / v ;
+				}
+		}
 		
 		function restart(){
 			G = initialG;
 			maxVerts = 5;
 			health = initialHealth;
-			posX = 0;
-			posY = 0;
+			posX = 50;
+			posY = 50;
 			velX = 0;
 			velY = 0;
 			launch = launchMin;
@@ -100,7 +122,15 @@
 				gradientTop[i] = gradientTopInitial[i];
 				gradientBottom[i] = gradientBottomInitial[i];
 			}
-
+			
+			for( const item of fallingItems ){
+				if( item.tag == "HeartCoin" ){
+					item.y  = 200;
+				}		
+			}
+			
+			updateItems();
+			
 			setTimeout( () => {running = true; }, refresh * 10)
 		}
 		
@@ -108,6 +138,9 @@
 			velY += G;
 			for (const vert of fallingVerts) {
 				vert.velY += G * 2;
+			}
+			for (const item of fallingItems) {
+				item.velY += G;
 			}
 		}
 		
@@ -127,15 +160,44 @@
 			arrowOffsetY = arrowHeight / 2;
 		}
 		
+		function itemCollide(item) {
+				let rect1 = item.elem.getBoundingClientRect();
+				let rect2 = player.getBoundingClientRect();
+
+				collide = (
+					rect1.left < rect2.right &&
+					rect1.right > rect2.left &&
+					rect1.top < rect2.bottom &&
+					rect1.bottom > rect2.top
+				);		
+			return collide;
+		}
+		
+		function vertCollide(vert) {
+			let collide = false;
+			let rect1 = vert.div.getBoundingClientRect();
+			let rect2 = player.getBoundingClientRect();
+
+			collide = (
+				rect1.left < rect2.right &&
+				rect1.right > rect2.left &&
+				rect1.top < rect2.bottom &&
+				rect1.bottom > rect2.top
+			);
+			
+			return collide;
+		}
 		
 		function makeVerts() {
 			setTimeout( () => {
-				if (fallingVerts.length < maxVerts){
+				if (fallingVerts.length < (maxVerts * (vw / 1000) )){
 					const vert = document.createElement("div");
 					vert.classList.add("fallingVert");
 					vertSpawnX = Math.random() * 100;
-					vert.style.left = vertSpawnX.toString() + "vw";
-					vert.style.top = vertSpawnY.toString() + "vh";
+					vert.style.left = vertSpawnX + "vw";
+					vert.style.top = vertSpawnY + "vh";
+					vert.style.width = (halfVertWidth * 2) + playerUnits;
+					vert.style.height = (halfVertHeight * 2) + playerUnits;
 					fallingVerts.push({div : vert, x : vertSpawnX, y : vertSpawnY, velY : 0});
 					document.body.append(vert);
 				}
@@ -153,27 +215,47 @@
 				if (vert.y > 100) { 
 					fallingVerts.splice(i, 1);
 					vert.div.remove();
-				//collision detection
+
 				} else {
-					
-					if ( playerUnits == 'vh' ){
-						if ( Math.abs(vert.x - (posX + 50) + halfVertWidth) < ( halfWidth * (vh/vw)) && Math.abs(vert.y - (posY + 50) + halfWidth) < (halfWidth * 2)){
+					if (vertCollide(vert)){
 							fallingVerts.splice(i, 1);
 							vert.div.remove();
 							if (running) {
 								health--;
 							}
 						}
-					} else {
-						if ( Math.abs(vert.x - (posX + 50) + halfVertWidth) < halfWidth && Math.abs(vert.y - (posY + 50) + (halfWidth * (vw / vh))) < halfVertLength){
-							fallingVerts.splice(i, 1);
-							vert.div.remove();
-							if (running) {
-								health--;
-							}
-						}
-					}
 				}
+				
+				i++;
+			}
+		}
+		
+		function updateItems() {
+			let i = 0;
+			for (const item of fallingItems) {
+				if (item.tag == "HeartCoin") {
+					if (itemCollide(item)) {
+							item.y  = heartCoinDropMin + heartCoinDropOffset - (Math.random() * heartCoinDropVariation);
+							item.x = Math.random() * 100;
+							item.velY = 0;
+							
+							if (running) {
+								health++;
+							}
+					}
+					
+					if (item.y > 100){
+						item.y  = heartCoinDropMin + heartCoinDropOffset - (Math.random() * heartCoinDropVariation);
+						item.x = Math.random() * 100;
+						item.velY = 0;
+					}
+					item.y += item.velY;
+				}
+				
+				item.elem.style.top = item.y + "vh";
+				item.elem.style.left = item.x + "vw";
+				item.elem.style.width = item.w + playerUnits;
+				item.elem.style.height = item.h + playerUnits;
 				
 				i++;
 			}
@@ -231,17 +313,16 @@
 									
 									if (vw > vh) {
 										playerUnits = 'vh';
-									}
-									else {
+									} else {
 										playerUnits = 'vw';
 									}
 									
 									document.body.style.fontSize = "7" + playerUnits;
 									
-									tilt = Math.atan((cursorY - posY - 50) / (cursorX - posX - 50.00001)) + 1.57;
+									tilt = Math.atan((cursorY - posY - (halfWidth * vRatio(vh))) / (cursorX - posX - (halfWidth * vRatio(vw)) + 0.0000001)) + 1.57;
 									
 									
-									if(cursorX - posX - 50 < 0){
+									if(cursorX - (posX + (halfWidth * vRatio(vw))) < 0){
 										tilt = 3.14 + tilt;
 									} 
 									
@@ -256,6 +337,7 @@
 										updateHealth();
 										growArrow();
 										updateVerts();
+										updateItems();
 										
 										if (maxVerts < 5000) {
 											maxVerts += 0.003;
@@ -277,10 +359,10 @@
 										
 									}
 
-									if (health <= 0 || posX < -50 - (halfWidth) || posX > 50 + (halfWidth) || posY < -50 - (halfWidth) || posY > 50 + (halfWidth)) { growing = false; running = false; }
+									if (health <= 0 || posX < 0 - (halfWidth * vRatio(vw) * 2) || posX > 100 + (halfWidth * vRatio(vw)) || posY < 0 - (halfWidth * vRatio(vh)) || posY > 100 + (halfWidth * vRatio(vh))) { growing = false; running = false; }
 									
-									player.style.left = "calc(50vw - " + halfWidth + playerUnits + " + " + posX + "vw";
-									player.style.top = "calc(50vh - " + halfWidth + playerUnits + " + " + posY + "vh"; 
+									player.style.left = "calc(" + posX + "vw";
+									player.style.top = "calc(" + posY + "vh"; 
 									player.style.width = (halfWidth * 2) + playerUnits;
 									player.style.height = (halfWidth * 2) + playerUnits;
 									player.style.transform = "rotate(" + Math.sin(tilt) + "rad)";
@@ -288,8 +370,8 @@
 									arrow.style.height = arrowHeight + playerUnits;
 									arrow.style.width = arrowWidth + playerUnits;
 									
-									arrow.style.left = "calc(50vw - " + arrowOffsetX + playerUnits + " + " + posX + "vw";
-									arrow.style.top = "calc(50vh - " + arrowOffsetY + playerUnits + " + " + posY + "vh"; 
+									arrow.style.left = "calc(" + (-halfWidth) + playerUnits + " + " + posX + "vw)";
+									arrow.style.top = "calc(" + (halfWidth - arrowOffsetY) + playerUnits + " + " + posY + "vh)"; 
 									
 									arrow.style.transform = "rotate(" + tilt + "rad)";
 									
@@ -315,8 +397,8 @@
 		}
 		
 		function release() {
-			velY = ( Math.sin(tilt - 1.57) * (launch / 200) );
-			velX = ( Math.cos(tilt - 1.57) * (launch / 200) );
+			velY = ( Math.sin(tilt - 1.57) * (launch / 130) * vRatio(vh));
+			velX = ( Math.cos(tilt - 1.57) * (launch / 130) * vRatio(vw));
 				
 			launch = launchMin;
 			arrowHeight = 20;

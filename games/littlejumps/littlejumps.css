@@ -30,6 +30,8 @@ body {
 #HeartCoin {
 	width: 5vh;
 	height: 5vh;
+	position: fixed;
+	top: -10vh;
 }
 
 #Score {
