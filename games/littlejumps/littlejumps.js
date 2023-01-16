@@ -45,6 +45,9 @@
 		const gradientSpeed = 20;
 		const gradientInc = [0.75 , 0.5, 1];
 		
+		const purpleHat = document.createElement("svg");
+		
+		
 		let vh = window.innerHeight;
 		let vw = window.innerWidth;
 		let playerUnits = '';
