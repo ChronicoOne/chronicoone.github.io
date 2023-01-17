@@ -1,10 +1,30 @@
 import page_builder as pb
 from lxml import etree
-desc = """Projects, games, and tutorials created by Chronico are free to all
-          for learning and entertainment purposes."""
-          
-if __name__ == "__main__":
-    f = open("core/index.chronico")
+from os import listdir
+from os.path import isfile, join, dirname, realpath, split
+
+dir_path = dirname(realpath(__file__))
+core_path = join(dir_path, 'core')
+
+def gen_html_file(corefilepath):
+    if not '.chronico' in corefilepath:
+        return -1
+        
+    file_start = corefilepath
+    file_end = split(file_start)[1]
+    file_start = split(file_start)[0]
+    
+    while split(file_start)[1] != 'core':
+        file_end = join(split(file_start)[1], file_end)
+        file_start = split(file_start)[0]
+    
+    file_end = file_end.replace('.chronico', '.html')
+    
+    htmlfilepath = join(dir_path, file_end)
+    
+    print("Generating File at:", file_end)
+    
+    f = open(corefilepath, "r")
     text = f.read()
     lines = pb.split_script(text)
     elements = pb.multi_parse(lines)
@@ -12,11 +32,20 @@ if __name__ == "__main__":
     for element in elements:
         main_article.append(element)
         
-    html_tree = pb.build_page("index.html", main_article)
+    html_tree = pb.build_page(file_end, main_article)
     
     html_doc = etree.tostring(html_tree, method="html", pretty_print=True)
-    print(html_doc)
-    
-    out_file = open("index.html", "wb")
+    out_file = open(htmlfilepath, "wb")
     out_file.write(html_doc)
     out_file.close()
+
+def gen_html_branch(dirpath):
+    for branch in listdir(dirpath):
+        if isfile(join(dirpath, branch)):
+            gen_html_file(join(dirpath, branch))
+        else:
+            gen_html_branch(join(dirpath, branch))
+
+
+if __name__ == "__main__":
+    gen_html_branch(core_path)

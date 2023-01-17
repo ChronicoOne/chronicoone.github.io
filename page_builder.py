@@ -1,5 +1,5 @@
 from lxml import etree
-from os.path import exists, join
+from os.path import exists, join, split
 
 # ! Globals
 site_title = "Chronico.One"
@@ -35,7 +35,8 @@ navicons = ["Home",
 # !! returns the navicon that should be active on the page at filepath
 
 def active_icon(filepath):
-    dirs = filepath.split("/")
+    dirs = split(filepath)
+    dirs = [part for part in dirs if part != '']
     if len(dirs) > 1:
         for icon in navicons:
             if icon.lower() == dirs[0].lower():
@@ -46,7 +47,8 @@ def active_icon(filepath):
 # !! homepath : filepath -> String
 # !! returns the relative path to the site home directory
 def homepath(filepath):
-    dirs = filepath.split("/")
+    dirs = split(filepath)
+    dirs = [part for part in dirs if part != '']
     pagepath = ""
     for i in range(len(dirs) - 1):
         pagepath += '../'
@@ -61,7 +63,8 @@ def githubpath(filepath):
 # !! navpagepath : filepath navicon -> filepath
 # !! returns the relative path to the navicon's page 
 def navpagepath(path, navicon):
-    dirs = path.split("/")
+    dirs = split(path)
+    dirs = [part for part in dirs if part != '']
     pagepath = homepath(path)
     if navicon == "Home":
         pagepath += "index.html"
@@ -154,7 +157,7 @@ def build_page(path, main_article):
     ###### p
     nav_ul_li_div_p = etree.SubElement(nav_ul_li_div, "p")
     nav_ul_li_div_p.set("id", "pwd")
-    nav_ul_li_div_p.text = "/" + path.split("/")[-1]
+    nav_ul_li_div_p.text = "/" + split(path)[-1]
     
     ### header
     header = etree.SubElement(body, "header")
