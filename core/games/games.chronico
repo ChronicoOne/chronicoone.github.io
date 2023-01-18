@@ -10,7 +10,7 @@ CONTENT~
 	GAMECARD~
 		Little Jumps;
 		Play as a little jumper who desperately wants to avoid the black bars falling from the sky.
-		This is an "HTML5 game" written mostly using JavaScript and should run on almost any modern web-browsing device.;
+		 This is an "HTML5 game" written mostly using JavaScript and should run on almost any modern web-browsing device.;
 		Instructions: Press and hold (tap, click, or spacebar) to charge up a jump. Release to launch the Little Jumper towards your cursor.;
 		svg/game_icons/littlejumps.svg;
 		games/littlejumps/littlejumps.html;
