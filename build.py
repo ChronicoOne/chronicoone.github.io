@@ -1,4 +1,5 @@
 import page_builder as pb
+import chronico_script as cs
 from lxml import etree
 from os import listdir
 from os.path import isfile, join, dirname, realpath, split
@@ -26,14 +27,14 @@ def gen_html_file(corefilepath):
     
     f = open(corefilepath, "r")
     text = f.read()
-    lines = pb.split_script(text)
-    elements = pb.multi_parse(lines)
+    lines = cs.split_script(text)
+    elements = cs.multi_parse(file_end, lines)
     main_article = etree.Element('article')
     for element in elements:
         main_article.append(element)
         
     html_tree = pb.build_page(file_end, main_article)
-    
+    etree.indent(html_tree)
     html_doc = etree.tostring(html_tree, method="html", pretty_print=True)
     out_file = open(htmlfilepath, "wb")
     out_file.write(html_doc)

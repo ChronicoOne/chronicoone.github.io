@@ -11,15 +11,15 @@ html {
 }
 
 main {
+	min-height: calc(100vh - 6em);
 	margin-top: 3em;
-	margin-left: 70px;
+	margin-left: 60px;
 	margin-right: 0;
 	margin-bottom: 0;
 	padding-top: 0px;
-	padding-left: 25px;
-	padding-right: 25px;
-	padding-bottom: 55px;
-	min-height: calc(100vh - 3em - 110px);
+	padding-left: 10px;
+	padding-right: 10px;
+	padding-bottom: 60px;
 }
 
 body {
@@ -96,10 +96,6 @@ p a:hover::after {
 	        top: 0.2em;
 }
 
-nav{
-
-}
-
 nav ul{
   list-style-type: none;
   margin: 0;
@@ -109,7 +105,7 @@ nav ul{
   float: left;
   overflow: hidden;  
   height: 100%;
-  width: 70px;
+  width: 60px;
   position: fixed;
 }
 
@@ -119,15 +115,15 @@ nav ul:first-child{
 
 nav li a{
 	display: block;
-	padding: 10px 0px;
+	padding: 6px 3px;
 	color: #EEEEEE;
 	text-decoration: none;
 	text-align: center;
-	font-size: 15px;
+	font-size: 14px;
 }
 
-nav li a svg{
-	margin: 0px 10px 1px 10px;
+nav li a img{
+	margin: 0px 3px 0px 3px;
 }
 
 .active{
@@ -139,10 +135,10 @@ nav li a:hover{
 }
 
 footer {
-	width: 100%;
+	width: calc(100% - 60px);
 	background-color: #000000;
-	bottom: 0;
-	left: 0;
+	bottom: 0px;
+	margin-left: 60px;
 	text-align: center;
 
 }
@@ -150,48 +146,48 @@ footer {
 footer p{
 	font-size: 18px;
 	margin: 0;
-	padding: 15px 0 15px 90px;
+	padding: 15px 0 15px 0px;
 }
 
-.article-body{
+.page-body{
 	display: block;
-	background-color: #171717;
+	background-color: #101010;
 	margin-top: 5px;
 	margin-bottom: 10px;
 	padding: 15px;
 }
 
-.article-head{
+.page-head{
 	display: block;
-	background-color: #171717;
+	background-color: #101010;
 	margin-top: 0px;
 	margin-bottom: 0px;
-	margin-left: -25px;
-	margin-right: -25px;
+	margin-left: -10px;
+	margin-right: -10px;
 	padding: 12px 15px;
 }
 
-.article-desc{
+.page-desc{
 	display: block;
-	background-color: #191919;
+	background-color: #131313;
 	margin-top: 0;
-	margin-left: -25px;
-	margin-right: -25px;
+	margin-left: -10px;
+	margin-right: -10px;
 	margin-bottom: 10px;
 	padding: 10px 15px 10px 15px;
 	
 }
 
-.article-desc p{
+.page-desc p{
 	padding: 0;
 	margin: 0;
 }
 
-.article-body p{
+.page-body p{
 	margin-bottom: 0;
 }
 
-.article-body p:first-child{
+.page-body p:first-child{
 	margin-top: 0;
 }
 
@@ -206,6 +202,10 @@ footer p{
 
 .game-card:hover {
 	background-color: #444444;
+}
+
+.game-card p{
+	margin-top: 0;
 }
 
 .game-icon {
@@ -227,15 +227,13 @@ footer p{
 }
 
 .dir {
-	position: absolute;
-	top: 0.5em;
-	left: 10px;
-	width: 13%;
+	margin-top: 10px;
+	writing-mode: vertical-rl;
 }
 
 #pwd {
 	color: #EEEEEE;
 	font-family: "Courier New";
+	margin-left: 22px;
 	font-size: 14px;
-	overflow-x: hidden;
 }
