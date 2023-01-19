@@ -96,6 +96,14 @@ p a:hover::after {
 	        top: 0.2em;
 }
 
+.nav_button {
+	        height: 2.5em;
+	        position: fixed;
+	        left: 15px;
+	        top: 0.2em;
+			width: 30px;
+}
+
 nav ul{
   list-style-type: none;
   margin: 0;

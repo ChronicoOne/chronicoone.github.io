@@ -21,6 +21,7 @@ footer_text = """Chronico.One is independently managed and developed by Connor B
 # !! Icons
 gorbu_svg = "svg/gorbu_head_original.svg"
 gorbu_fav = "img/gorbu_favicon.png"
+nav_button_svg = "svg/navbutton.svg"
 
 # !!! navicon : (name, filename)
 navicons = ["Home",
@@ -165,15 +166,20 @@ def build_page(path, main_article):
     #### h1
     header_h1 = etree.SubElement(header, "h1")
     header_h1.text = header_text
+    
+    #### img
+    header_img = etree.SubElement(header, "img")
+    header_img.set("src", homepath(path) + nav_button_svg)
+    header_img.set("class", "nav_button")
 
     #### a
     header_a = etree.SubElement(header, "a")
     header_a.set("href", gorbu_path)
 
     ##### img
-    header_img = etree.SubElement(header_a, "img")
-    header_img.set("src", homepath(path) + gorbu_svg)
-    header_img.set("class", "logo_main")
+    header_a_img = etree.SubElement(header_a, "img")
+    header_a_img.set("src", homepath(path) + gorbu_svg)
+    header_a_img.set("class", "logo_main")
 
     ### main
     main = etree.SubElement(body, "main")
