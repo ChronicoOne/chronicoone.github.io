@@ -9,6 +9,7 @@ function moveNavLeft(pos) {
 		navBar.style.width = pos + "px";
 		main.style.marginLeft = pos + "px";
 		footer.style.marginLeft = pos + "px";
+		footer.style.width = "calc(100% - " + pos + "px)";
 		setTimeout( () => {moveNavLeft(pos - 1);}, refresh);
 	}
 }
@@ -18,6 +19,7 @@ function moveNavRight(pos) {
 		navBar.style.width = pos + "px";
 		main.style.marginLeft = pos + "px";
 		footer.style.marginLeft = pos + "px";
+		footer.style.width = "calc(100% - " + pos + "px)";
 		setTimeout( () => {moveNavRight(pos + 1);}, refresh);
 	}
 }
