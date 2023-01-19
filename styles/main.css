@@ -96,7 +96,7 @@ p a:hover::after {
 	        top: 0.2em;
 }
 
-.nav_button {
+#nav_button {
 	        height: 2.5em;
 	        position: fixed;
 	        left: 15px;

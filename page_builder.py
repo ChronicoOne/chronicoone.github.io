@@ -23,6 +23,9 @@ gorbu_svg = "svg/gorbu_head_original.svg"
 gorbu_fav = "img/gorbu_favicon.png"
 nav_button_svg = "svg/navbutton.svg"
 
+# !! Scripts
+nav_js = "scripts/nav.js"
+
 # !!! navicon : (name, filename)
 navicons = ["Home",
             "Projects",
@@ -126,6 +129,11 @@ def build_page(path, main_article):
     link_icon.set("rel", "icon")
     link_icon.set("href", homepath(path) + gorbu_fav)
     
+    ### script nav.js
+    script_nav = etree.SubElement(head, "script")
+    script_nav.set("defer", "")
+    script_nav.set("src", homepath(path) + nav_js)
+    
     ## body
     body = etree.SubElement(html, "body")
 
@@ -167,10 +175,11 @@ def build_page(path, main_article):
     header_h1 = etree.SubElement(header, "h1")
     header_h1.text = header_text
     
-    #### img
+    #### img (nav toggle button)
     header_img = etree.SubElement(header, "img")
     header_img.set("src", homepath(path) + nav_button_svg)
-    header_img.set("class", "nav_button")
+    header_img.set("id", "nav_button")
+    header_img.set("onclick", "toggleNav()")
 
     #### a
     header_a = etree.SubElement(header, "a")
