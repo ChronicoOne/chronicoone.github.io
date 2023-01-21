@@ -1,26 +1,32 @@
 navBar = document.querySelector('nav ul');
 main = document.querySelector('main');
 footer = document.querySelector('footer');
-refresh = 1;
+refresh = 5;
 navMax = 60;
 
 function moveNavLeft(pos) {
 	if(pos >= 0){
-		navBar.style.width = pos + "px";
-		main.style.marginLeft = pos + "px";
-		footer.style.marginLeft = pos + "px";
-		footer.style.width = "calc(100% - " + pos + "px)";
-		setTimeout( () => {moveNavLeft(pos - 1);}, refresh);
+		setTimeout( () => {
+			posPX = pos + "px"
+			navBar.style.width = posPX;
+			main.style.marginLeft = posPX;
+			footer.style.marginLeft = posPX;
+			footer.style.width = "calc(100% - " + pos + "px)";
+			moveNavLeft(pos - 3);
+		}, refresh);
 	}
 }
 
 function moveNavRight(pos) {
 	if(pos <= navMax){
-		navBar.style.width = pos + "px";
-		main.style.marginLeft = pos + "px";
-		footer.style.marginLeft = pos + "px";
-		footer.style.width = "calc(100% - " + pos + "px)";
-		setTimeout( () => {moveNavRight(pos + 1);}, refresh);
+		setTimeout( () => {
+			posPX = pos + "px";
+			navBar.style.width = posPX;
+			main.style.marginLeft = posPX;
+			footer.style.marginLeft = posPX;
+			footer.style.width = "calc(100% - " + pos + "px)";
+			moveNavRight(pos + 3);
+		}, refresh);
 	}
 }
 
