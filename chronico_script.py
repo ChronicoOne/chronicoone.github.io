@@ -157,22 +157,22 @@ def build_content_gamecard(filepath, text_content):
     title, desc, instructions, imgpath, gamepath = unpack_gamecard(text_content)
     # a
     a = etree.Element("a")
-    a.set("class", "game-card")
+    a.set("class", "card")
     a.set("href", homepath(filepath) + gamepath)
     
     ## img
     img = etree.SubElement(a, "img")
-    img.set("class", "game-icon")
+    img.set("class", "card-img")
     img.set("src", homepath(filepath) + imgpath)
+    
+    ## span
+    a_span = etree.SubElement(a, "span")
+    a_span.set("class", "card-title")
+    a_span.text = title
     
     ## p 
     p1 = etree.SubElement(a, "p")
-    
-    ### span
-    p1_span = etree.SubElement(p1, "span")
-    p1_span.set("class", "game-title")
-    p1_span.text = title
-    p1_span.tail = desc
+    p1.text = desc
     
     ## p 
     p2 = etree.SubElement(a, "p")

@@ -7,7 +7,7 @@
 html {
 	margin: 0;
 	padding: 0;
-	background-color: #1A1A1A;
+	background-color: #222222;
 }
 
 main {
@@ -135,11 +135,11 @@ nav li a img{
 }
 
 .active{
-	background-color: #444444;
+	background-color: #222222;
 }
 
 nav li a:hover{
-	background-color: #444444;
+	background-color: #222222;
 }
 
 footer {
@@ -159,15 +159,15 @@ footer p{
 
 .page-body{
 	display: block;
-	background-color: #101010;
+	background-color: #131313;
 	margin-top: 5px;
 	margin-bottom: 10px;
-	padding: 15px;
+	padding: 10px;
 }
 
 .page-head{
 	display: block;
-	background-color: #101010;
+	background-color: #1A1A1A;
 	margin-top: 0px;
 	margin-bottom: 0px;
 	margin-left: -10px;
@@ -199,38 +199,32 @@ footer p{
 	margin-top: 0;
 }
 
-.game-card{
+.card{
 	display: block;
-	background-color:#171717;
 	width: calc(100%- 25px);
-	min-height: 150px;
-	padding: 0px 10px 10px 20px;
+	min-height: 126px;
+	padding: 10px;
 	text-decoration: none;
 }
 
-.game-card:hover {
-	background-color: #444444;
+.card p{
+	margin: 10px;
 }
 
-.game-card p{
-	margin-top: 0;
+.card:hover {
+	background-color: #222222;
 }
 
-.game-icon {
-	width: 130px;
-	height: 130px;
+.card-img{
+	height: 126px;
 	float: left;
-	padding-top: 15px;
+	padding: 0;
 	margin-right: 10px;
 	margin-top: 0px;
 }
 
-.game-title {
-	display: block;
+.card-title{
 	font-size: 1.2em;
-	margin: 0;
-	padding-top: 15px;
-	padding-bottom: 5px;
 	font-weight: bold;
 }
 
