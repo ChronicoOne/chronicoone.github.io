@@ -16,10 +16,10 @@
 		<title>Little Jumps | Chronico.One</title>	
 	</head>
 		
-	<a href="../games.html"><img src="../../svg/gorbu_head_original.svg" class="logo_main"/></a>
-	
 	<body>
+		<div id="store-button" onclick="toggleStore(); document.getElementById('head-hat').replaceWith(getHat());"></div>
 		
+		<a href="../games.html"><img src="../../svg/gorbu_head_original.svg" class="logo_main"/></a>
 		
 		<div id="TopBox" class="ui">
 			<p class="ui-p">Health: <span  id="Health">0</span></p>
@@ -35,8 +35,213 @@
 		<svg id="HeartCoin" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 91.42 86.9"><path d="M49.22,93.23,87.56,53.88C97.71,43.46,97.92,26.24,88,15.43h0a24.67,24.67,0,0,0-36.29-.71L13.42,54.07Z" transform="translate(-3.89 -6.93)" style="fill:red"/><path d="M48.51,93.83,11.17,53a28.34,28.34,0,0,1,.48-38.44h0a24.64,24.64,0,0,1,36.28.71L85.27,56.09Z" transform="translate(-3.89 -6.93)" style="fill:red"/></svg>
 
 
+		<div id="outer" style="visibility:hidden">
+			<div id="buy-menu" onclick="setHat(hat);">
+			
+			</div>
+			
+			<div id="editor-div">
+			
+				<div>
+				
+					<div id="inner">
+		
+						<svg id="hat" class="editor-svg" viewBox="0 0 100 100">
+							<path id="hat-path" d="M 5 97 Q 50 -85 95 97 Z" stroke="none" fill="purple"/>
+						</svg>
+				
+						<svg id="anchors" class="editor-svg" viewBox="0 0 100 100">
+							<circle class="anchor" id="anc-hat-path" cx="50" cy="6" r="2" stroke="none" fill="#453215"/>
+						</svg>
+				
+					</div>
+			
+					<ul id="shape-select">
+				
+						<li id="rect-button">
+							<svg id="rect-svg" class="button-svg" viewBox="0 0 100 100">
+								<rect width="50" height="50" x="25" y="25" stroke="black" stroke-width="3" fill="purple"/>
+							</svg>
+						</li>
+						
+						<li id="ellipse-button">
+							<svg id="ellipse-svg" class="button-svg" viewBox="0 0 100 100">
+								<circle cx="50" cy="50" r="30" stroke="black" stroke-width="3" fill="purple"/>
+							</svg>
+						</li>
+					
+						<li id="polygon-button">
+							<svg id="polygon-svg" class="button-svg" viewBox="0 0 100 100">
+								<polygon points="50,25 25,75 75,75" stroke="black" stroke-width="3" fill="purple"/>
+							</svg>
+						</li>
+					
+						<li id="delete-button">
+							<svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+								<rect x='0' y='0' width='100' height='100' fill='red' fill-opacity='0.7'/>
+								<path d="M25 25 L75 75 M75 25 L25 75" stroke="#212121" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+							</svg>
+						</li>
+					
+					</ul>
+				
+				</div>
+				
+				<div id="color-picker">
+					<table>
+						<tbody>
+							<tr>
+								<td style="background-color: #FF0000;"></td>
+								<td style="background-color: #FF1900;"></td>
+								<td style="background-color: #FF3300;"></td>
+							</tr>
+							
+							<tr>
+								<td style="background-color: #FF4C00;"></td>
+								<td style="background-color: #FF6600;"></td>
+								<td style="background-color: #FF8000;"></td>
+							</tr>
+							
+							<tr>
+								<td style="background-color: #FF9900;"></td>
+								<td style="background-color: #FFB300;"></td>
+								<td style="background-color: #FFCC00;"></td>
+							</tr>
+							
+							<tr>
+								<td style="background-color: #FFE600;"></td>
+								<td style="background-color: #FFFF00;"></td>
+								<td style="background-color: #E6FF00;"></td>
+							</tr>
+							
+							<tr>
+								<td style="background-color: #CCFF00;"></td>
+								<td style="background-color: #B3FF00;"></td>
+								<td style="background-color: #99FF00;"></td>
+							</tr>
+							
+							<tr>
+								<td style="background-color: #80FF00;"></td>
+								<td style="background-color: #66FF00;"></td>
+								<td style="background-color: #4CFF00;"></td>
+							</tr>
+							
+							<tr>
+								<td style="background-color: #33FF00;"></td>
+								<td style="background-color: #19FF00;"></td>
+								<td style="background-color: #00FF00;"></td>
+							</tr>
+							
+							<tr>
+								<td style="background-color: #00FF19;"></td>
+								<td style="background-color: #00FF33;"></td>
+								<td style="background-color: #00FF4C;"></td>
+							</tr>
+							
+							<tr>
+								<td style="background-color: #00FF66;"></td>
+								<td style="background-color: #00FF80;"></td>
+								<td style="background-color: #00FF99;"></td>
+							</tr>
+							
+							<tr>
+								<td style="background-color: #00FFB3;"></td>
+								<td style="background-color: #00FFCC;"></td>
+								<td style="background-color: #00FFE6;"></td>
+							</tr>
+							
+							<tr>
+								<td style="background-color: #00FFFF;"></td>
+								<td style="background-color: #00E6FF;"></td>
+								<td style="background-color: #00CCFF;"></td>
+							</tr>
+							
+							<tr>
+								<td style="background-color: #00B3FF;"></td>
+								<td style="background-color: #0099FF;"></td>
+								<td style="background-color: #0080FF;"></td>
+							</tr>
+							
+							<tr>
+								<td style="background-color: #0066FF;"></td>
+								<td style="background-color: #004CFF;"></td>
+								<td style="background-color: #0033FF;"></td>
+							</tr>
+							
+							<tr>
+								<td style="background-color: #0019FF;"></td>
+								<td style="background-color: #0000FF;"></td>
+								<td style="background-color: #1900FF;"></td>
+							</tr>
+							
+							<tr>
+								<td style="background-color: #3300FF;"></td>
+								<td style="background-color: #4C00FF;"></td>
+								<td style="background-color: #6600FF;"></td>
+							</tr>
+							
+							<tr>
+								<td style="background-color: #8000FF;"></td>
+								<td style="background-color: #9900FF;"></td>
+								<td style="background-color: #B300FF;"></td>
+							</tr>
+							
+							<tr>
+								<td style="background-color: #CC00FF;"></td>
+								<td style="background-color: #E600FF;"></td>
+								<td style="background-color: #FF00FF;"></td>
+							</tr>
+							
+							<tr>
+								<td style="background-color: #FF00E6;"></td>
+								<td style="background-color: #FF00CC;"></td>
+								<td style="background-color: #FF00B3;"></td>
+							</tr>
+							
+							<tr>
+								<td style="background-color: #FF0099;"></td>
+								<td style="background-color: #FF0080;"></td>
+								<td style="background-color: #FF0066;"></td>
+							</tr>
+							
+							<tr>
+								<td style="background-color: #FF004C;"></td>
+								<td style="background-color: #FF0033;"></td>
+								<td style="background-color: #FF0019;"></td>
+							</tr>
+							
+							<tr>
+								<td style="background-color: #FF4444;"></td>
+								<td style="background-color: #FF8888;"></td>
+								<td style="background-color: #FFCCCC;"></td>
+							</tr>
+							
+							<tr>
+								<td style="background-color: #44FF44;"></td>
+								<td style="background-color: #88FF88;"></td>
+								<td style="background-color: #CCFFCC;"></td>
+							</tr>
+							
+							<tr>
+								<td style="background-color: #4444FF;"></td>
+								<td style="background-color: #8888FF;"></td>
+								<td style="background-color: #CCCCFF;"></td>
+							</tr>
+							
+							<tr>
+								<td style="background-color: #FFFFFF;"></td>
+								<td style="background-color: #888888;"></td>
+								<td style="background-color: #000000;"></td>
+							</tr>
+							
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
 		
 		<script src="littlejumps.js" defer></script>
+		<script src="hat-editor.js" defer></script>
 		
 	</body>
 	

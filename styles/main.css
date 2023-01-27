@@ -208,7 +208,7 @@ footer p{
 }
 
 .card p{
-	margin: 10px;
+	margin: 10px 10px 10px 0px;
 }
 
 .card:hover {
@@ -221,6 +221,7 @@ footer p{
 	padding: 0;
 	margin-right: 10px;
 	margin-top: 0px;
+	margin-bottom: 10px;
 }
 
 .card-title{
