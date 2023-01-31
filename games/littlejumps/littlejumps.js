@@ -373,8 +373,9 @@ function gameLoop(){
 							if (health <= 0 || posX < 0 - (halfWidth * vRatio(vw) * 2) || posX > 100 + (halfWidth * vRatio(vw)) || posY < 0 - (halfWidth * vRatio(vh)) || posY > 100 + (halfWidth * vRatio(vh))) { growing = false; running = false; }
 							
 							headHat = document.getElementById('head-hat');
-							hatOffsetY = halfWidth * 1.5 * vRatio(vh);
-							hatOffsetX = Math.tan(playerTilt) * hatOffsetY;
+							hatOffset = halfWidth * 1.5;
+							hatOffsetX = Math.sin(playerTilt) * hatOffset * vRatio(vw);
+							hatOffsetY = Math.cos(playerTilt) * hatOffset * vRatio(vh);
 							
 							player.style.left = posX + "vw";
 							player.style.top = posY + "vh"; 
@@ -382,7 +383,7 @@ function gameLoop(){
 							player.style.height = (halfWidth * 2) + playerUnits;
 							player.style.transform = "rotate(" + playerTilt + "rad)";
 							
-							headHat.style.left = (posX) + "vw";
+							headHat.style.left = (posX + hatOffsetX) + "vw";
 							headHat.style.top = (posY - hatOffsetY) + "vh"; 
 							headHat.style.width = (halfWidth * 2) + playerUnits;
 							headHat.style.height = (halfWidth * 2) + playerUnits;
