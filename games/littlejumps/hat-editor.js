@@ -32,30 +32,50 @@ let build = false;
 let fillColor = "purple";
 
 
-function setHat(hatSVG){
-	const hatCopy = hatSVG.cloneNode(true);
-	hatCopy.setAttribute('viewBox', '0 0 100 100');
+function setHat(){
+	const XMLS = new XMLSerializer();
+	const hatStr = XMLS.serializeToString(document.getElementById('hat'));
+	const hatAnchorsStr = XMLS.serializeToString(document.getElementById('anchors'));
+	localStorage.setItem('hat', hatStr);
+	localStorage.setItem('hatAnchors', hatAnchorsStr);	
+}
+
+function getHatRaw() {
+	const parser = new DOMParser();
+	let fetchedHat = localStorage.getItem('hat');
+	if(fetchedHat === null){
+		setHat();
+		fetchedHat = localStorage.getItem('hat');
+	}
+	const doc = parser.parseFromString(fetchedHat, "image/svg+xml");
+	return doc.firstChild;
+}
+
+function getHat(){
+	const hatCopy = getHatRaw().cloneNode(true);
 	hatCopy.setAttribute('id', 'head-hat');
 	hatCopy.setAttribute('class', '');
 	for(const node of hatCopy.children){
 		node.setAttribute('id', '');
 	}
-	const XMLS = new XMLSerializer();
-	const hatStr = XMLS.serializeToString(hatCopy);
-	localStorage.setItem('hat', hatStr);
+	return hatCopy;
 }
 
-function getHat(){
+function getHatAnchors(){
 	const parser = new DOMParser();
-	let fetchedHat = localStorage.getItem('hat');
-	if(typeof fetchedHat === 'undefined' || fetchedHat =='{}'){
-		const defaultHat = document.createElement('svg');
-		defaultHat.setAttribute('id', 'head-hat');
-		setHat(defaultHat);
-		fetchedHat = localStorage.getItem('hat');
+	let fetchedAnchors = localStorage.getItem('hatAnchors');
+	if(fetchedAnchors === null){
+		setHat();
+		fetchedAnchors = localStorage.getItem('hatAnchors');
 	}
-	const doc = parser.parseFromString(fetchedHat, "image/svg+xml");
+	const doc = parser.parseFromString(fetchedAnchors, "image/svg+xml");
 	return doc.firstChild;
+}
+
+function refreshHat(){
+	document.getElementById('head-hat').replaceWith(getHat());
+	//document.getElementById('anchors').replaceWith(getHatAnchors());
+	//document.getElementById('hat').replaceWith(getHatRaw());
 }
 
 function setActiveShape(shape){
@@ -526,4 +546,5 @@ for (const td of document.querySelectorAll('td')){
 	});
 }
 
+refreshHat();
 setActiveShape(hatPath);

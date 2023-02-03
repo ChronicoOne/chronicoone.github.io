@@ -178,10 +178,14 @@ body {
 		background-color: #EEEEEE;
 	}
 	#buy-menu {
-		background-color: blue;
+		background-color: #EEEEEE;
 		height: 50px;
 		width: 100%;
 		margin-bottom: 10px;
+		font-size: 30px;
+		padding-top: 10px;
+		text-align: center;
+		font-family: monospace;
 	}
 
 	table {

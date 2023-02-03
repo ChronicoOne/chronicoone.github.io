@@ -100,8 +100,7 @@ let heartCoinDropOffset = heartCoinDropOffsetInitial;
 let growing = false;
 let running = true;
 
-let headHat = defaultHat;
-document.body.appendChild(headHat);
+let headHat = document.getElementById('head-hat');
 
 function vRatio(v){
 		if (playerUnits == "vh") {
