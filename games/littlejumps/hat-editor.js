@@ -137,16 +137,99 @@ function deleteShape(){
 	if (activeShape != null){
 		let postID = activeShape.getAttribute('id');
 	
-		if (postID[0] == "e" || postID[0] == "r"){
+		if (postID[0] == "e"){
 			document.getElementById('anc-c-' + postID).remove();
 			document.getElementById('anc-rx-' + postID).remove();
 			document.getElementById('anc-ry-' + postID).remove();
+			shapeCounts["ellipse"]--;
+			for(const shape of hat.children){
+				const shapeId = shape.getAttribute('id');
+				let shapeNum = 0;
+				if(shapeId[0] == "e"){
+					shapeNum = +(shapeId[shapeId.length - 1]);
+					if(shapeNum > +(postID[postID.length - 1])){
+						shapeNum--;
+					}
+					shape.setAttribute("id", "ellipse" + shapeNum);
+				}
+			}
+			for(const shapeAnchor of anchorOverlay.children){
+				const anchorId = shapeAnchor.getAttribute('id');
+				const splitId = anchorId.split('-');
+				const shapeId = splitId[splitId.length - 1];
+				let shapeNum = 0;
+				if(shapeId[0] == "e"){
+					shapeNum = +(shapeId[shapeId.length - 1]);
+					if(shapeNum > +(postID[postID.length - 1])){
+						shapeNum--;
+					}
+					shapeAnchor.setAttribute("id", splitId[0] + "-" + splitId[1] + "-" + "ellipse" + shapeNum);
+				}
+			}
+			
 		}
-	
+		
+		if (postID[0] == "r"){
+			document.getElementById('anc-c-' + postID).remove();
+			document.getElementById('anc-rx-' + postID).remove();
+			document.getElementById('anc-ry-' + postID).remove();
+			shapeCounts["rect"]--;
+			for(const shape of hat.children){
+				const shapeId = shape.getAttribute('id');
+				let shapeNum = 0;
+				if(shapeId[0] == "r"){
+					shapeNum = +(shapeId[shapeId.length - 1]);
+					if(shapeNum > +(postID[postID.length - 1])){
+						shapeNum--;
+					}
+					shape.setAttribute("id", "rect" + shapeNum);
+				}
+			}
+			for(const shapeAnchor of anchorOverlay.children){
+				const anchorId = shapeAnchor.getAttribute('id');
+				const splitId = anchorId.split('-');
+				const shapeId = splitId[splitId.length - 1];
+				let shapeNum = 0;
+				if(shapeId[0] == "r"){
+					shapeNum = +(shapeId[shapeId.length - 1]);
+					if(shapeNum > +(postID[postID.length - 1])){
+						shapeNum--;
+					}
+					shapeAnchor.setAttribute("id", splitId[0] + "-" + splitId[1] + "-" + "rect" + shapeNum);
+				}
+			}
+			
+		}
+		
 		if (postID[0] == "p" && postID[1] == "o"){
 			document.getElementById('anc-a-' + postID).remove();
 			document.getElementById('anc-b-' + postID).remove();
 			document.getElementById('anc-c-' + postID).remove();
+			shapeCounts["polygon"]--;
+			for(const shape of hat.children){
+				const shapeId = shape.getAttribute('id');
+				let shapeNum = 0;
+				if(shapeId[0] + shapeId[1] == "po"){
+					shapeNum = +(shapeId[shapeId.length - 1]);
+					if(shapeNum > +(postID[postID.length - 1])){
+						shapeNum--;
+					}
+					shape.setAttribute("id", "polygon" + shapeNum);
+				}
+			}
+			for(const shapeAnchor of anchorOverlay.children){
+				const anchorId = shapeAnchor.getAttribute('id');
+				const splitId = anchorId.split('-');
+				const shapeId = splitId[splitId.length - 1];
+				let shapeNum = 0;
+				if(shapeId[0] + shapeId[1] == "po"){
+					shapeNum = +(shapeId[shapeId.length - 1]);
+					if(shapeNum > +(postID[postID.length - 1])){
+						shapeNum--;
+					}
+					shapeAnchor.setAttribute("id", splitId[0] + "-" + splitId[1] + "-" + "polygon" + shapeNum);
+				}
+			}
 		}
 	
 		if (postID[0] == "p" && postID[1] == "a"){
