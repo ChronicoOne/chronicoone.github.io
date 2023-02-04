@@ -6,12 +6,12 @@ const deleteButton = document.getElementById("delete-button");
 const activeColor = "#DDDDDD";
 const inactiveColor = "#EEEEEE";
 
-const hatPath = document.getElementById("hat-path");
+const hatPath = document.getElementById("path");
 const hatPathAnc = document.getElementById("anc-hat-path");
 
 
-const hat = document.getElementById("hat");
-const anchorOverlay = document.getElementById("anchors");
+let hat = document.getElementById("hat");
+let anchorOverlay = document.getElementById("anchors");
 
 const anchorOffsetX = 2;
 const anchorOffsetY = 2;
@@ -72,10 +72,36 @@ function getHatAnchors(){
 	return doc.firstChild;
 }
 
+function setupHatAnchors(){
+	const anchorSVG = document.getElementById('anchors');
+	anchorSVG.addEventListener('mousemove', makeMoves);
+	anchorSVG.addEventListener('mousedown', (event) => {if (build){buildShape(event.offsetX / 4, event.offsetY / 4); event.stopPropagation();}});
+	for(const hatAnchor of anchorSVG.children){
+		const tag = hatAnchor.getAttribute('id').split('-')[2];	
+		hatAnchor.addEventListener('mousedown', (event) => {
+											down = true;
+											activeAnchor = hatAnchor;
+											setActiveShape(document.getElementById(tag));
+											event.stopPropagation();
+											});
+	}
+}
+
 function refreshHat(){
 	document.getElementById('head-hat').replaceWith(getHat());
-	//document.getElementById('anchors').replaceWith(getHatAnchors());
-	//document.getElementById('hat').replaceWith(getHatRaw());
+	document.getElementById('anchors').replaceWith(getHatAnchors());
+	setupHatAnchors();
+	document.getElementById('hat').replaceWith(getHatRaw());
+	shapeCounts = {"ellipse" : 0, "polygon" : 0, "rect" : 0}
+	for(const shape of document.getElementById('hat').children){
+		const tag = shape.getAttribute('id');
+		const subTag = tag.substring(0, tag.length-1);
+		if(subTag[0] != 'p'){
+			shapeCounts[subTag]++;
+		}
+	}
+	hat = document.getElementById('hat');
+	anchorOverlay = document.getElementById('anchors');
 }
 
 function setActiveShape(shape){
@@ -134,8 +160,7 @@ function deleteShape(){
 
 function buildShape(x, y) {
 	build = false;
-	shape = document.createElementNS('http://www.w3.org/2000/svg', currentShape);
-	
+	const shape = document.createElementNS('http://www.w3.org/2000/svg', currentShape);
 	shape.setAttribute('id', currentShape + shapeCounts[currentShape]);
 	shape.setAttribute('fill', fillColor);
 	
@@ -339,12 +364,13 @@ function buildShape(x, y) {
 	shapeCounts[currentShape]++;
 	setActiveShape(shape);
 	hat.appendChild(shape);
+	
 }
 
 function moveHatTip(x, y){
-	hatPath.setAttribute('d', "M 5 97 Q " + x + " " + ((y * 2) - 97) + " 95 97 Z");
-	hatPathAnc.setAttribute('cx', x);
-	hatPathAnc.setAttribute('cy', y);
+	activeShape.setAttribute('d', "M 5 97 Q " + x + " " + ((y * 2) - 97) + " 95 97 Z");
+	activeAnchor.setAttribute('cx', x);
+	activeAnchor.setAttribute('cy', y);
 }
 
 function moveEllipseRX(x){
@@ -476,6 +502,25 @@ function movePolygonC(x, y){
 	activeAnchor.setAttribute('cy', y);
 }
 
+function makeMoves(event){
+	let x = event.offsetX / 4;
+	let y = event.offsetY / 4;
+	
+	if (down) {
+		if (activeAnchor.id == "anc-hat-path"){moveHatTip(x, y);
+		} else if (activeAnchor.id.substring(0, 8) == "anc-rx-e"){moveEllipseRX(x);
+		} else if (activeAnchor.id.substring(0, 8) == "anc-ry-e"){moveEllipseRY(y);
+		} else if (activeAnchor.id.substring(0, 7) == "anc-c-e"){moveEllipseC(x, y);
+		} else if (activeAnchor.id.substring(0, 8) == "anc-rx-r"){moveRectRX(x);
+		} else if (activeAnchor.id.substring(0, 8) == "anc-ry-r"){moveRectRY(y);
+		} else if (activeAnchor.id.substring(0, 7) == "anc-c-r"){moveRectC(x, y);
+		} else if (activeAnchor.id.substring(0, 7) == "anc-a-p"){movePolygonA(x, y);
+		} else if (activeAnchor.id.substring(0, 7) == "anc-b-p"){movePolygonB(x, y);
+		} else if (activeAnchor.id.substring(0, 7) == "anc-c-p"){movePolygonC(x, y);
+		}
+	}
+}
+
 anchorOverlay.addEventListener('mousedown', (event) => {if (build){buildShape(event.offsetX / 4, event.offsetY / 4); event.stopPropagation();}});
 
 hatPathAnc.addEventListener('mousedown', (event) => {
@@ -485,28 +530,7 @@ hatPathAnc.addEventListener('mousedown', (event) => {
 											event.stopPropagation();
 											});
 
-anchorOverlay.addEventListener('mousemove', 
-	(event) => 
-	{
-		let x = event.offsetX / 4;
-		let y = event.offsetY / 4;
-		
-		if (down) {
-			if (activeAnchor.id == "anc-hat-path"){moveHatTip(x, y);
-			} else if (activeAnchor.id.substring(0, 8) == "anc-rx-e"){moveEllipseRX(x);
-			} else if (activeAnchor.id.substring(0, 8) == "anc-ry-e"){moveEllipseRY(y);
-			} else if (activeAnchor.id.substring(0, 7) == "anc-c-e"){moveEllipseC(x, y);
-			} else if (activeAnchor.id.substring(0, 8) == "anc-rx-r"){moveRectRX(x);
-			} else if (activeAnchor.id.substring(0, 8) == "anc-ry-r"){moveRectRY(y);
-			} else if (activeAnchor.id.substring(0, 7) == "anc-c-r"){moveRectC(x, y);
-			} else if (activeAnchor.id.substring(0, 7) == "anc-a-p"){movePolygonA(x, y);
-			} else if (activeAnchor.id.substring(0, 7) == "anc-b-p"){movePolygonB(x, y);
-			} else if (activeAnchor.id.substring(0, 7) == "anc-c-p"){movePolygonC(x, y);
-			}
-		}
-		
-	}
-);
+anchorOverlay.addEventListener('mousemove', makeMoves);
 
 document.addEventListener('mouseup', (event) => {down = false;});
 
