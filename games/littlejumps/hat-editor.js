@@ -143,14 +143,14 @@ function deleteShape(){
 			document.getElementById('anc-ry-' + postID).remove();
 		}
 	
-		if (postID[0] == "p"){
+		if (postID[0] == "p" && postID[1] == "o"){
 			document.getElementById('anc-a-' + postID).remove();
 			document.getElementById('anc-b-' + postID).remove();
 			document.getElementById('anc-c-' + postID).remove();
 		}
 	
-		if (postID[0] == "h"){
-			document.getElementById('anc-' + postID).remove();
+		if (postID[0] == "p" && postID[1] == "a"){
+			document.getElementById('anc-hat-' + postID).remove();
 		}
 		
 		activeShape.remove();
