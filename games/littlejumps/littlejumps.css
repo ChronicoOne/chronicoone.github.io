@@ -42,12 +42,24 @@ body {
 	z-index: 3;
 }
 
+#Coin {
+	width: 5vh;
+	height: 5vh;
+	position: fixed;
+	top: -10vh;
+	z-index: 3;
+}
+
 #Score {
 	color: #22FF22;
 }
 
 #Health {
 	color: #FF2222;
+}
+
+#Coins {
+	color: #d9e021;
 }
 
 #HighScore {

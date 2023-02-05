@@ -96,7 +96,7 @@ function refreshHat(){
 	for(const shape of document.getElementById('hat').children){
 		const tag = shape.getAttribute('id');
 		const subTag = tag.substring(0, tag.length-1);
-		if(subTag[0] != 'p'){
+		if(subTag[0] + subTag[1] != 'pa'){
 			shapeCounts[subTag]++;
 		}
 	}
@@ -113,7 +113,6 @@ function setActiveShape(shape){
 		shape.setAttribute('stroke-width', '0.5');
 		shape.setAttribute('stroke', 'red');
 	}
-	
 	activeShape = shape;
 }
 
@@ -239,6 +238,7 @@ function deleteShape(){
 		activeShape.remove();
 		activeShape = null;
 	}
+	setupHatAnchors();
 }
 
 function buildShape(x, y) {

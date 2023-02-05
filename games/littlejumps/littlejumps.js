@@ -26,11 +26,23 @@ const heartCoinElem = document.getElementById("HeartCoin");
 
 const heartCoin = {elem : heartCoinElem, x : Math.random() * 100, y : heartCoinDropMin + heartCoinDropOffsetInitial, w : halfHeartWidth * 2, h : halfHeartHeight * 2, tag : "HeartCoin", velY : 0};
 
+const coinDropMin = -110;
+const coinDropVariation = 10;
+const coinDropOffsetInitial = -10;
+
+const halfCoinHeight = 4;
+const halfCoinWidth = 4;
+const coinElem = document.getElementById("Coin");
+
+const coin = {elem : coinElem, x : Math.random() * 100, y : coinDropMin + coinDropOffsetInitial, w : halfCoinWidth * 2, h : halfCoinHeight * 2, tag : "Coin", velY : 0};
+
+
 const fallingVerts = [];
-const fallingItems = [heartCoin];
+const fallingItems = [heartCoin, coin];
 
 const scoreBox = document.getElementById('Score');
 const healthBox = document.getElementById('Health');
+const coinsBox = document.getElementById('Coins');
 const highScoreBox = document.getElementById('HighScore');
 
 const gradientTopInitial = [45, 45, 154];
@@ -80,6 +92,12 @@ if (typeof localStorage.getItem('highScore') === 'undefined') {
 let G = initialG;
 let maxVerts = 5;
 let health = initialHealth;
+let coins = 0;
+
+if(localStorage.getItem('Coins') !== null){
+	coins = +(localStorage.getItem('Coins'));
+}
+
 let posX = 50;
 let posY = 50;
 let velX = 0;
@@ -96,6 +114,7 @@ let arrowOffsetX = 10;
 let vertSpawnX = 50;
 let vertSpawnY = -10;
 let heartCoinDropOffset = heartCoinDropOffsetInitial;
+let coinDropOffset = coinDropOffsetInitial;
 
 let growing = false;
 let running = true;
@@ -134,8 +153,11 @@ function restart(){
 	
 	for( const item of fallingItems ){
 		if( item.tag == "HeartCoin" ){
-			item.y  = 200;
-		}		
+			item.y  = heartCoinDropMin + heartCoinDropOffsetInitial;
+		}
+		if( item.tag == "Coin" ){
+			item.y  = coinDropMin + coinDropOffsetInitial;
+		}				
 	}
 	
 	updateItems();
@@ -261,6 +283,25 @@ function updateItems() {
 			item.y += item.velY;
 		}
 		
+		if (item.tag == "Coin") {
+			if (itemCollide(item)) {
+					item.y  = coinDropMin + coinDropOffset - (Math.random() * coinDropVariation);
+					item.x = Math.random() * 100;
+					item.velY = 0;
+					
+					if (running) {
+						coins++;
+					}
+			}
+			
+			if (item.y > 100){
+				item.y  = coinDropMin + coinDropOffset - (Math.random() * coinDropVariation);
+				item.x = Math.random() * 100;
+				item.velY = 0;
+			}
+			item.y += item.velY;
+		}
+		
 		item.elem.style.top = item.y + "vh";
 		item.elem.style.left = item.x + "vw";
 		item.elem.style.width = item.w + playerUnits;
@@ -276,6 +317,11 @@ function updateScore(){
 
 function updateHealth(){
 	healthBox.textContent = health.toString();
+}
+
+function updateCoins(){
+	coinsBox.textContent = coins.toString();
+	localStorage.setItem('Coins', coins);
 }
 
 function updateHighScore(){
@@ -345,6 +391,7 @@ function gameLoop(){
 								
 								updateScore();
 								updateHealth();
+								updateCoins();
 								growArrow();
 								updateVerts();
 								updateItems();
