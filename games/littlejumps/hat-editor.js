@@ -9,6 +9,33 @@ const inactiveColor = "#EEEEEE";
 const hatPath = document.getElementById("path");
 const hatPathAnc = document.getElementById("anc-hat-path");
 
+const defaultPath = document.createElementNS('http://www.w3.org/2000/svg', "path");
+defaultPath.setAttribute('id', 'path');
+defaultPath.setAttribute('d', "M 5 97 Q 50 -85 95 97 Z");
+defaultPath.setAttribute('stroke', 'none');
+defaultPath.setAttribute('stroke-width', '0.5');
+defaultPath.setAttribute('fill', 'purple');
+
+const defaultHat = document.createElementNS('http://www.w3.org/2000/svg', "svg");
+defaultHat.setAttribute('id', 'hat');
+defaultHat.setAttribute('class', 'editor-svg');
+defaultHat.setAttribute('viewBox', '0 0 100 100');
+defaultHat.appendChild(defaultPath);
+
+const defaultPathAnchor = document.createElementNS('http://www.w3.org/2000/svg', "circle");
+defaultPathAnchor.setAttribute('class', 'anchor');
+defaultPathAnchor.setAttribute('id', 'anc-hat-path');
+defaultPathAnchor.setAttribute('cx', '50');
+defaultPathAnchor.setAttribute('cy', '6');
+defaultPathAnchor.setAttribute('r', '2');
+defaultPathAnchor.setAttribute('stroke', 'none');
+defaultPathAnchor.setAttribute('fill', '#453215');
+
+const defaultAnchors = document.createElementNS('http://www.w3.org/2000/svg', "svg");
+defaultAnchors.setAttribute('id', 'anchors');
+defaultAnchors.setAttribute('class', 'editor-svg');
+defaultAnchors.setAttribute('viewBox', '0 0 100 100');
+defaultAnchors.appendChild(defaultPathAnchor);
 
 let hat = document.getElementById("hat");
 let anchorOverlay = document.getElementById("anchors");
@@ -102,6 +129,18 @@ function refreshHat(){
 	}
 	hat = document.getElementById('hat');
 	anchorOverlay = document.getElementById('anchors');
+}
+
+function sellHat(){
+	document.getElementById('hat').replaceWith(defaultHat);
+	document.getElementById('anchors').replaceWith(defaultAnchors);
+	
+	hat = document.getElementById('hat');
+	anchorOverlay = document.getElementById('anchors');
+	fillColor = "purple";
+	
+	setHat();
+	refreshHat();
 }
 
 function setActiveShape(shape){

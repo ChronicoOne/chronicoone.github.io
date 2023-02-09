@@ -59,9 +59,6 @@ for(let i = 0; i < 3; i++){
 const gradientSpeed = 20;
 const gradientInc = [0.75 , 0.5, 1];
 
-const defaultHat = document.createElement('svg');
-defaultHat.setAttribute('id', 'head-hat');
-
 let storeOpen = false;
 
 let vh = window.innerHeight;
