@@ -58,8 +58,16 @@ body {
 	color: #FF2222;
 }
 
+#Health::after {
+	content: "❤️";
+}
+
 #Coins {
 	color: #d9e021;
+}
+
+#Coins::after {
+	content: "🪙";
 }
 
 #HighScore {
@@ -180,7 +188,20 @@ body {
 		display:block;
 		height: 101px;
 		width: 101px;
+		font-size: 14px;
+		font-family: monospace;
+		text-align: center;
+		
 	}
+	
+	.shape-button svg{
+		margin-top: -10px;
+	}
+	
+	.shape-button span::after{
+		content: "🪙";
+	}
+	
 	
 	#color-picker {
 		float: right;

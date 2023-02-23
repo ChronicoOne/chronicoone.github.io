@@ -289,15 +289,14 @@ function deleteShape(){
 
 function buildShape(x, y) {
 	build = false;
+	if (activeButton != null){
+		activeButton.style.backgroundColor = inactiveColor;
+	}
 	if(+(document.getElementById("Coins").textContent) >= shapeCost){
 		document.getElementById("Coins").textContent = +(document.getElementById("Coins").textContent) - shapeCost;
 		const shape = document.createElementNS('http://www.w3.org/2000/svg', currentShape);
 		shape.setAttribute('id', currentShape + shapeCounts[currentShape]);
 		shape.setAttribute('fill', fillColor);
-		
-		if (activeButton != null){
-			activeButton.style.backgroundColor = inactiveColor;
-		}
 		
 		if (currentShape == "ellipse") {
 			shape.setAttribute('cx', x);

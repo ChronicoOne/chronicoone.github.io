@@ -22,9 +22,9 @@
 		<a href="../games.html"><img src="../../svg/gorbu_head_original.svg" class="logo_main"/></a>
 		
 		<div id="TopBox" class="ui">
-			<p class="ui-p">Coins: <span  id="Coins">0</span></p>
-			<p class="ui-p">Health: <span  id="Health">0</span></p>
-			<p class="ui-p">Score: <span id="Score">0</span></p>
+			<p class="ui-p"><span  id="Coins">0</span></p>
+			<p class="ui-p"><span  id="Health">0</span></p>
+			<p class="ui-p"><span id="Score">0</span></p>
 		</div>
 		
 		<div id="BottomBox" class="ui">
@@ -65,19 +65,23 @@
 			
 					<ul id="shape-select">
 				
-						<li id="rect-button">
+						<li class="shape-button" id="rect-button">
+							<span>8</span>
 							<svg id="rect-svg" class="button-svg" viewBox="0 0 100 100">
 								<rect width="50" height="50" x="25" y="25" stroke="black" stroke-width="3" fill="#9900FF"/>
 							</svg>
+							
 						</li>
 						
-						<li id="ellipse-button">
+						<li class="shape-button" id="ellipse-button">
+							<span>8</span>
 							<svg id="ellipse-svg" class="button-svg" viewBox="0 0 100 100">
 								<circle cx="50" cy="50" r="30" stroke="black" stroke-width="3" fill="#9900FF"/>
 							</svg>
 						</li>
 					
-						<li id="polygon-button">
+						<li class="shape-button" id="polygon-button">
+							<span>8</span>
 							<svg id="polygon-svg" class="button-svg" viewBox="0 0 100 100">
 								<polygon points="50,25 25,75 75,75" stroke="black" stroke-width="3" fill="#9900FF"/>
 							</svg>
