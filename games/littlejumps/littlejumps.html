@@ -17,7 +17,7 @@
 	</head>
 		
 	<body>
-		<div id="store-button" onclick="toggleStore(); refreshHat();"></div>
+		<div id="store-button" onclick="toggleStore(); setHat(); refreshHat(); adjustCoins();"></div>
 		
 		<a href="../games.html"><img src="../../svg/gorbu_head_original.svg" class="logo_main"/></a>
 		
@@ -40,10 +40,10 @@
 		<svg id="head-hat" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"></svg>
 
 		<div id="outer" style="visibility:hidden">
-			<div id="buy-menu" onclick="setHat();">
+			<div id="buy-menu">
 				<ul>
-					<li onclick="sellHat();">Sell</li>
-					<li>Buy</li>
+					<li>Hat Builder</li>
+					<li style="background-color:red; float: right;" onclick="sellHat();">Reset</li>
 				</ul>
 			</div>
 			
@@ -67,19 +67,19 @@
 				
 						<li id="rect-button">
 							<svg id="rect-svg" class="button-svg" viewBox="0 0 100 100">
-								<rect width="50" height="50" x="25" y="25" stroke="black" stroke-width="3" fill="purple"/>
+								<rect width="50" height="50" x="25" y="25" stroke="black" stroke-width="3" fill="#9900FF"/>
 							</svg>
 						</li>
 						
 						<li id="ellipse-button">
 							<svg id="ellipse-svg" class="button-svg" viewBox="0 0 100 100">
-								<circle cx="50" cy="50" r="30" stroke="black" stroke-width="3" fill="purple"/>
+								<circle cx="50" cy="50" r="30" stroke="black" stroke-width="3" fill="#9900FF"/>
 							</svg>
 						</li>
 					
 						<li id="polygon-button">
 							<svg id="polygon-svg" class="button-svg" viewBox="0 0 100 100">
-								<polygon points="50,25 25,75 75,75" stroke="black" stroke-width="3" fill="purple"/>
+								<polygon points="50,25 25,75 75,75" stroke="black" stroke-width="3" fill="#9900FF"/>
 							</svg>
 						</li>
 					

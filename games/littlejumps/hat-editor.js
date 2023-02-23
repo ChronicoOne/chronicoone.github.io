@@ -5,6 +5,8 @@ const deleteButton = document.getElementById("delete-button");
 
 const activeColor = "#DDDDDD";
 const inactiveColor = "#EEEEEE";
+const shapeCost = 8;
+const shapeSellValue = 5;
 
 const hatPath = document.getElementById("path");
 const hatPathAnc = document.getElementById("anc-hat-path");
@@ -14,7 +16,7 @@ defaultPath.setAttribute('id', 'path');
 defaultPath.setAttribute('d', "M 5 97 Q 50 -85 95 97 Z");
 defaultPath.setAttribute('stroke', 'none');
 defaultPath.setAttribute('stroke-width', '0.5');
-defaultPath.setAttribute('fill', 'purple');
+defaultPath.setAttribute('fill', '#9900FF');
 
 const defaultHat = document.createElementNS('http://www.w3.org/2000/svg', "svg");
 defaultHat.setAttribute('id', 'hat');
@@ -56,7 +58,7 @@ let shapeCounts = {"ellipse" : 0, "polygon" : 0, "rect" : 0}
 let down = false;
 let build = false;
 
-let fillColor = "purple";
+let fillColor = "#9900FF";
 
 
 function setHat(){
@@ -132,13 +134,17 @@ function refreshHat(){
 }
 
 function sellHat(){
+	const shapesNum = +(document.getElementById('hat').childElementCount);
+	if (shapesNum > 1){
+		document.getElementById("Coins").textContent = +(document.getElementById("Coins").textContent) + ((shapesNum - 1) * shapeSellValue);
+	}
+	
 	document.getElementById('hat').replaceWith(defaultHat);
 	document.getElementById('anchors').replaceWith(defaultAnchors);
 	
 	hat = document.getElementById('hat');
 	anchorOverlay = document.getElementById('anchors');
-	fillColor = "purple";
-	
+
 	setHat();
 	refreshHat();
 }
@@ -276,217 +282,220 @@ function deleteShape(){
 		
 		activeShape.remove();
 		activeShape = null;
+		document.getElementById("Coins").textContent = +(document.getElementById("Coins").textContent) + shapeSellValue;
 	}
 	setupHatAnchors();
 }
 
 function buildShape(x, y) {
 	build = false;
-	const shape = document.createElementNS('http://www.w3.org/2000/svg', currentShape);
-	shape.setAttribute('id', currentShape + shapeCounts[currentShape]);
-	shape.setAttribute('fill', fillColor);
-	
-	if (activeButton != null){
-		activeButton.style.backgroundColor = inactiveColor;
+	if(+(document.getElementById("Coins").textContent) >= shapeCost){
+		document.getElementById("Coins").textContent = +(document.getElementById("Coins").textContent) - shapeCost;
+		const shape = document.createElementNS('http://www.w3.org/2000/svg', currentShape);
+		shape.setAttribute('id', currentShape + shapeCounts[currentShape]);
+		shape.setAttribute('fill', fillColor);
+		
+		if (activeButton != null){
+			activeButton.style.backgroundColor = inactiveColor;
+		}
+		
+		if (currentShape == "ellipse") {
+			shape.setAttribute('cx', x);
+			shape.setAttribute('cy', y);
+		
+			shape.setAttribute('rx', 5);
+			shape.setAttribute('ry', 5);
+		
+			let rxAnchor = document.createElementNS('http://www.w3.org/2000/svg', "circle");
+			rxAnchor.setAttribute('class', 'anchor');
+			rxAnchor.setAttribute('id', 'anc-rx-' + currentShape + shapeCounts[currentShape]);
+			rxAnchor.setAttribute('r', anchorRadius);
+			rxAnchor.setAttribute('cx', x + 5 + anchorOffsetX);
+			rxAnchor.setAttribute('cy', y);
+			rxAnchor.setAttribute('stroke', 'none');
+			rxAnchor.setAttribute('fill', '#453215');
+		
+			anchorOverlay.appendChild(rxAnchor);
+		
+			rxAnchor.addEventListener('mousedown', (event) => {
+												down = true;
+												activeAnchor = rxAnchor;
+												setActiveShape(document.getElementById(activeAnchor.id.substring(7)));
+												event.stopPropagation();
+												});
+		
+			let ryAnchor = document.createElementNS('http://www.w3.org/2000/svg', "circle");
+			ryAnchor.setAttribute('class', 'anchor');
+			ryAnchor.setAttribute('id', 'anc-ry-' + currentShape + shapeCounts[currentShape]);
+			ryAnchor.setAttribute('r', anchorRadius);
+			ryAnchor.setAttribute('cx', x);
+			ryAnchor.setAttribute('cy', y - 5 - anchorOffsetY);
+			ryAnchor.setAttribute('stroke', 'none');
+			ryAnchor.setAttribute('fill', '#453215');
+		
+			anchorOverlay.appendChild(ryAnchor);
+		
+			ryAnchor.addEventListener('mousedown', (event) => {
+												down = true;
+												activeAnchor = ryAnchor;
+												setActiveShape(document.getElementById(activeAnchor.id.substring(7)));
+												event.stopPropagation();
+												});
+												
+			let cAnchor = document.createElementNS('http://www.w3.org/2000/svg', "circle");
+		
+			cAnchor.setAttribute('class', 'anchor');
+			cAnchor.setAttribute('id', 'anc-c-' + currentShape + shapeCounts[currentShape]);
+			cAnchor.setAttribute('r', anchorRadius);
+			cAnchor.setAttribute('cx', x);
+			cAnchor.setAttribute('cy', y);
+			cAnchor.setAttribute('stroke', 'none');
+			cAnchor.setAttribute('fill', 'red');
+		
+			anchorOverlay.appendChild(cAnchor);
+			
+			cAnchor.addEventListener('mousedown', (event) => {
+												down = true;
+												activeAnchor = cAnchor;
+												setActiveShape(document.getElementById(activeAnchor.id.substring(6)));
+												event.stopPropagation();
+												});
+			activeAnchor = cAnchor;
+		}
+		
+		if (currentShape == "rect"){
+			
+			shape.setAttribute('width', 10);
+			shape.setAttribute('height', 10);
+			
+			shape.setAttribute('x', x - (10/2));
+			shape.setAttribute('y', y - (10/2));
+			
+		
+			let rxAnchor = document.createElementNS('http://www.w3.org/2000/svg', "circle");
+			rxAnchor.setAttribute('class', 'anchor');
+			rxAnchor.setAttribute('id', 'anc-rx-' + currentShape + shapeCounts[currentShape]);
+			rxAnchor.setAttribute('r', anchorRadius);
+			rxAnchor.setAttribute('cx', x + 5 + anchorOffsetX);
+			rxAnchor.setAttribute('cy', y);
+			rxAnchor.setAttribute('stroke', 'none');
+			rxAnchor.setAttribute('fill', '#453215');
+		
+			anchorOverlay.appendChild(rxAnchor);
+		
+			rxAnchor.addEventListener('mousedown', (event) => {
+												down = true;
+												activeAnchor = rxAnchor;
+												setActiveShape(document.getElementById(activeAnchor.id.substring(7)));
+												event.stopPropagation();
+												});
+		
+			let ryAnchor = document.createElementNS('http://www.w3.org/2000/svg', "circle");
+			ryAnchor.setAttribute('class', 'anchor');
+			ryAnchor.setAttribute('id', 'anc-ry-' + currentShape + shapeCounts[currentShape]);
+			ryAnchor.setAttribute('r', anchorRadius);
+			ryAnchor.setAttribute('cx', x);
+			ryAnchor.setAttribute('cy', y - 5 - anchorOffsetY);
+			ryAnchor.setAttribute('stroke', 'none');
+			ryAnchor.setAttribute('fill', '#453215');
+		
+			anchorOverlay.appendChild(ryAnchor);
+		
+			ryAnchor.addEventListener('mousedown', (event) => {
+												down = true;
+												activeAnchor = ryAnchor;
+												setActiveShape(document.getElementById(activeAnchor.id.substring(7)));
+												event.stopPropagation();
+												});
+												
+			let cAnchor = document.createElementNS('http://www.w3.org/2000/svg', "circle");
+		
+			cAnchor.setAttribute('class', 'anchor');
+			cAnchor.setAttribute('id', 'anc-c-' + currentShape + shapeCounts[currentShape]);
+			cAnchor.setAttribute('r', anchorRadius);
+			cAnchor.setAttribute('cx', x);
+			cAnchor.setAttribute('cy', y);
+			cAnchor.setAttribute('stroke', 'none');
+			cAnchor.setAttribute('fill', 'red');
+		
+			anchorOverlay.appendChild(cAnchor);
+			
+			cAnchor.addEventListener('mousedown', (event) => {
+												down = true;
+												activeAnchor = cAnchor;
+												setActiveShape(document.getElementById(activeAnchor.id.substring(6)));
+												event.stopPropagation();
+												});
+			activeAnchor = cAnchor;
+		}
+		
+		if (currentShape == "polygon"){
+			let pointA = x + "," + (y - 5);
+			let pointB = (x - 5) + "," + (y + 5);
+			let pointC = (x + 5) + "," + (y + 5);
+			
+			shape.setAttribute('points', pointA + " " + pointB + " " + pointC);
+			
+			let anchorA = document.createElementNS('http://www.w3.org/2000/svg', "circle");
+			anchorA.setAttribute('class', 'anchor');
+			anchorA.setAttribute('id', 'anc-a-' + currentShape + shapeCounts[currentShape]);
+			anchorA.setAttribute('r', anchorRadius);
+			anchorA.setAttribute('cx', pointA.split(',')[0]);
+			anchorA.setAttribute('cy', pointA.split(',')[1]);
+			anchorA.setAttribute('stroke', 'none');
+			anchorA.setAttribute('fill', '#453215');
+		
+			anchorOverlay.appendChild(anchorA);
+		
+			anchorA.addEventListener('mousedown', (event) => {
+												down = true;
+												activeAnchor = anchorA;
+												setActiveShape(document.getElementById(activeAnchor.id.substring(6)));
+												event.stopPropagation();
+												});
+			
+			let anchorB = document.createElementNS('http://www.w3.org/2000/svg', "circle");
+			anchorB.setAttribute('class', 'anchor');
+			anchorB.setAttribute('id', 'anc-b-' + currentShape + shapeCounts[currentShape]);
+			anchorB.setAttribute('r', anchorRadius);
+			anchorB.setAttribute('cx', pointB.split(',')[0]);
+			anchorB.setAttribute('cy', pointB.split(',')[1]);
+			anchorB.setAttribute('stroke', 'none');
+			anchorB.setAttribute('fill', '#453215');
+		
+			anchorOverlay.appendChild(anchorB);
+		
+			anchorB.addEventListener('mousedown', (event) => {
+												down = true;
+												activeAnchor = anchorB;
+												setActiveShape(document.getElementById(activeAnchor.id.substring(6)));
+												event.stopPropagation();
+												});
+			
+			let anchorC = document.createElementNS('http://www.w3.org/2000/svg', "circle");
+			anchorC.setAttribute('class', 'anchor');
+			anchorC.setAttribute('id', 'anc-c-' + currentShape + shapeCounts[currentShape]);
+			anchorC.setAttribute('r', anchorRadius);
+			anchorC.setAttribute('cx', pointC.split(',')[0]);
+			anchorC.setAttribute('cy', pointC.split(',')[1]);
+			anchorC.setAttribute('stroke', 'none');
+			anchorC.setAttribute('fill', '#453215');
+		
+			anchorOverlay.appendChild(anchorC);
+		
+			anchorC.addEventListener('mousedown', (event) => {
+												down = true;
+												activeAnchor = anchorC;
+												setActiveShape(document.getElementById(activeAnchor.id.substring(6)));
+												event.stopPropagation();
+												});
+			activeAnchor = anchorA;
+		}
+		
+		shapeCounts[currentShape]++;
+		setActiveShape(shape);
+		hat.appendChild(shape);
 	}
-	
-	if (currentShape == "ellipse") {
-		shape.setAttribute('cx', x);
-		shape.setAttribute('cy', y);
-	
-		shape.setAttribute('rx', 5);
-		shape.setAttribute('ry', 5);
-	
-		let rxAnchor = document.createElementNS('http://www.w3.org/2000/svg', "circle");
-		rxAnchor.setAttribute('class', 'anchor');
-		rxAnchor.setAttribute('id', 'anc-rx-' + currentShape + shapeCounts[currentShape]);
-		rxAnchor.setAttribute('r', anchorRadius);
-		rxAnchor.setAttribute('cx', x + 5 + anchorOffsetX);
-		rxAnchor.setAttribute('cy', y);
-		rxAnchor.setAttribute('stroke', 'none');
-		rxAnchor.setAttribute('fill', '#453215');
-	
-		anchorOverlay.appendChild(rxAnchor);
-	
-		rxAnchor.addEventListener('mousedown', (event) => {
-											down = true;
-											activeAnchor = rxAnchor;
-											setActiveShape(document.getElementById(activeAnchor.id.substring(7)));
-											event.stopPropagation();
-											});
-	
-		let ryAnchor = document.createElementNS('http://www.w3.org/2000/svg', "circle");
-		ryAnchor.setAttribute('class', 'anchor');
-		ryAnchor.setAttribute('id', 'anc-ry-' + currentShape + shapeCounts[currentShape]);
-		ryAnchor.setAttribute('r', anchorRadius);
-		ryAnchor.setAttribute('cx', x);
-		ryAnchor.setAttribute('cy', y - 5 - anchorOffsetY);
-		ryAnchor.setAttribute('stroke', 'none');
-		ryAnchor.setAttribute('fill', '#453215');
-	
-		anchorOverlay.appendChild(ryAnchor);
-	
-		ryAnchor.addEventListener('mousedown', (event) => {
-											down = true;
-											activeAnchor = ryAnchor;
-											setActiveShape(document.getElementById(activeAnchor.id.substring(7)));
-											event.stopPropagation();
-											});
-											
-		let cAnchor = document.createElementNS('http://www.w3.org/2000/svg', "circle");
-	
-		cAnchor.setAttribute('class', 'anchor');
-		cAnchor.setAttribute('id', 'anc-c-' + currentShape + shapeCounts[currentShape]);
-		cAnchor.setAttribute('r', anchorRadius);
-		cAnchor.setAttribute('cx', x);
-		cAnchor.setAttribute('cy', y);
-		cAnchor.setAttribute('stroke', 'none');
-		cAnchor.setAttribute('fill', 'red');
-	
-		anchorOverlay.appendChild(cAnchor);
-		
-		cAnchor.addEventListener('mousedown', (event) => {
-											down = true;
-											activeAnchor = cAnchor;
-											setActiveShape(document.getElementById(activeAnchor.id.substring(6)));
-											event.stopPropagation();
-											});
-		activeAnchor = cAnchor;
-	}
-	
-	if (currentShape == "rect"){
-		
-		shape.setAttribute('width', 10);
-		shape.setAttribute('height', 10);
-		
-		shape.setAttribute('x', x - (10/2));
-		shape.setAttribute('y', y - (10/2));
-		
-	
-		let rxAnchor = document.createElementNS('http://www.w3.org/2000/svg', "circle");
-		rxAnchor.setAttribute('class', 'anchor');
-		rxAnchor.setAttribute('id', 'anc-rx-' + currentShape + shapeCounts[currentShape]);
-		rxAnchor.setAttribute('r', anchorRadius);
-		rxAnchor.setAttribute('cx', x + 5 + anchorOffsetX);
-		rxAnchor.setAttribute('cy', y);
-		rxAnchor.setAttribute('stroke', 'none');
-		rxAnchor.setAttribute('fill', '#453215');
-	
-		anchorOverlay.appendChild(rxAnchor);
-	
-		rxAnchor.addEventListener('mousedown', (event) => {
-											down = true;
-											activeAnchor = rxAnchor;
-											setActiveShape(document.getElementById(activeAnchor.id.substring(7)));
-											event.stopPropagation();
-											});
-	
-		let ryAnchor = document.createElementNS('http://www.w3.org/2000/svg', "circle");
-		ryAnchor.setAttribute('class', 'anchor');
-		ryAnchor.setAttribute('id', 'anc-ry-' + currentShape + shapeCounts[currentShape]);
-		ryAnchor.setAttribute('r', anchorRadius);
-		ryAnchor.setAttribute('cx', x);
-		ryAnchor.setAttribute('cy', y - 5 - anchorOffsetY);
-		ryAnchor.setAttribute('stroke', 'none');
-		ryAnchor.setAttribute('fill', '#453215');
-	
-		anchorOverlay.appendChild(ryAnchor);
-	
-		ryAnchor.addEventListener('mousedown', (event) => {
-											down = true;
-											activeAnchor = ryAnchor;
-											setActiveShape(document.getElementById(activeAnchor.id.substring(7)));
-											event.stopPropagation();
-											});
-											
-		let cAnchor = document.createElementNS('http://www.w3.org/2000/svg', "circle");
-	
-		cAnchor.setAttribute('class', 'anchor');
-		cAnchor.setAttribute('id', 'anc-c-' + currentShape + shapeCounts[currentShape]);
-		cAnchor.setAttribute('r', anchorRadius);
-		cAnchor.setAttribute('cx', x);
-		cAnchor.setAttribute('cy', y);
-		cAnchor.setAttribute('stroke', 'none');
-		cAnchor.setAttribute('fill', 'red');
-	
-		anchorOverlay.appendChild(cAnchor);
-		
-		cAnchor.addEventListener('mousedown', (event) => {
-											down = true;
-											activeAnchor = cAnchor;
-											setActiveShape(document.getElementById(activeAnchor.id.substring(6)));
-											event.stopPropagation();
-											});
-		activeAnchor = cAnchor;
-	}
-	
-	if (currentShape == "polygon"){
-		let pointA = x + "," + (y - 5);
-		let pointB = (x - 5) + "," + (y + 5);
-		let pointC = (x + 5) + "," + (y + 5);
-		
-		shape.setAttribute('points', pointA + " " + pointB + " " + pointC);
-		
-		let anchorA = document.createElementNS('http://www.w3.org/2000/svg', "circle");
-		anchorA.setAttribute('class', 'anchor');
-		anchorA.setAttribute('id', 'anc-a-' + currentShape + shapeCounts[currentShape]);
-		anchorA.setAttribute('r', anchorRadius);
-		anchorA.setAttribute('cx', pointA.split(',')[0]);
-		anchorA.setAttribute('cy', pointA.split(',')[1]);
-		anchorA.setAttribute('stroke', 'none');
-		anchorA.setAttribute('fill', '#453215');
-	
-		anchorOverlay.appendChild(anchorA);
-	
-		anchorA.addEventListener('mousedown', (event) => {
-											down = true;
-											activeAnchor = anchorA;
-											setActiveShape(document.getElementById(activeAnchor.id.substring(6)));
-											event.stopPropagation();
-											});
-		
-		let anchorB = document.createElementNS('http://www.w3.org/2000/svg', "circle");
-		anchorB.setAttribute('class', 'anchor');
-		anchorB.setAttribute('id', 'anc-b-' + currentShape + shapeCounts[currentShape]);
-		anchorB.setAttribute('r', anchorRadius);
-		anchorB.setAttribute('cx', pointB.split(',')[0]);
-		anchorB.setAttribute('cy', pointB.split(',')[1]);
-		anchorB.setAttribute('stroke', 'none');
-		anchorB.setAttribute('fill', '#453215');
-	
-		anchorOverlay.appendChild(anchorB);
-	
-		anchorB.addEventListener('mousedown', (event) => {
-											down = true;
-											activeAnchor = anchorB;
-											setActiveShape(document.getElementById(activeAnchor.id.substring(6)));
-											event.stopPropagation();
-											});
-		
-		let anchorC = document.createElementNS('http://www.w3.org/2000/svg', "circle");
-		anchorC.setAttribute('class', 'anchor');
-		anchorC.setAttribute('id', 'anc-c-' + currentShape + shapeCounts[currentShape]);
-		anchorC.setAttribute('r', anchorRadius);
-		anchorC.setAttribute('cx', pointC.split(',')[0]);
-		anchorC.setAttribute('cy', pointC.split(',')[1]);
-		anchorC.setAttribute('stroke', 'none');
-		anchorC.setAttribute('fill', '#453215');
-	
-		anchorOverlay.appendChild(anchorC);
-	
-		anchorC.addEventListener('mousedown', (event) => {
-											down = true;
-											activeAnchor = anchorC;
-											setActiveShape(document.getElementById(activeAnchor.id.substring(6)));
-											event.stopPropagation();
-											});
-		activeAnchor = anchorA;
-	}
-	
-	shapeCounts[currentShape]++;
-	setActiveShape(shape);
-	hat.appendChild(shape);
-	
 }
 
 function moveHatTip(x, y){

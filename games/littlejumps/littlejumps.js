@@ -325,6 +325,11 @@ function updateHighScore(){
 	highScoreBox.textContent = Math.trunc(highScore).toString();
 }
 
+function adjustCoins(){
+	coins = +(document.getElementById("Coins").textContent);
+}
+
+
 function gradientLoop() {
 	setTimeout(() => {
 		document.body.style.backgroundImage = ("linear-gradient(rgb(" + 
