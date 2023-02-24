@@ -63,9 +63,9 @@ body {
     content: '';
 	margin-left: 10px;
     background-image: url('svg/heartcoin.svg');
-	background-size: 40px 40px;
-    height: 40px;
-    width: 40px;
+	background-size: 0.6em 0.6em;
+    height: 0.6em;
+    width: 0.6em;
 }
 
 #Coins {
@@ -77,9 +77,9 @@ body {
     content: '';
 	margin-left: 10px;
     background-image: url('svg/coin.svg');
-	background-size: 40px 40px;
-    height: 40px;
-    width: 40px;
+	background-size: 0.6em 0.6em;
+    height: 0.6em;
+    width: 0.6em;
 }
 
 #HighScore {
