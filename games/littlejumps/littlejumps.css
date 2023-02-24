@@ -59,7 +59,13 @@ body {
 }
 
 #Health::after {
-	content: "❤️";
+	display: inline-flex;
+    content: '';
+	margin-left: 10px;
+    background-image: url('svg/heartcoin.svg');
+	background-size: 40px 40px;
+    height: 40px;
+    width: 40px;
 }
 
 #Coins {
@@ -67,7 +73,13 @@ body {
 }
 
 #Coins::after {
-	content: "🪙";
+	display: inline-flex;
+    content: '';
+	margin-left: 10px;
+    background-image: url('svg/coin.svg');
+	background-size: 40px 40px;
+    height: 40px;
+    width: 40px;
 }
 
 #HighScore {
@@ -199,9 +211,13 @@ body {
 	}
 	
 	.shape-button span::after{
-		content: "🪙";
+		display: inline-flex;
+        content: '';
+		margin-left: 3px;
+        background-image: url('svg/coin.svg');
+        height: 10px;
+        width: 10px;
 	}
-	
 	
 	#color-picker {
 		float: right;
