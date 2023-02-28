@@ -1,0 +1,75 @@
+body {
+	  -webkit-user-select: none; /* Safari */
+      -ms-user-select: none; /* IE 10 and IE 11 */
+      user-select: none; /* Standard syntax */
+	  
+	  background-repeat: no-repeat;
+	  background-attachment: fixed;
+	  background-image: linear-gradient(#FFFFFF, #FFFFFF);
+	  margin: 0;
+	  padding: 0;
+}
+
+main {
+	display: flex;
+	flex-direction: row;
+	width: 100vw;
+}
+
+.logo_main {
+	        height: 14vh;
+	        position: fixed;
+	        right: 15px;
+	        top: 5px;
+			z-index: 6;
+}
+
+#store-area {
+	width: 20vw;
+	height: 100vh;
+	background-color: #CCCCCC;
+}
+
+#game-area {
+	width: 80vw;
+	height: 100vh;
+	text-align: center;
+}
+
+#buy-menu {
+	height: 90vh;
+	width: 100%;
+	margin: 0;
+	padding: 0;
+}
+
+#bank {
+	height: 10vh;
+	width: 100%;
+	text-align: center;
+}
+
+#problem-area {
+	height: 60vh;
+	width: 100%;
+	box-sizing: border-box;
+	background-color: #FEFEFE;
+	padding: 5vh 10vw 5vh 10vw;
+}
+
+#problem-span {
+	font-size: 8vh;
+	font-family: "Times New Roman", Times, serif;
+}
+
+#input-area {
+	height: fit-content;
+	width: 100%;
+	padding: 0;
+	background-color: #E0EEE0;
+}
+
+#type-input {
+	font-size: 8vh;
+	font-family: "Times New Roman", Times, serif;
+}
