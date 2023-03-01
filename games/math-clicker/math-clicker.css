@@ -8,6 +8,7 @@ body {
 	  background-image: linear-gradient(#FFFFFF, #FFFFFF);
 	  margin: 0;
 	  padding: 0;
+	  font-family: system-ui, sans-serif;
 }
 
 main {
@@ -17,9 +18,9 @@ main {
 }
 
 .logo_main {
-	        height: 14vh;
+	        height: 6vw;
 	        position: fixed;
-	        right: 15px;
+	        left: 10px;
 	        top: 5px;
 			z-index: 6;
 }
@@ -37,10 +38,37 @@ main {
 }
 
 #buy-menu {
+	display: flex;
+	flex-direction: column;
 	height: 90vh;
 	width: 100%;
 	margin: 0;
 	padding: 0;
+}
+
+.store-entry {
+	display: block;
+	box-sizing: border-box;
+	list-style: none;
+	background-color: #EEEEEE;
+	width: 100%;
+	height: fit-content;
+	padding: 0 0 0.1vh 0;
+}
+
+.store-entry:hover{
+	background-color: #DDDDDD;
+}
+.store-entry span {
+	display: block;
+	text-align: center;
+	font-size: 2vh;
+}
+
+.store-entry div {
+	display: block;
+	text-align: center;
+	font-size: 3vh;
 }
 
 #bank {
@@ -59,7 +87,6 @@ main {
 
 #problem-span {
 	font-size: 8vh;
-	font-family: "Times New Roman", Times, serif;
 }
 
 #input-area {
@@ -71,5 +98,4 @@ main {
 
 #type-input {
 	font-size: 8vh;
-	font-family: "Times New Roman", Times, serif;
 }
