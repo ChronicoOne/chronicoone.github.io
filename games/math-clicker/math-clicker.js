@@ -235,6 +235,31 @@ class Adder extends Solver {
 	}
 }
 
+class Subtractor extends Solver {
+	static desc = "A large panda who helps you subtract...";
+	constructor(){
+		super('Subtractor', 40, 0.1, Subtractor.desc);
+	}
+	
+	solveProblem(problem){
+		if(problem.isSimple() || !isNaN(problem)){
+			return false;
+		} else if(problem.getLeft().isSimple() && problem.getLeft().getOp() == '-'){
+			problem.solveLeft();
+			return true;
+		} else if(problem.getRight().isSimple() && problem.getRight().getOp() == '-'){
+			problem.solveRight();
+			return true;
+		} else if(this.solveProblem(problem.getLeft())){
+			return true;
+		} else if(this.solveProblem(problem.getRight())){
+			return true;
+		} else {
+			return false;
+		}
+	}
+}
+
 function randomInt(max){
   return Math.floor(Math.random() * max);
 }
@@ -308,7 +333,7 @@ const problemManager = {
 };
 
 const store = {
-	entries : [new Adder()],
+	entries : [new Adder(), new Subtractor()],
 	unlocked : 1,
 	buyMenu: document.getElementById('buy-menu'),
 	
