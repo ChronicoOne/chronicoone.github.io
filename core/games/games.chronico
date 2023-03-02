@@ -15,4 +15,12 @@ CONTENT~
 		svg/game_icons/littlejumps.svg;
 		games/littlejumps/littlejumps.html;
 	~
+	GAMECARD~
+		Math Clicker;
+		Practice your math skills and satisfy your urge to play idle games with this fun combo of both.
+		 This HTML5 game requires a keyboard to play.;
+		Instructions: Type the correct answer to the math problem that appears on the screen. Click to buy upgrades that will help you solve harder problems.;
+		svg/game_icons/math-clicker.svg;
+		games/math-clicker/math-clicker.html;
+	~
 ~

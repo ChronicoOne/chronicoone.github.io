@@ -1,5 +1,6 @@
 const refresh = 100;
 const currencySpan = document.getElementById("currency");
+const totalEarnedSpan = document.getElementById("total-earned");
 const inputSpan = document.getElementById("type-input");
 const inputArea = document.getElementById("input-area");
 const problemSpan = document.getElementById("problem-span");
@@ -7,10 +8,19 @@ const currencyName = "Solves";
 const decimalPlaces = 2;
 
 let currency = 0;
+let totalEarned = 0;
 let allowNegatives = false;
+
+function incCurrency(inc){
+	currency += inc;
+	totalEarned += inc;
+}
 
 Number.prototype.getSolution = function () {
 	return this.valueOf();
+}
+Number.prototype.isSimple = function () {
+	return false;
 }
 
 class Problem {
@@ -67,6 +77,22 @@ class Problem {
 		return op(this.#solutionLeft, this.#solutionRight);
 	}
 	
+	isSimple() {
+		return !isNaN(this.#problemLeft) && !isNaN(this.#problemRight);
+	}
+	
+	getLeft(){
+		return this.#problemLeft;
+	}
+	
+	getRight(){
+		return this.#problemRight;
+	}
+	
+	getOp(){
+		return this.#operator;
+	}
+	
 	solveLeft(){
 		this.#problemLeft = this.#solutionLeft;
 	}
@@ -90,12 +116,18 @@ class Problem {
 }
 
 class Solver {
+	
+	static backColor = '#E1E1E1';
+	static hoverColor = '#DADADA';
+	static clickColor = '#CACACA';
 	name;
 	price;
 	speed;
 	desc;
+	maxCount;
 	unlocked = false;
 	count = 0;
+	ticker = 1000;
 	storeElement;
 	elementTitle;
 	elementDesc;
@@ -107,12 +139,16 @@ class Solver {
 		this.speed = speed;
 		this.desc = desc;
 		this.createStoreElement();
+		this.maxCount = 5 / speed;
 	}
 	
 	buy() {
-		if(currency >= this.price){
+		if(currency >= this.price && this.count < this.maxCount){
 			currency -= this.price;
 			this.count++;
+			if(this.count == 1){
+				levelUp();
+			}
 		}
 	}
 	
@@ -122,7 +158,7 @@ class Solver {
 		this.storeElement.setAttribute('class', "store-entry");
 		
 		this.elementTitle = document.createElement('div');
-		this.elementTitle.textContent = this.name;
+		this.elementTitle.textContent = this.name + " (" + this.price + ")";
 		this.storeElement.appendChild(this.elementTitle);
 		
 		this.elementDesc = document.createElement('span');
@@ -130,19 +166,72 @@ class Solver {
 		this.storeElement.appendChild(this.elementDesc);
 		
 		this.elementState = document.createElement('span');
-		this.elementState.textContent = "Owned: " + this.count + "  Solves/sec: " + this.speed * this.count;
+		this.elementState.textContent = this.count + " Owned. " + (this.speed * this.count).toFixed(1) + " Solves/sec.";
 		this.storeElement.appendChild(this.elementState);
+		
+		this.storeElement.addEventListener('mousedown', this.mouseDown.bind(this));
+		this.storeElement.addEventListener('mouseover', this.mouseOver.bind(this));
+		
+		this.storeElement.addEventListener('mouseup', this.mouseOver.bind(this));
+		this.storeElement.addEventListener('mouseleave', this.mouseLeave.bind(this));
 	}
 	
 	unlock() {
 		this.unlocked = true;
+	}
+	
+	solveProblem(problem) {}
+	
+	tick() {
+		if(this.ticker > 0){
+			this.ticker -= this.speed * this.count * refresh;
+		} else {
+			this.solveProblem(problemManager.currentProblem);
+			this.ticker = 1000;
+		}
+	}
+	
+	mouseDown(event) {
+		this.storeElement.style.backgroundColor = Solver.clickColor;
+		this.buy();
+	}
+	
+	mouseLeave(event) {
+		this.storeElement.style.backgroundColor = Solver.backColor;
+	}
+	
+	mouseOver(event) {
+		this.storeElement.style.backgroundColor = Solver.hoverColor;
+	}
+	
+	draw() {
+		this.elementTitle.textContent = this.name + " (" + this.price + ")";
+		this.elementState.textContent = this.count + " Owned. " + (this.speed * this.count).toFixed(1) + " Solves/sec.";
 	}
 }
 
 class Adder extends Solver {
 	static desc = "A little man who helps you add...";
 	constructor(){
-		super('Adder', 15, 0.2, Adder.desc);
+		super('Adder', 15, 0.1, Adder.desc);
+	}
+	
+	solveProblem(problem){
+		if(problem.isSimple() || !isNaN(problem)){
+			return false;
+		} else if(problem.getLeft().isSimple() && problem.getLeft().getOp() == '+'){
+			problem.solveLeft();
+			return true;
+		} else if(problem.getRight().isSimple() && problem.getRight().getOp() == '+'){
+			problem.solveRight();
+			return true;
+		} else if(this.solveProblem(problem.getLeft())){
+			return true;
+		} else if(this.solveProblem(problem.getRight())){
+			return true;
+		} else {
+			return false;
+		}
 	}
 }
 
@@ -155,9 +244,9 @@ const problemManager = {
 	
 	ops: {'+':25, '-':25, 'x':12},
 	
-	leftProblemCount: 1,
+	leftProblemCount: 0,
 	
-	rightProblemCount:1,
+	rightProblemCount: 0,
 	
 	newArg(op) {
 		return randomInt(this.ops[op]);
@@ -201,7 +290,7 @@ const problemManager = {
 	
 	submitInput() {
 		if (this.currentProblem.solved(+inputCollector.currentInput)) {
-			currency++;
+			incCurrency(1 + this.leftProblemCount + this.rightProblemCount);
 			this.switchProblem();
 			inputCollector.clearInput();
 		} else {
@@ -220,14 +309,34 @@ const problemManager = {
 
 const store = {
 	entries : [new Adder()],
+	unlocked : 1,
 	buyMenu: document.getElementById('buy-menu'),
 	
 	setupMenu() {
 		this.buyMenu.innerHTML = '';
-		for(const entry of this.entries){
-			if(entry.unlocked){
-				this.buyMenu.appendChild(entry.storeElement);
-			}
+		for(const entry of this.entries.slice(0, this.unlocked)){
+			this.buyMenu.appendChild(entry.storeElement);
+		}
+	},
+	
+	unlockNext(){
+		if(this.entries.length > this.unlocked){
+			const entry = this.entries[this.unlocked];
+			entry.unlock();
+			this.unlocked++;
+			this.buyMenu.appendChild(entry.storeElement);
+		}
+	},
+	
+	tick(){
+		for(const entry of this.entries.slice(0, this.unlocked)){
+			entry.tick();
+		}
+	},
+	
+	draw(){
+		for(const entry of this.entries.slice(0, this.unlocked)){
+			entry.draw();
 		}
 	},
 	
@@ -284,8 +393,17 @@ function wrongAnswer() {
 	}, refresh * 5);
 }
 
+function levelUp() {
+	store.unlockNext();
+	problemManager.increaseDifficulty();
+}
+
 function drawCurrency(){
-	currencySpan.textContent = currency + " " + currencyName;
+	currencySpan.textContent = currency + " " + currencyName + ".";
+}
+
+function drawTotalEarned(){
+	totalEarnedSpan.textContent = totalEarned + " Total " + currencyName + ".";
 }
 
 function drawInput(){
@@ -300,6 +418,9 @@ function drawGame(){
 	drawProblem();
 	drawInput();
 	drawCurrency();
+	drawTotalEarned();
+	store.draw();
+	store.tick();
 }
 
 function gameLoop(){
@@ -309,5 +430,6 @@ function gameLoop(){
 
 document.addEventListener("keydown", typeListener);
 
+store.setupMenu();
 problemManager.switchProblem();
 gameLoop();

@@ -28,7 +28,7 @@ main {
 #store-area {
 	width: 20vw;
 	height: 100vh;
-	background-color: #CCCCCC;
+	background-color: #EDEDED;
 }
 
 #game-area {
@@ -50,15 +50,12 @@ main {
 	display: block;
 	box-sizing: border-box;
 	list-style: none;
-	background-color: #EEEEEE;
+	background-color: #E1E1E1;
 	width: 100%;
 	height: fit-content;
 	padding: 0 0 0.1vh 0;
 }
 
-.store-entry:hover{
-	background-color: #DDDDDD;
-}
 .store-entry span {
 	display: block;
 	text-align: center;
@@ -76,7 +73,9 @@ main {
 	width: 100%;
 	text-align: center;
 }
-
+#bank span {
+	display: block;
+}
 #problem-area {
 	height: 60vh;
 	width: 100%;
