@@ -125,6 +125,7 @@ class Solver {
 	speed;
 	desc;
 	maxCount;
+	maxed = false;
 	unlocked = false;
 	count = 0;
 	ticker = 1000;
@@ -139,7 +140,7 @@ class Solver {
 		this.speed = speed;
 		this.desc = desc;
 		this.createStoreElement();
-		this.maxCount = 5 / speed;
+		this.maxCount = 500 / (refresh * speed);
 	}
 	
 	buy() {
@@ -148,6 +149,11 @@ class Solver {
 			this.count++;
 			if(this.count == 1){
 				levelUp();
+			}
+			
+			if(this.count >= this.maxCount){
+				levelUp();
+				this.maxed = true;
 			}
 		}
 	}
@@ -167,6 +173,9 @@ class Solver {
 		
 		this.elementState = document.createElement('span');
 		this.elementState.textContent = this.count + " Owned. " + (this.speed * this.count).toFixed(1) + " Solves/sec.";
+		if(this.maxed){
+			this.elementState.textContent += " (MAX)";
+		}
 		this.storeElement.appendChild(this.elementState);
 		
 		this.storeElement.addEventListener('mousedown', this.mouseDown.bind(this));
@@ -207,11 +216,14 @@ class Solver {
 	draw() {
 		this.elementTitle.textContent = this.name + " (" + this.price + ")";
 		this.elementState.textContent = this.count + " Owned. " + (this.speed * this.count).toFixed(1) + " Solves/sec.";
+		if(this.maxed){
+			this.elementState.textContent += " (MAX)";
+		}
 	}
 }
 
 class Adder extends Solver {
-	static desc = "A little man who helps you add...";
+	static desc = "A little man who can solve inner addition problems...";
 	constructor(){
 		super('Adder', 15, 0.1, Adder.desc);
 	}
@@ -236,7 +248,7 @@ class Adder extends Solver {
 }
 
 class Subtractor extends Solver {
-	static desc = "A large panda who helps you subtract...";
+	static desc = "A large panda who can solve inner subtraction problems...";
 	constructor(){
 		super('Subtractor', 40, 0.1, Subtractor.desc);
 	}

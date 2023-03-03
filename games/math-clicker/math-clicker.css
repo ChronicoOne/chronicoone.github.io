@@ -53,7 +53,7 @@ main {
 	background-color: #E1E1E1;
 	width: 100%;
 	height: fit-content;
-	padding: 0 0 0.1vh 0;
+	padding: .1vh .2vh;
 }
 
 .store-entry span {
