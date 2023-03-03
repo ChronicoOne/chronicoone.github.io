@@ -172,7 +172,7 @@ class Solver {
 		this.storeElement.appendChild(this.elementDesc);
 		
 		this.elementState = document.createElement('span');
-		this.elementState.textContent = this.count + " Owned. " + (this.speed * this.count).toFixed(1) + " Solves/sec.";
+		this.elementState.textContent = this.count + " Owned. " + (this.speed * this.count).toFixed(2) + " Solves/sec.";
 		if(this.maxed){
 			this.elementState.textContent += " (MAX)";
 		}
@@ -215,7 +215,7 @@ class Solver {
 	
 	draw() {
 		this.elementTitle.textContent = this.name + " (" + this.price + ")";
-		this.elementState.textContent = this.count + " Owned. " + (this.speed * this.count).toFixed(1) + " Solves/sec.";
+		this.elementState.textContent = this.count + " Owned. " + (this.speed * this.count).toFixed(2) + " Solves/sec.";
 		if(this.maxed){
 			this.elementState.textContent += " (MAX)";
 		}
@@ -223,7 +223,7 @@ class Solver {
 }
 
 class Adder extends Solver {
-	static desc = "A little man who can solve inner addition problems...";
+	static desc = "A little bird who can solve inner addition problems...";
 	constructor(){
 		super('Adder', 15, 0.1, Adder.desc);
 	}
@@ -260,6 +260,31 @@ class Subtractor extends Solver {
 			problem.solveLeft();
 			return true;
 		} else if(problem.getRight().isSimple() && problem.getRight().getOp() == '-'){
+			problem.solveRight();
+			return true;
+		} else if(this.solveProblem(problem.getLeft())){
+			return true;
+		} else if(this.solveProblem(problem.getRight())){
+			return true;
+		} else {
+			return false;
+		}
+	}
+}
+
+class Multiplier extends Solver {
+	static desc = "A wise tortoise who can solve inner multiplication problems...";
+	constructor(){
+		super('Multiplier', 100, 0.03, Multiplier.desc);
+	}
+	
+	solveProblem(problem){
+		if(problem.isSimple() || !isNaN(problem)){
+			return false;
+		} else if(problem.getLeft().isSimple() && problem.getLeft().getOp() == 'x'){
+			problem.solveLeft();
+			return true;
+		} else if(problem.getRight().isSimple() && problem.getRight().getOp() == 'x'){
 			problem.solveRight();
 			return true;
 		} else if(this.solveProblem(problem.getLeft())){
@@ -345,7 +370,7 @@ const problemManager = {
 };
 
 const store = {
-	entries : [new Adder(), new Subtractor()],
+	entries : [new Adder(), new Subtractor(), new Multiplier()],
 	unlocked : 1,
 	buyMenu: document.getElementById('buy-menu'),
 	
