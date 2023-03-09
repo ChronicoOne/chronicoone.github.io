@@ -97,7 +97,6 @@ body {
 }
 
 #store-button {
-	background-color: red;
 	height: 2em;
 	width: 2em;
 	position: fixed;
@@ -105,7 +104,6 @@ body {
 	top: 5px;
 	z-index: 6;
 }
-
 
 .fallingVert {
 	background-color: #333333;
