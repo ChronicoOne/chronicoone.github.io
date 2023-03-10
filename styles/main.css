@@ -159,7 +159,7 @@ footer p{
 
 .page-body{
 	display: block;
-	background-color: #000000;
+	background-color: #131313;
 	margin-top: 5px;
 	margin-bottom: 10px;
 	padding: 10px;
@@ -205,7 +205,7 @@ footer p{
 
 .card{
 	display: flex;
-	background-color: #131313;
+	background-color: #222222;
 	flex-direction: row;
 	min-height: 126px;
 	padding: 10px;
@@ -222,7 +222,7 @@ footer p{
 }
 
 .card:hover {
-	background-color: #222222;
+	background-color: #2B2B2B;
 }
 
 .card-img{
