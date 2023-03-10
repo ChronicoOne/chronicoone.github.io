@@ -160,22 +160,28 @@ def build_content_gamecard(filepath, text_content):
     a.set("class", "card")
     a.set("href", homepath(filepath) + gamepath)
     
-    ## img
-    img = etree.SubElement(a, "img")
+    ## div
+    div1 = etree.SubElement(a, "div")
+    
+    ### img
+    img = etree.SubElement(div1, "img")
     img.set("class", "card-img")
     img.set("src", homepath(filepath) + imgpath)
     
-    ## span
-    a_span = etree.SubElement(a, "span")
+    ## div
+    div2 = etree.SubElement(a, "div")
+    
+    ### span
+    a_span = etree.SubElement(div2, "span")
     a_span.set("class", "card-title")
     a_span.text = title
     
-    ## p 
-    p1 = etree.SubElement(a, "p")
+    ### p 
+    p1 = etree.SubElement(div2, "p")
     p1.text = desc
     
-    ## p 
-    p2 = etree.SubElement(a, "p")
+    ### p 
+    p2 = etree.SubElement(div2, "p")
     p2.text = instructions
     
     return a
