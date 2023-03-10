@@ -212,6 +212,11 @@ footer p{
 	text-decoration: none;
 }
 
+.card div{
+	margin: 0;
+	padding: 0;
+}
+
 .card p{
 	margin: 10px 10px 10px 0px;
 }
