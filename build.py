@@ -18,7 +18,7 @@ def gen_html_file(corefilepath):
     while split(file_start)[1] != 'core':
         file_end = join(split(file_start)[1], file_end)
         file_start = split(file_start)[0]
-    
+        
     file_end = file_end.replace('.chronico', '.html')
     
     htmlfilepath = join(dir_path, file_end)

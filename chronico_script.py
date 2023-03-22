@@ -1,6 +1,11 @@
 from lxml import etree
 from page_builder import homepath
- 
+from os import listdir
+from os.path import isfile, join, dirname, realpath
+
+dir_path = dirname(realpath(__file__))
+core_path = join(dir_path, 'core')
+
 # ! script parsing functions
 
 # !! split_script : String -> ListOfLines
@@ -33,6 +38,18 @@ def unpack_gamecard(gamecard):
     out = [text for text in gamecard.split(';') if text != '']
     return (out[0], out[1], out[2], out[3], out[4])
 
+# !! modifiers_parse : ListOfLines -> Dict
+# !! returns a dictionary of attributes given a list containing modifier script lines
+def modifiers_parse(lines):
+    modifier_dict = {}
+    for line in lines:
+        cleaned = line.replace('\t', '').replace(' ', '').replace("${", "").replace("}",'')
+        for attrib in cleaned.split(','):
+            if ':' in attrib:
+                pair = attrib.split(':')
+                modifier_dict[pair[0]] = pair[1]
+    return modifier_dict
+
 # !! single_parse : filepath ListOfLines -> etree 
 # !! returns an etree given some lines of .chronico script containing a single element
 # !! and the relative filepath to the html document
@@ -51,13 +68,36 @@ def single_parse(filepath, lines):
         inner_content = lines[inner_start:end_index]
         inner_elements = multi_parse(filepath, inner_content)
     
-    # build pre-content text for current node
+    # parse for element modifier lines
+    modifier_start = None
+    modifier_end = None
+    modifier_dict = {}
+    
     for i in range(1, inner_start):
+        if "${" in lines[i]:
+            modifier_start = i
+        if "}" in lines[i] and modifier_start != None:
+            modifier_end = i
+    
+    if modifier_end != None:
+        modifier_dict = modifiers_parse(lines[modifier_start:modifier_end + 1])
+    
+    # build pre-content text for current node
+    pretext_start = 1
+    if modifier_end != None:
+        pretext_start = modifier_end + 1
+        
+    for i in range(pretext_start, inner_start):
         text_content += lines[i]
     text_content = text_content.replace('\t', '')
+      
+    # build return_etree using builder function
+    return_etree = builder_dict[script_key](filepath, text_content)
     
-    # build return_etree using chronico script function
-    return_etree = chronico_script[script_key](filepath, text_content)
+    #modify return_etree using modifier_dict
+    for modifier in modifier_dict:
+        return_etree.set(modifier, modifier_dict[modifier])
+    
     for elem in inner_elements:
         return_etree.append(elem)
         
@@ -106,13 +146,26 @@ def multi_parse(filepath, lines):
 # ! Return an etree containing a complete element
               
 # !! build_content_head : filepath String -> etree
-# !! returns an etree containing containing the main article header given header text
+# !! returns an etree containing the main article header given header text
 def build_content_head(filepath, text_content):
     # h1
     h1 = etree.Element("h1")
     h1.set("class", "page-head")
     h1.text = text_content
     return h1
+
+# !! get_head_content : filepath -> String
+# !! returns a String containing containing the header text of a given .chronico file
+def get_head_content(filepath):
+    chronico_file = open(filepath)
+    lines = split_script(chronico_file.read())
+    e_tree = multi_parse('none', lines)
+    children = list(e_tree)
+    i = 0
+    while children[i].get("class") != 'page-head':
+        i += 1
+        
+    return children[i].text
     
 # !! build_content_desc : filepath String -> etree
 # !! returns an etree containing the main article description given desc text
@@ -123,6 +176,19 @@ def build_content_desc(filepath, text_content):
     desc.text = text_content
     return desc
 
+# !! get_desc_content : filepath -> String
+# !! returns a String containing containing the description text of a given .chronico file
+def get_desc_content(filepath):
+    chronico_file = open(filepath)
+    lines = split_script(chronico_file.read())
+    e_tree = multi_parse('none', lines)
+    children = list(e_tree)
+    i = 0
+    while children[i].get("class") != 'page-desc':
+        i += 1
+        
+    return children[i].text
+    
 # !! build_content_main : filepath String -> etree
 # !! returns an etree to contain the main article content given some text content
 # !! Note: text_content should usually be ''
@@ -186,10 +252,131 @@ def build_content_gamecard(filepath, text_content):
     
     return a
     
+# !! build_content_vid : filepath LinkString -> etree
+# !! returns an etree containing video content given a LinkString
+def build_content_vid(filepath, text_content):
+    text, link = unpack_linkstring(text_content)
+    
+    # iframe
+    iframe = etree.Element("iframe")
+    iframe.set("width", "560")
+    iframe.set("height", "315")
+    iframe.set("src", link)
+    iframe.set("class", "vid")
+    iframe.set("allow", "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture") 
+    iframe.set("title", "Youtube video player")
+    iframe.set("allowfullscreen", "")
+    iframe.set("frameborder", "0")
+    
+    return iframe
+    
+# !! get_thumbnail_path : filepath -> String
+# !! returns a String containing containing the thumbnail of the main-vid in a given .chronico file
+def get_thumbnail_path(filepath):
+    chronico_file = open(filepath)
+    lines = split_script(chronico_file.read())
+    e_tree = multi_parse('none', lines)
+    children = list(list(e_tree)[2])
+    thumbnail = ""
+    
+    for child in children:
+        if child.get("id") == 'main-vid':
+            vid_id = child.get("src").split('/')[-1]
+            thumbnail = "https://i.ytimg.com/vi_webp/" + vid_id + "/mqdefault.webp"
+    
+    return thumbnail
+
+# !! build_articlewidget : filepath ListOfFolders -> etree
+# !! returns an etree containing cards of all articles in a given folder
+def build_articlewidget(filepath, folder):
+    folder_path = join(core_path, folder)
+    
+    # div
+    div = etree.Element("div")
+    
+    for path in listdir(folder_path):
+        if not isfile(join(folder_path, path)):
+            for inner_path in listdir(join(folder_path, path)):
+                if ".chronico" in inner_path:
+                    html_innerpath = inner_path.replace(".chronico", ".html")
+                    file_htmlpath = join(homepath(filepath), join(join(folder, path), html_innerpath))
+                    file_chronicopath = join(join(folder_path, path), inner_path)
+                    
+                    head_content = get_head_content(file_chronicopath)
+                    desc_content = get_desc_content(file_chronicopath)
+                    thumbnail_path = get_thumbnail_path(file_chronicopath)
+                    
+                    ## a
+                    a = etree.SubElement(div, "a")
+                    a.set("class", "card")
+                    a.set("href", file_htmlpath)
+                    
+                    ### div
+                    div1 = etree.SubElement(a, "div")
+                    
+                    #### img
+                    img = etree.SubElement(div1, "img")
+                    img.set("class", "card-img")
+                    img.set("src", thumbnail_path)
+                    
+                    ### div
+                    div2 = etree.SubElement(a, "div")
+                    
+                    #### span
+                    a_span = etree.SubElement(div2, "span")
+                    a_span.set("class", "card-title")
+                    a_span.text = head_content
+                    
+                    #### p 
+                    p1 = etree.SubElement(div2, "p")
+                    p1.text = desc_content
+    return div 
+    
+# !! build_content_tutorwidget : filepath String -> etree
+# !! returns an etree containing all tutorial cards given filepath
+def build_content_tutorwidget(filepath, text_content):
+    return build_articlewidget(filepath, "tutorials")
+
+# !! build_content_projectwidget : filepath String -> etree
+# !! returns an etree containing all project cards given filepath
+def build_content_projectwidget(filepath, text_content):
+    return build_articlewidget(filepath, "projects")
+
+# !! build_content_mainwidget : filepath String -> etree
+# !! returns an etree containing all content cards given filepath
+def build_content_mainwidget(filepath, text_content):
+    projects = list(build_articlewidget(filepath, "projects"))
+    tutorials = list(build_articlewidget(filepath, "tutorials"))
+    game_file = join(join(core_path, "games"), "games.chronico")
+    games = list( list( multi_parse(filepath, split_script(open(game_file).read())) )[2] )
+    articles = []
+    i = 0
+    while i < max(len(projects), len(tutorials), len(games)):
+        if i < len(projects):
+            articles.append(projects[i])
+        if i < len(tutorials):
+            articles.append(tutorials[i])
+        if i < len(games):
+            articles.append(games[i])
+        i += 1
+        
+    # div
+    div = etree.Element("div")
+    for article in articles:
+        div.append(article)
+    
+    return div
+    
+    
 # ! .chronico script builder function dictionary
-chronico_script = {"HEAD~": build_content_head, 
-                   "DESC~": build_content_desc,
-                   "CONTENT~": build_content_main,
-                   "P~": build_content_p,
-                   "A~": build_content_a,
-                   "GAMECARD~": build_content_gamecard}
+# ! filepath String -> etree
+builder_dict = {"HEAD~": build_content_head, 
+                "DESC~": build_content_desc,
+                "CONTENT~": build_content_main,
+                "P~": build_content_p,
+                "A~": build_content_a,
+                "GAMECARD~": build_content_gamecard,
+                "VID~": build_content_vid,
+                "TUTORWIDGET~": build_content_tutorwidget,
+                "PROJECTWIDGET~": build_content_projectwidget,
+                "MAINWIDGET~": build_content_mainwidget}

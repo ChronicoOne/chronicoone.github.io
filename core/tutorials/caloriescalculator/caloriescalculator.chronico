@@ -1,0 +1,22 @@
+HEAD~
+	How to create EASY machine learning models with Python
+~
+
+DESC~
+	This tutorial...
+~
+
+CONTENT~
+	VID~
+		${id:main-vid}
+		Linear Regression Tutorial`https://www.youtube.com/embed/NPtIoZazWVk`
+	~
+
+	P~
+		Using Scikit-Learn and Pandas to create machine learning models is incredibly intuitive and elegant, and it takes very few lines of code.
+		 The pandas library provides powerful tools for organizing the data we need to train our models, and sklearn handles all the heavy lifting and complicated math that's required for training the models.
+		 As an example project, I demonstrate how to build a model trained to predict the number of calories in
+		 a given food based on how many grams of protein, fat, and carbs it contains.
+				
+	~
+~

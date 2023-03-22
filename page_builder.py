@@ -1,6 +1,6 @@
 from lxml import etree
 from os.path import exists, join, split
-
+from pathlib import Path
 # ! Globals
 site_title = "Chronico.One"
 github_link = "https://github.com/ChronicoOne/chronicoone.github.io/tree/master/"
@@ -39,8 +39,7 @@ navicons = ["Home",
 # !! returns the navicon that should be active on the page at filepath
 
 def active_icon(filepath):
-    dirs = split(filepath)
-    dirs = [part for part in dirs if part != '']
+    dirs = Path(filepath).parts
     if len(dirs) > 1:
         for icon in navicons:
             if icon.lower() == dirs[0].lower():
@@ -51,8 +50,7 @@ def active_icon(filepath):
 # !! homepath : filepath -> String
 # !! returns the relative path to the site home directory
 def homepath(filepath):
-    dirs = split(filepath)
-    dirs = [part for part in dirs if part != '']
+    dirs = Path(filepath).parts
     pagepath = ""
     for i in range(len(dirs) - 1):
         pagepath += '../'
