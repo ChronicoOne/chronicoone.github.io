@@ -26,14 +26,15 @@ nav_button_svg = "svg/navbutton.svg"
 
 # !! Scripts
 nav_js = "scripts/nav.js"
+code_snips_js = "scripts/code_snips.js"
 
 # !!! navicon : (name, filename)
 navicons = ["Home",
             "Projects",
             "Tutorials",
             "Games",
+            #"YouTube",
             "GitHub"]
-            #"YouTube"]
 
 # ! Functions
 
@@ -142,6 +143,11 @@ def build_page(path, main_article):
     script_nav.set("defer", "")
     script_nav.set("src", homepath(path) + nav_js)
     
+    ### script code_snips.js
+    script_code = etree.SubElement(head, "script")
+    script_code.set("defer", "")
+    script_code.set("src", homepath(path) + code_snips_js)
+    
     ## body
     body = etree.SubElement(html, "body")
 
@@ -162,7 +168,10 @@ def build_page(path, main_article):
         if icon == "GitHub" or icon == "YouTube":
             a.set("target", "_blank")
             a.set("rel", "noopener noreferrer")
-        img.tail = icon
+            img.set("style", 
+                    "margin: 2px 10px 2px 10px;")
+        else:
+            img.tail = icon
     
     ##### li
     nav_ul_li = etree.SubElement(nav_ul, "li")

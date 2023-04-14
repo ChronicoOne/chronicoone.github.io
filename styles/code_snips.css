@@ -6,6 +6,7 @@
 
 .code-snip {
 	display: flex;
+	position: relative;
 	flex-direction: column;
 	background-color: #fffff2;
 	padding: 8px;
@@ -22,6 +23,14 @@
 	color: #000000;
 	font-family: "Courier New";
 	font-size: min(3vw, 20px);
+}
+
+.code-copy {
+	display: block;
+	position: absolute;
+	bottom: 10px;
+	right: 10px;
+	width: min(5vw, 30px);
 }
 
 .python-op {

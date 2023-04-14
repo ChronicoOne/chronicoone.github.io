@@ -389,6 +389,14 @@ def build_content_mainwidget(filepath, text_content):
 def build_content_code_python(filepath, text_content):
     # code
     code = etree.fromstring("<code class=\"code-snip\">" + format_python(text_content) + "</code>")
+    
+    ## img
+    img = etree.SubElement(code, "img")
+    img.set("class", "code-copy")
+    img.set("src", homepath(filepath) + "/svg/code_copy.svg")
+    img.set("copy-string", text_content)
+    img.set("title", "Copy to Clipboard")
+    
     return code
     
     
