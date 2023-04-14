@@ -213,4 +213,3 @@ def build_page(path, main_article):
     footer_p.text = footer_text
     
     return html
-

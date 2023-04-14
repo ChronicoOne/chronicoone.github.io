@@ -193,13 +193,6 @@ footer p{
 
 .page-body p{
 	margin-bottom: 0;
-}
-
-.page-body > *:first-child{
-	margin-top: 0;
-}
-
-.page-body > *{
 	margin-top: 10px;
 }
 
@@ -209,12 +202,18 @@ footer p{
 	min-height: 126px;
 	padding: 10px;
 	text-decoration: none;
+	margin-top: 10px;
 }
 
 .card > div{
 	margin: 0;
 	padding: 0;
 }
+
+.card:first-child{
+	margin-top: 0;
+}
+
 
 .card-text {
 	display: block;
