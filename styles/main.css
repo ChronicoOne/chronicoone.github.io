@@ -1,13 +1,9 @@
-* {
-	font-family: serif;
-	font-size: 20px;
-	color: #EEEEEE;
-}
-
 html {
 	margin: 0;
 	padding: 0;
 	background-color: #222222;
+	font-family: serif;
+	font-size: 20px;
 }
 
 main {
@@ -89,6 +85,10 @@ p a:hover::after {
 	text-decoration: underline #EEEEEE;
 }
 
+iframe {
+	max-width: 100%;
+}
+
 .logo_main {
 	        height: 2.5em;
 	        position: fixed;
@@ -162,7 +162,7 @@ footer p{
 	background-color: #131313;
 	margin-top: 5px;
 	margin-bottom: 10px;
-	padding: 10px;
+	padding: 15px;
 }
 
 .page-head{
@@ -195,34 +195,42 @@ footer p{
 	margin-bottom: 0;
 }
 
-.page-body *:first-child{
+.page-body > *:first-child{
 	margin-top: 0;
 }
 
-.page-body *{
+.page-body > *{
 	margin-top: 10px;
 }
 
 .card{
-	display: flex;
 	background-color: #222222;
-	flex-direction: row;
+	display:block;
 	min-height: 126px;
 	padding: 10px;
 	text-decoration: none;
 }
 
-.card div{
+.card > div{
 	margin: 0;
 	padding: 0;
 }
 
-.card p{
+.card-text {
+	display: block;
+}
+
+.card-text p{
 	margin: 10px 10px 10px 0px;
 }
 
+
 .card:hover {
 	background-color: #2B2B2B;
+}
+
+.card-img-container {
+	display: block;
 }
 
 .card-img{
@@ -231,17 +239,25 @@ footer p{
 	padding: 0;
 	margin-right: 10px;
 	margin-top: 0px;
-	margin-bottom: 0px;
+	margin-bottom: 10px;
+	object-fit: cover;
+	max-width: 100%;
 }
 
 .card-title{
+	display:block;
 	font-size: 1.2em;
 	font-weight: bold;
+	margin-top: 0px;
+	padding-bottom: 5px;
+	color: #EEEEEE;
 }
+
 
 .dir {
 	margin-top: 10px;
 	writing-mode: vertical-rl;
+	overflow: hidden;
 }
 
 #pwd {

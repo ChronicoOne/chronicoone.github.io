@@ -2,6 +2,7 @@ from lxml import etree
 from page_builder import homepath
 from os import listdir
 from os.path import isfile, join, dirname, realpath
+from code_snips import format_python
 
 dir_path = dirname(realpath(__file__))
 core_path = join(dir_path, 'core')
@@ -12,8 +13,19 @@ core_path = join(dir_path, 'core')
 # !! returns a list of script lines given a full script string
 def split_script(script):
     lines = script.split('\n')
-    lines = [line for line in lines if line != '']
+    lines = [line + '\n' for line in lines if line != '']
     return lines
+
+# !! remove_ends : ListOfLines -> ListOfLines
+# !! returns a list of script lines missing \n given a list of script lines
+def remove_ends(lines):
+    clean_lines = [line.replace("\n", "") for line in lines if line != '']
+    return clean_lines
+
+# !! script_clean: String -> String
+# !! returns a string missing \n given a script string
+def script_clean(script):
+    return script.replace("\n", "")
     
 # -- A LinkString is a string that looks like this: 
 # --    Link text content goes here`https://www.linkgoeshere.com`
@@ -43,7 +55,7 @@ def unpack_gamecard(gamecard):
 def modifiers_parse(lines):
     modifier_dict = {}
     for line in lines:
-        cleaned = line.replace('\t', '').replace(' ', '').replace("${", "").replace("}",'')
+        cleaned = line.replace('\t', '').replace("\n","").replace(' ', '').replace("${", "").replace("}",'')
         for attrib in cleaned.split(','):
             if ':' in attrib:
                 pair = attrib.split(':')
@@ -55,7 +67,7 @@ def modifiers_parse(lines):
 # !! and the relative filepath to the html document
 def single_parse(filepath, lines): 
     text_content = ''
-    script_key = lines[0].replace('\t', '')
+    script_key = lines[0].replace('\t', '').replace('\n', '')
     end_index = len(lines) - 1
 
     # build inner elements
@@ -151,7 +163,7 @@ def build_content_head(filepath, text_content):
     # h1
     h1 = etree.Element("h1")
     h1.set("class", "page-head")
-    h1.text = text_content
+    h1.text = script_clean(text_content)
     return h1
 
 # !! get_head_content : filepath -> String
@@ -173,7 +185,7 @@ def build_content_desc(filepath, text_content):
     # desc
     desc = etree.Element("p")
     desc.set("class", "page-desc")
-    desc.text = text_content
+    desc.text = script_clean(text_content)
     return desc
 
 # !! get_desc_content : filepath -> String
@@ -196,7 +208,7 @@ def build_content_main(filepath, text_content):
     # div
     div = etree.Element("div")
     div.set("class", "page-body")
-    div.text = text_content
+    div.text = script_clean(text_content)
     return div
 
 # !! build_content_p : filepath String -> etree
@@ -204,13 +216,13 @@ def build_content_main(filepath, text_content):
 def build_content_p(filepath, text_content):
     # p
     p = etree.Element("p")
-    p.text = text_content
+    p.text = script_clean(text_content)
     return p
 
 # !! build_content_a : filepath LinkString -> etree
 # !! returns an etree containing anchor content given a LinkString
 def build_content_a(filepath, text_content):
-    text, link = unpack_linkstring(text_content)
+    text, link = unpack_linkstring(script_clean(text_content))
     # a
     a = etree.Element("a")
     a.set("href", link)
@@ -220,34 +232,36 @@ def build_content_a(filepath, text_content):
 # !! build_content_gamecard : filepath GameCard -> etree
 # !! returns an etree containing GameCard content given a GameCard
 def build_content_gamecard(filepath, text_content):
-    title, desc, instructions, imgpath, gamepath = unpack_gamecard(text_content)
+    title, desc, instructions, imgpath, gamepath = unpack_gamecard(script_clean(text_content))
     # a
     a = etree.Element("a")
     a.set("class", "card")
     a.set("href", homepath(filepath) + gamepath)
     
     ## div
-    div1 = etree.SubElement(a, "div")
+    a_div = etree.SubElement(a, "div")
+    a_div.set("class", "card-img-container")
     
     ### img
-    img = etree.SubElement(div1, "img")
+    img = etree.SubElement(a_div, "img")
     img.set("class", "card-img")
     img.set("src", homepath(filepath) + imgpath)
+       
+    ## span
+    a_span = etree.SubElement(a, "span")
+    a_span.set("class", "card-title")
+    a_span.text = "Game: " + title
     
     ## div
-    div2 = etree.SubElement(a, "div")
-    
-    ### span
-    a_span = etree.SubElement(div2, "span")
-    a_span.set("class", "card-title")
-    a_span.text = title
-    
+    a_div2 = etree.SubElement(a, "div")
+    a_div2.set("class", "card-text")
+                    
     ### p 
-    p1 = etree.SubElement(div2, "p")
+    p1 = etree.SubElement(a_div2, "p")
     p1.text = desc
     
     ### p 
-    p2 = etree.SubElement(div2, "p")
+    p2 = etree.SubElement(a_div2, "p")
     p2.text = instructions
     
     return a
@@ -255,7 +269,7 @@ def build_content_gamecard(filepath, text_content):
 # !! build_content_vid : filepath LinkString -> etree
 # !! returns an etree containing video content given a LinkString
 def build_content_vid(filepath, text_content):
-    text, link = unpack_linkstring(text_content)
+    text, link = unpack_linkstring(script_clean(text_content))
     
     # iframe
     iframe = etree.Element("iframe")
@@ -312,23 +326,26 @@ def build_articlewidget(filepath, folder):
                     a.set("href", file_htmlpath)
                     
                     ### div
-                    div1 = etree.SubElement(a, "div")
+                    a_div = etree.SubElement(a, "div")
+                    a_div.set("class", "card-img-container")
                     
                     #### img
-                    img = etree.SubElement(div1, "img")
+                    img = etree.SubElement(a_div, "img")
                     img.set("class", "card-img")
                     img.set("src", thumbnail_path)
                     
-                    ### div
-                    div2 = etree.SubElement(a, "div")
                     
-                    #### span
-                    a_span = etree.SubElement(div2, "span")
+                    ### span
+                    a_span = etree.SubElement(a, "span")
                     a_span.set("class", "card-title")
                     a_span.text = head_content
                     
+                    ### div
+                    a_div2 = etree.SubElement(a, "div")
+                    a_div2.set("class", "card-text")
+    
                     #### p 
-                    p1 = etree.SubElement(div2, "p")
+                    p1 = etree.SubElement(a_div2, "p")
                     p1.text = desc_content
     return div 
     
@@ -367,6 +384,13 @@ def build_content_mainwidget(filepath, text_content):
     
     return div
     
+# !! build_content_code_python : filepath String -> etree
+# !! returns an etree containing python code example given filepath and code string
+def build_content_code_python(filepath, text_content):
+    # code
+    code = etree.fromstring("<code class=\"code-snip\">" + format_python(text_content) + "</code>")
+    return code
+    
     
 # ! .chronico script builder function dictionary
 # ! filepath String -> etree
@@ -379,4 +403,5 @@ builder_dict = {"HEAD~": build_content_head,
                 "VID~": build_content_vid,
                 "TUTORWIDGET~": build_content_tutorwidget,
                 "PROJECTWIDGET~": build_content_projectwidget,
-                "MAINWIDGET~": build_content_mainwidget}
+                "MAINWIDGET~": build_content_mainwidget,
+                "PYTHON~": build_content_code_python}

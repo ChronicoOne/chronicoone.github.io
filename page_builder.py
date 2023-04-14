@@ -4,6 +4,7 @@ from pathlib import Path
 # ! Globals
 site_title = "Chronico.One"
 github_link = "https://github.com/ChronicoOne/chronicoone.github.io/tree/master/"
+youtube_link = "https://www.youtube.com/@ChronicoOne"
 gorbu_path = "#top"
 doctype = b"<!DOCTYPE html>\n"
 lang = "en-US"
@@ -32,6 +33,7 @@ navicons = ["Home",
             "Tutorials",
             "Games",
             "GitHub"]
+            #"YouTube"]
 
 # ! Functions
 
@@ -72,6 +74,8 @@ def navpagepath(path, navicon):
         pagepath += "index.html"
     elif navicon == "GitHub":
         pagepath = githubpath("/".join(dirs[:-1]))
+    elif navicon == "YouTube":
+        pagepath = youtube_link
     else:
         pagepath += navicon.lower() + "/" + navicon.lower() + ".html"
     return pagepath
@@ -122,6 +126,12 @@ def build_page(path, main_article):
     link_style.set("rel", "stylesheet")
     link_style.set("href", homepath(path) + "styles/" + stylesheet)
     
+    ### link stylesheet
+    link_code_snips = etree.SubElement(head, "link")
+    link_code_snips.set("rel", "stylesheet")
+    link_code_snips.set("href", homepath(path) + "styles/code_snips.css")
+    
+    
     ### link favicon
     link_icon = etree.SubElement(head, "link")
     link_icon.set("rel", "icon")
@@ -149,7 +159,7 @@ def build_page(path, main_article):
         a.set("href", navpagepath(path, icon))
         img = etree.SubElement(a, "img")
         img.set("src", svgpath(path, icon))
-        if icon == "GitHub":
+        if icon == "GitHub" or icon == "YouTube":
             a.set("target", "_blank")
             a.set("rel", "noopener noreferrer")
         img.tail = icon

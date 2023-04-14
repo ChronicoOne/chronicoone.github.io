@@ -1,3 +1,12 @@
 <svg class="game-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
-	<rect width="100" height="100" fill="pink"></rect>
+	<rect width="100" height="100" fill="pink">
+	</rect>
+	<style>
+		.small {
+			font-family: system-ui, sans-serif;
+			font-size: 11px;
+			font-weight: bold;
+		}
+	</style>
+	<text x="5.2" y="50" class="small">(math) + (clicker)</text>
 </svg>

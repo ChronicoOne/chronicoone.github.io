@@ -1,0 +1,32 @@
+.python-indent {
+	white-space: pre;
+	margin: 0;
+	padding: 0;
+}
+
+.code-snip {
+	display: block;
+	background-color: #fffff2;
+}
+
+.code-snip p {
+	display: flex;
+	white-space: pre;
+	margin: 0;
+	color: #000000;
+	font-family: "Courier New";
+}
+
+.python-op {
+	color: #2a2de8;
+	font-weight: bold;
+}
+
+.python-value {
+	color: #bf2ae8;
+	font-weight: bold;
+}
+
+.python-comment {
+	color: #21b55e;
+}

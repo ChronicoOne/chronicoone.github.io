@@ -1,9 +1,9 @@
 HEAD~
-	How to create EASY machine learning models with Python
+	Tutorial: How to build a linear regression model with sci-kit learn and pandas
 ~
 
 DESC~
-	This tutorial...
+	This tutorial demonstrates the simple steps used to construct a linear regression model using any linearly correlated data.
 ~
 
 CONTENT~
@@ -18,5 +18,15 @@ CONTENT~
 		 As an example project, I demonstrate how to build a model trained to predict the number of calories in
 		 a given food based on how many grams of protein, fat, and carbs it contains.
 				
+	~
+	PYTHON~
+		#This is a comment
+		#This is an example snippet of code to show 
+		#the capabilities of the code_snips.py module
+		def my_function(arg1):
+		    return 42 + arg1
+		def another_function(bool_val):
+		    val = bool_val == True
+		    return val
 	~
 ~
