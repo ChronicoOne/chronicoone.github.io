@@ -33,7 +33,7 @@ navicons = ["Home",
             "Projects",
             "Tutorials",
             "Games",
-            #"YouTube",
+            "YouTube",
             "GitHub"]
 
 # ! Functions

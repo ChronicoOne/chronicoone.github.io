@@ -24,7 +24,13 @@ CONTENT~
 		#This is an example snippet of code to show 
 		#the capabilities of the code_snips.py module
 		def my_function(arg1):
-		    return 42 + arg1
+		    print(42 + arg1)
+		class MyClass:
+		    def __init__(self, num):
+		        self.num = num
+		    def lizard(self):
+		        if num == 4:
+		            return type(num)
 		def another_function(bool_val):
 		    val = bool_val == True
 		    return val
