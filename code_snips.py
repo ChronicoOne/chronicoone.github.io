@@ -59,6 +59,9 @@ def chop_lines(lines, keywords, comments):
                 last_index = word_start
         if last_index < len(line):
             chopped_lines.append(line[last_index:len(line)])
+        for i in range(len(chopped_lines)):
+            if chopped_lines[i] == " " or chopped_lines[i] == "  " or chopped_lines[i] == "   ":
+                chopped_lines[i] = "<span>" + chopped_lines[i] + "</span>"
     return chopped_lines
     
 # ! code formatting functions
@@ -121,11 +124,7 @@ def format_python(code_string):
             fragments[i] = "<span class=\"python-op\">" + fragments[i] + "</span>"
         elif len(fragment_stripped) > 0:
             if fragment_stripped[0] == "#":
-                fragments[i] = "<p><span class=\"python-comment\">" + fragment_stripped + "</span></p>"
-    for i in range(len(fragments)):
-        if fragments[i] == " " or fragments[i] == "  " or fragments[i] == "   ":
-            fragments[i] = "<span>" + fragments[i] + "</span>"
-            
+                fragments[i] = "<p><span class=\"python-comment\">" + fragment_stripped + "</span></p>"    
     html_block = ''.join(fragments)
     html_block = html_block.replace("    ", "<span class=\"python-indent\">    </span>")
     return html_block
