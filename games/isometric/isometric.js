@@ -99,29 +99,41 @@ class Enemy {
 	}
 	
 	moveTowardTarget(){
-		if(this.x < this.target.x){
+		if(this.x < this.target.x + this.#speed){
 			this.x +=  this.#speed;
 			this.div.style.transform = this.#transformString;
-		} else if(this.x > this.target.x){
+		} else if(this.x > this.target.x + this.#speed){
 			this.x -= this.#speed;
 			this.div.style.transform = this.#transformString + " scaleX(-1)";
-		} else if(this.y < this.target.y){
+		} else if(this.y < this.target.y - this.#speed){
 			this.y += this.#speed;
 			this.div.style.transform = this.#transformString;
-		} else if(this.y > this.target.y){
+		} else if(this.y > this.target.y - this.#speed){
 			this.y -= this.#speed;
 			this.div.style.transform = this.#transformString + " scaleX(-1)";
 		}
 		this.updatePos();
 		
-		if(Math.abs(this.x - this.target.x) > 1 || Math.abs(this.y - this.target.y) > 1){
+		if(this.x - this.target.x > this.#speed + tileSize || this.y - this.target.y > this.#speed + tileSize || this.target.x - this.x > this.#speed || this.target.y - this.y > this.#speed){
 			setTimeout( () => this.moveTowardTarget(), frameWait);
-		}
+		} 
 	}
 	
 	goToTarget(){
 		this.animate("move");
 		this.moveTowardTarget();
+	}
+	
+	findNearestTarget(listOfTargets){
+		if(this.target == this){
+				this.target = listOfTargets[0];
+		}
+		
+		for(const target of listOfTargets){
+			if(Math.abs(this.x - this.target.x) + Math.abs(this.y - this.target.y) > Math.abs(this.x - target.x) + Math.abs(this.y - target.y)){
+				this.setTarget(target);
+			}
+		}
 	}
 	
 }
@@ -179,8 +191,6 @@ class Building {
 		this.#animationID = setTimeout( () => {
 			// increment the current frame index and wrap around if needed
 			this.#currentFrame = (this.#currentFrame + 1) % this.#activeFrames.length;
-			console.log(this.div)
-			console.log(this.#activeFrames)
 			// remove the current SVG file from the container
 			this.div.removeChild(this.div.lastChild);
 			// add the next SVG file to the container
@@ -197,10 +207,15 @@ class Building {
 		this.div.style.bottom = this.y + "px";
 	}
 } 
-const alien1 = new Enemy("alien", alienFiles, 0, 0, 2, "translateZ(40px) translateX(-20px) translateY(20px) rotateZ(-45deg) rotateX(-55deg)");
+const alien1 = new Enemy("alien", alienFiles, 200, 200, 2, "translateZ(40px) translateX(-20px) translateY(20px) rotateZ(-45deg) rotateX(-55deg)");
 alien1.animate("move");
 const base1 = new Building("base", baseFiles, 1, 1, 2);
 base1.animate("idle");
 const base2 = new Building("base", baseFiles, 4, 6, 2);
 base2.animate("idle");
-alien1.setTarget(base2);
+const base3 = new Building("base", baseFiles, 8, 8, 2);
+base3.animate("idle");
+const base4 = new Building("base", baseFiles, 8, 2, 2);
+base4.animate("idle");
+
+const targets = [base1, base2, base3, base4];
