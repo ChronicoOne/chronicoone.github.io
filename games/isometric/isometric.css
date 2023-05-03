@@ -6,21 +6,24 @@
   position: fixed;
   top: calc(50vh - 100px);
   left: calc(50vw - 175px);
+  z-index: 1;
 }
 
 .row {
   display: flex;
   flex-wrap: nowrap;
+  transform-style: preserve-3d;
+  z-index: 1;
 }
 
 .tile {
   box-sizing: border-box;
   width: 40px;
   height: 40px;
-  background-color: green;
+  background-color: #474ce6;
   margin: 0;
   border: 1px solid black;
-  z-index: 1;
+  z-index: 2;
 }
 
 .alien {
@@ -28,7 +31,7 @@
 	width: 50px;
 	height: 50px;
 	transform:  translateZ(40px) translateX(-20px) translateY(20px) rotateZ(-45deg) rotateX(-55deg); 
-	z-index: 3;
+	z-index: 4;
 }
 
 .base {
@@ -36,7 +39,7 @@
 	width: 40px;
 	height: 40px;
 	transform:  translateZ(40px) rotateZ(-45deg) rotateX(-55deg); 
-	z-index: 2;
+	z-index: 3;
 }
 
 .tower {
@@ -44,14 +47,42 @@
 	width: 40px;
 	height: 40px;
 	transform:  translateZ(75px) rotateZ(-45deg) rotateX(-55deg); 
-	z-index: 2;
+	z-index: 3;
 }
 
 
-.towerAttachment {
+.fireBall {
 	position: absolute;
 	width: 40px;
 	height: 40px;
 	transform:  translateZ(95px) rotateZ(-45deg) rotateX(-55deg); 
-	z-index: 2;
+	z-index: 5;
+}
+
+.storeButton {
+	width: 100px;
+	height: 100px;
+	background-color: #EEEEEE;
+	padding: 10px;
+}
+
+.storeButton:hover {
+	background-color: #BBBBBB;
+}
+
+.storeButton img {
+	display: block;
+	height: 100%;
+	margin: auto;
+}
+
+
+#store {
+	position: fixed;
+	display: flex;
+	flex-direction: row;
+	z-index: 6;
+	left: 0;
+	top: 0 ;
+	background-color: red;
 }
