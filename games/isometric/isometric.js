@@ -465,13 +465,13 @@ class gunTower extends attackBuilding{
 	#fireBallID;
 	
 	constructor(posX, posY){
-		super("tower", towerFiles, posX, posY, 200, 100, 1);
+		super("tower", towerFiles, posX, posY, 200, 100, 5);
 		this.turretReady = true;
 		this.fireBallDiv = this.attachmentDiv;
 		this.fireBallSpeed = 10;
-		this.fireBallHitRadius = 3;
+		this.fireBallHitRadius = 6;
 		
-		this.fireBallPos = {x: posX * tileSize, y: posY * tileSize};
+		this.fireBallPos = {x: posX * tileSize, y: posY * tileSize, z: 95};
 		this.#fireBallID;
 	}
 	
@@ -483,32 +483,38 @@ class gunTower extends attackBuilding{
 	updateFireBallPos() {
 		this.fireBallDiv.style.left = this.fireBallPos.x + "px";
 		this.fireBallDiv.style.bottom = this.fireBallPos.y + "px";
+		
+		this.fireBallDiv.style.transform = "translateZ(" + this.fireBallPos.z + "px) " + "rotateZ(-45deg) rotateX(-55deg)";
+		
 	}
 	
 	moveFireBall() {
-		const vectorX = this.target.x - this.x;
-		const vectorY = this.target.y - this.y;
+		const vectorX = this.target.x - this.fireBallPos.x;
+		const vectorY = this.target.y - this.fireBallPos.y;
+		const vectorZ = 40 - this.fireBallPos.z;
 		
-		const fireBallInRangeX = Math.abs(this.fireBallPos.x - this.target.x) < this.fireBallHitRadius;
-		const fireBallInRangeY = Math.abs(this.fireBallPos.y - this.target.y) < this.fireBallHitRadius;
+		const vectorLength = Math.sqrt((vectorX ** 2) + (vectorY ** 2) + (vectorZ ** 2));
 		
-		const thetaX = Math.atan(vectorX/(vectorY+0.000001));
-		const thetaY = Math.atan(vectorY/(vectorX+0.000001));
-		const speedX = this.fireBallSpeed * Math.sin(thetaX);
-		const speedY = this.fireBallSpeed * Math.sin(thetaY);
+		const speedX = this.fireBallSpeed * vectorX/vectorLength;
+		const speedY = this.fireBallSpeed * vectorY/vectorLength;
+		const speedZ = this.fireBallSpeed * vectorZ/vectorLength;
 		
 		this.fireBallPos.x += speedX;
 		this.fireBallPos.y += speedY;
+		this.fireBallPos.z += speedZ;
 		
-		if(fireBallInRangeX && fireBallInRangeY){
+		const fireBallInRange = vectorLength < this.fireBallHitRadius;
+		
+		if(fireBallInRange){
 			this.target.health -= this.attackDamage;
 			this.fireBallPos.x = this.x;
 			this.fireBallPos.y = this.y;
+			this.fireBallPos.z = 95;
 			this.updateFireBallPos();
 			this.turretReady = true;
 		} else {
-			this.#fireBallID = setTimeout(() => {this.moveFireBall();}, frameWait);
 			this.updateFireBallPos();
+			this.#fireBallID = setTimeout(() => {this.moveFireBall();}, frameWait);
 		}
 	}
 	
