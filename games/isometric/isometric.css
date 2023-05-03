@@ -38,3 +38,20 @@
 	transform:  translateZ(40px) rotateZ(-45deg) rotateX(-55deg); 
 	z-index: 2;
 }
+
+.tower {
+	position: absolute;
+	width: 40px;
+	height: 40px;
+	transform:  translateZ(75px) rotateZ(-45deg) rotateX(-55deg); 
+	z-index: 2;
+}
+
+
+.towerAttachment {
+	position: absolute;
+	width: 40px;
+	height: 40px;
+	transform:  translateZ(95px) rotateZ(-45deg) rotateX(-55deg); 
+	z-index: 2;
+}
