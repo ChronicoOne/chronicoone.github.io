@@ -29,6 +29,12 @@ const fireBallIdleFiles = ["sprites/blueFireBall_idle/blueFireBall_idle1.svg"];
 const fireBallFiles = {
 	idleFiles : fireBallIdleFiles,
 };
+
+const stoneIdleFiles = ["sprites/stone_idle/stone_idle1.svg"];
+const stoneFiles = {
+	idleFiles : stoneIdleFiles,
+};
+
 const grid = document.getElementById('grid');
 
 const gameManager = {
@@ -129,6 +135,8 @@ class Tile {
 		this.y = Number(div.parentElement.getAttribute("index"));
 		this.full = false;
 		this.div.addEventListener("mousedown", this.build.bind(this));
+		
+		this.spawnRandomResource();
 	}
 	
 	build(){
@@ -142,6 +150,13 @@ class Tile {
 			gameManager.listOfTargets.push(this.structure);
 			gameManager.updateEnemyTargets();
 			gameManager.updateBuildingTargets();
+		}
+	}
+	
+	spawnRandomResource(){
+		if(Math.random() < 0.1){
+			this.structure = new Stone(this);
+			this.full = true;
 		}
 	}
 }
@@ -321,7 +336,7 @@ class Enemy {
 	}
 }
 
-class Building {
+class Structure {
 	
 	x;
 	y;
@@ -453,6 +468,12 @@ class Building {
 		if(this.attachmentFrames.length > 0){
 			this.attachmentDiv.remove();
 		}
+	}
+}
+
+class Building extends Structure {
+	constructor(name, animationFilesObj, tile, posZ, maxHealth){
+		super(name, animationFilesObj, tile, posZ, maxHealth);
 	}
 }
 
@@ -701,6 +722,25 @@ class gunTower extends attackBuilding{
 		}
 	}
 	
+}
+
+class Resource extends Structure{
+	
+	harvestScaler;
+	
+	constructor(name, animationFilesObj, tile, posZ, maxHealth, harvestScaler){
+		super(name, animationFilesObj, tile, posZ, maxHealth);
+		
+		this.harvestScaler = harvestScaler;
+	}
+	
+	
+}
+
+class Stone extends Resource {
+	constructor(tile){
+		super("stone", stoneFiles, tile, 20, 50);
+	}
 }
 
 // const base1 = new Building("base", baseFiles, 1, 1, 40, 200);
