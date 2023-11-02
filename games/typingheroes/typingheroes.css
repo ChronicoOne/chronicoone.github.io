@@ -1,0 +1,50 @@
+.logo_main {
+	        height: 6vw;
+	        position: fixed;
+	        left: 10px;
+	        top: 5px;
+			z-index: 6;
+}
+
+.tdiv-in-progress {
+		width: fit-content;
+		min-width: 100px;
+		margin: auto;
+		background-color: #e3e2a3;	
+		font-family: "sans-serif", "Tahoma";
+		font-size: 2em;
+		padding: 10px 10px;
+}
+
+.tdiv-failure {
+		width: fit-content;
+		min-width: 100px;
+		margin: auto;
+		background-color: #eb9494;	
+		font-family: "sans-serif", "Tahoma";
+		font-size: 2em;
+		padding: 10px 10px;
+}
+
+.tdiv-success {
+		width: fit-content;
+		min-width: 100px;
+		margin: auto;
+		background-color: #92e0a3;	
+		font-family: "sans-serif", "Tahoma";
+		font-size: 2em;
+		padding: 10px 10px;
+}
+
+
+.word-span {
+	color: #707070;
+}
+
+.type-span {
+	color: #3eab26;
+}
+
+.fail-span {
+	color: #e63535;
+}
