@@ -156,7 +156,7 @@ function checkBox(){
 	}
 }
 
-const timeout = 1000;
+const timeout = 500;
 
 function checkBoxLoop(){
 	checkBox();
