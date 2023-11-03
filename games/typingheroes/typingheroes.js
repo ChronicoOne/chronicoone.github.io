@@ -210,30 +210,64 @@ class Typer {
 
 class Player extends Typer {
 	
+	static failureDamage = 1;
+	maxHealth;
 	health;
 	attackDamage;
 	target;
+	playerUI;
+	healthBar;
 	
-	constructor(masterElem, health, attackDamage){
-		super(masterElem);
+	constructor(typeBoxParent, uiParent, health, attackDamage){
+		super(typeBoxParent);
 		this.health = health;
+		this.maxHealth = health;
 		this.attackDamage = attackDamage;
+		this.playerUI = document.createElement("div");
+		this.playerUI.setAttribute("id", "player-ui");
+		const healthBarOutline = document.createElement("div");
+		healthBarOutline.setAttribute("id", "player-health-bar-outline");
+		this.healthBar = document.createElement("div");
+		this.healthBar.setAttribute("id", "player-health-bar");
+		healthBarOutline.appendChild(this.healthBar);
+		this.playerUI.appendChild(healthBarOutline);
+		uiParent.appendChild(this.playerUI);
 		this.target = null;
 	}
 	
 	attack(){
-		if(target){
-			target.damage(this.attackDamage);
+		if(this.target){
+			this.target.damage(this.attackDamage);
 		}
 	}
 	
 	damage(amount){
 		this.health -= amount;
+		if(this.health <= 0){
+			this.die();
+		}
+		this.healthBar.setAttribute("style", "width: " + (this.health * 100 / this.maxHealth) + "%");
+	}
+	
+	onSuccess(){
+		this.attack();
+	}
+	
+	onFailure(){
+		this.damage(Player.failureDamage);
+	}
+	
+	die(){
+		if(this.target){
+			this.target.restart()
+		}
+		
+		this.health = this.maxHealth;
 	}
 }
 
 body = document.getElementsByTagName("body")[0];
-player = new Player(body); 
+player = new Player(body, body, 10, 1); 
 player.typeLoop();
 
 function typeListener(event) {
