@@ -163,8 +163,17 @@ class Typer {
 		this.timer = this.timeout;
 	}
 	
+	onSuccess() {
+		//pass
+	}
+	
+	onFailure() {
+		//pass
+	}
+	
 	typeLoop() {
 		const countDone = (this.timer == 0);
+		const countStart = (this.timer == this.timeout);
 		
 		if(this.typeBox.boxStatus == SUCCESS){
 			if(countDone){
@@ -172,6 +181,9 @@ class Typer {
 				this.timer = this.timeout;
 				// Make player deal damage
 			} else {
+				if(countStart){
+					this.onSuccess();
+				}
 				this.timer--;
 			}
 		} else if(this.typeBox.boxStatus == FAIL) {
@@ -180,6 +192,9 @@ class Typer {
 				this.timer = this.timeout;
 				//Make player take damage
 			} else {
+				if(countStart){
+					this.onFailure();
+				}
 				this.timer--;
 			}
 		}
@@ -194,9 +209,26 @@ class Typer {
 }
 
 class Player extends Typer {
-		
-	constructor(masterElem){
+	
+	health;
+	attackDamage;
+	target;
+	
+	constructor(masterElem, health, attackDamage){
 		super(masterElem);
+		this.health = health;
+		this.attackDamage = attackDamage;
+		this.target = null;
+	}
+	
+	attack(){
+		if(target){
+			target.damage(this.attackDamage);
+		}
+	}
+	
+	damage(amount){
+		this.health -= amount;
 	}
 }
 
