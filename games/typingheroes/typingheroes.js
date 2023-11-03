@@ -154,25 +154,80 @@ class Vocab {
 
 class Typer {
 	static tickLength = 20;
-	
+	static failureDamage = 5;
+	maxHealth;
+	health;
+	attackDamage;
+	target;
+	typerUI;
+	healthBar;
+	healthBarOutline;
 	typeBox;
 	vocab;
 	timeout;
 	timer;
 	
-	constructor(masterElem){
+	constructor(masterElem, health, attackDamage){
+		this.health = health;
+		this.maxHealth = health;
+		this.attackDamage = attackDamage;
+		this.target = null;
+		
+		this.typerUI = document.createElement("div");
+		this.healthBarOutline = document.createElement("div");
+		this.healthBar = document.createElement("div");
+		this.healthBarOutline.appendChild(this.healthBar);
+		this.typerUI.appendChild(this.healthBarOutline);
+		masterElem.appendChild(this.typerUI);	
+		
+		this.typerUI.setAttribute("class", "ui");
+		this.healthBarOutline.setAttribute("class", "health-bar-outline");
+		this.healthBar.setAttribute("class", "health-bar");
+		
 		this.typeBox = new TypeBox(masterElem, "Ready");
 		this.vocab = new Vocab(threeWordPhrases);
 		this.timeout = 10;
 		this.timer = this.timeout;
 	}
 	
-	onSuccess() {
-		//pass
+	attack(){
+		if(this.target){
+			this.target.damage(this.attackDamage * this.typeBox.currentWord.length);
+		}
 	}
 	
-	onFailure() {
-		//pass
+	damage(amount){
+		this.health -= amount;
+		if(this.health <= 0){
+			this.die();
+		}
+		this.updateHealthBar();
+	}
+	
+	die(){
+		if(this.target){
+			this.target.restart()
+		}
+		this.health = this.maxHealth;
+		this.updateHealthBar();
+	}
+	
+	restart(){
+		// resets current typer
+		this.health = this.maxHealth;
+		this.updateHealthBar();
+	}
+	
+	updateHealthBar(){
+		this.healthBar.setAttribute("style", "width: " + (this.health * 100 / this.maxHealth) + "%");	
+	}
+	
+	onSuccess(){
+		this.attack();
+	}
+	
+	onFailure(){
+		this.damage(Typer.failureDamage);
 	}
 	
 	typeLoop() {
@@ -214,131 +269,35 @@ class Typer {
 
 class Player extends Typer {
 	
-	static failureDamage = 1;
-	maxHealth;
-	health;
-	attackDamage;
-	target;
-	playerUI;
-	healthBar;
-	
-	constructor(typeBoxParent, uiParent, health, attackDamage){
-		super(typeBoxParent);
-		this.health = health;
-		this.maxHealth = health;
-		this.attackDamage = attackDamage;
-		this.playerUI = document.createElement("div");
-		this.playerUI.setAttribute("id", "player-ui");
-		const healthBarOutline = document.createElement("div");
-		healthBarOutline.setAttribute("id", "player-health-bar-outline");
-		this.healthBar = document.createElement("div");
+	constructor(uiParent, health, attackDamage){
+		super(uiParent, health, attackDamage);
+		this.typerUI.setAttribute("id", "player-ui");
+		this.healthBarOutline.setAttribute("id", "player-health-bar-outline");
 		this.healthBar.setAttribute("id", "player-health-bar");
-		healthBarOutline.appendChild(this.healthBar);
-		this.playerUI.appendChild(healthBarOutline);
-		uiParent.appendChild(this.playerUI);
-		this.target = null;
 	}
 	
-	attack(){
-		if(this.target){
-			this.target.damage(this.attackDamage);
-		}
-	}
-	
-	updateHealthBar(){
-		this.healthBar.setAttribute("style", "width: " + (this.health * 100 / this.maxHealth) + "%");	
-	}
-	
-	damage(amount){
-		this.health -= amount;
-		if(this.health <= 0){
-			this.die();
-		}
-		this.updateHealthBar();
-	}
-	
-	onSuccess(){
-		this.attack();
-	}
-	
-	onFailure(){
-		this.damage(Player.failureDamage);
-	}
-	
-	die(){
-		if(this.target){
-			this.target.restart()
-		}
-		this.health = this.maxHealth;
-		this.updateHealthBar();
-	}
 }
 
 class Monster extends Typer {
 	
-	static failureDamage = 1;
 	typeSpeed;
 	typeAccuracy;
-	maxHealth;
-	health;
-	attackDamage;
-	target;
-	monsterUI;
-	healthBar;
 	
-	constructor(typeBoxParent, uiParent, health, attackDamage, typeSpeed, typeAccuracy){
-		super(typeBoxParent);
-		this.health = health;
-		this.maxHealth = health;
-		this.attackDamage = attackDamage;
+	constructor(uiParent, health, attackDamage, typeSpeed, typeAccuracy){
+		super(uiParent, health, attackDamage);
 		this.typeSpeed = typeSpeed;
 		this.typeAccuracy = typeAccuracy;
-		this.monsterUI = document.createElement("div");
-		this.monsterUI.setAttribute("id", "monster-ui");
-		const healthBarOutline = document.createElement("div");
-		healthBarOutline.setAttribute("id", "monster-health-bar-outline");
-		this.healthBar = document.createElement("div");
+		this.typerUI.setAttribute("id", "monster-ui");
+		this.healthBarOutline.setAttribute("id", "monster-health-bar-outline");
 		this.healthBar.setAttribute("id", "monster-health-bar");
-		healthBarOutline.appendChild(this.healthBar);
-		this.monsterUI.appendChild(healthBarOutline);
-		uiParent.appendChild(this.monsterUI);
-		this.target = null;
-	}
-	
-	attack(){
-		if(this.target){
-			this.target.damage(this.attackDamage);
-		}
-	}
-	
-	updateHealthBar(){
-		this.healthBar.setAttribute("style", "width: " + (this.health * 100 / this.maxHealth) + "%");
-	}
-	
-	damage(amount){
-		this.health -= amount;
-		if(this.health <= 0){
-			this.die();
-		}
-		this.updateHealthBar();
-	}
-	
-	onSuccess(){
-		this.attack();
-	}
-	
-	onFailure(){
-		this.damage(Monster.failureDamage);
 	}
 	
 	die(){
 		// make this change to new monster
-		this.health = this.maxHealth;
-		this.updateHealthBar();
-	}
-	
-	restart(){
-		// resets current monster
+		if(this.target){
+			this.target.restart()
+		}
+		
 		this.health = this.maxHealth;
 		this.updateHealthBar();
 	}
@@ -356,14 +315,19 @@ class Monster extends Typer {
 }
 
 body = document.getElementsByTagName("body")[0];
-gameStage = document.createElement("div");
-gameStage.setAttribute("id", "game-stage");
-body.appendChild(gameStage);
 
-player = new Player(gameStage, gameStage, 10, 1); 
+monsterStage = document.createElement("div");
+monsterStage.setAttribute("id", "monster-stage");
+playerStage = document.createElement("div");
+playerStage.setAttribute("id", "player-stage");
+
+body.appendChild(monsterStage);
+body.appendChild(playerStage);
+
+player = new Player(playerStage, 100, 1); 
 player.typeLoop();
 
-monster = new Monster(gameStage, gameStage, 10, 1, 1, .90); 
+monster = new Monster(monsterStage, 100, 1, 1, .96); 
 monster.typeLoop();
 monster.battleLoop();
 monster.target = player;
