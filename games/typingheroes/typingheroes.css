@@ -1,3 +1,4 @@
+
 .logo_main {
 	        height: 6vw;
 	        position: fixed;
@@ -49,7 +50,17 @@
 	color: #e63535;
 }
 
+#game-stage {
+	width: 600px;
+	border-style: solid;
+	border-color: black;
+	border-width: 2px;
+	margin: auto;
+}
+
 #player-ui {
+	margin: auto;
+	margin-top: 10px;
 	width: 100%;
 	border-color: #5d85e3;
 	border-width: 2px;
@@ -70,3 +81,26 @@
 	height: 1em;
 	background-color: red;
 }
+
+#monster-ui {
+	margin: auto;
+	margin-top: 10px;
+	width: 100%;
+	border-color: #5d85e3;
+	border-width: 2px;
+	border-style: solid;
+	padding: 10px 0px;
+}
+
+#monster-health-bar-outline {
+	width: 300px;
+	border-style: solid;
+	border-color: black;
+	border-width: 2px;
+	margin: auto;
+}
+
+#monster-health-bar {
+	width: 300px;
+	height: 1em;
+	background-color: purple;

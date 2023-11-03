@@ -79,6 +79,10 @@ class TypeBox {
 		
 	}
 	
+	getNextLetter(){
+		return this.currentWord.substring(this.typedString.length, this.typedString.length + 1);
+	}
+	
 	resetBox(word){
 		this.currentWord = word;
 		this.typedString = "";
@@ -241,12 +245,16 @@ class Player extends Typer {
 		}
 	}
 	
+	updateHealthBar(){
+		this.healthBar.setAttribute("style", "width: " + (this.health * 100 / this.maxHealth) + "%");	
+	}
+	
 	damage(amount){
 		this.health -= amount;
 		if(this.health <= 0){
 			this.die();
 		}
-		this.healthBar.setAttribute("style", "width: " + (this.health * 100 / this.maxHealth) + "%");
+		this.updateHealthBar();
 	}
 	
 	onSuccess(){
@@ -261,14 +269,105 @@ class Player extends Typer {
 		if(this.target){
 			this.target.restart()
 		}
-		
 		this.health = this.maxHealth;
+		this.updateHealthBar();
+	}
+}
+
+class Monster extends Typer {
+	
+	static failureDamage = 1;
+	typeSpeed;
+	typeAccuracy;
+	maxHealth;
+	health;
+	attackDamage;
+	target;
+	monsterUI;
+	healthBar;
+	
+	constructor(typeBoxParent, uiParent, health, attackDamage, typeSpeed, typeAccuracy){
+		super(typeBoxParent);
+		this.health = health;
+		this.maxHealth = health;
+		this.attackDamage = attackDamage;
+		this.typeSpeed = typeSpeed;
+		this.typeAccuracy = typeAccuracy;
+		this.monsterUI = document.createElement("div");
+		this.monsterUI.setAttribute("id", "monster-ui");
+		const healthBarOutline = document.createElement("div");
+		healthBarOutline.setAttribute("id", "monster-health-bar-outline");
+		this.healthBar = document.createElement("div");
+		this.healthBar.setAttribute("id", "monster-health-bar");
+		healthBarOutline.appendChild(this.healthBar);
+		this.monsterUI.appendChild(healthBarOutline);
+		uiParent.appendChild(this.monsterUI);
+		this.target = null;
+	}
+	
+	attack(){
+		if(this.target){
+			this.target.damage(this.attackDamage);
+		}
+	}
+	
+	updateHealthBar(){
+		this.healthBar.setAttribute("style", "width: " + (this.health * 100 / this.maxHealth) + "%");
+	}
+	
+	damage(amount){
+		this.health -= amount;
+		if(this.health <= 0){
+			this.die();
+		}
+		this.updateHealthBar();
+	}
+	
+	onSuccess(){
+		this.attack();
+	}
+	
+	onFailure(){
+		this.damage(Monster.failureDamage);
+	}
+	
+	die(){
+		// make this change to new monster
+		this.health = this.maxHealth;
+		this.updateHealthBar();
+	}
+	
+	restart(){
+		// resets current monster
+		this.health = this.maxHealth;
+		this.updateHealthBar();
+	}
+	
+	battleLoop(){
+		const nextLetter = this.typeBox.getNextLetter();
+		if(Math.random() > this.typeAccuracy){
+			this.type(String.fromCharCode(nextLetter.charCodeAt(0) + 1));
+		} else {
+			this.type(nextLetter);
+		}
+		
+		setTimeout( () => {this.battleLoop();}, 1000 / this.typeSpeed);
 	}
 }
 
 body = document.getElementsByTagName("body")[0];
-player = new Player(body, body, 10, 1); 
+gameStage = document.createElement("div");
+gameStage.setAttribute("id", "game-stage");
+body.appendChild(gameStage);
+
+player = new Player(gameStage, gameStage, 10, 1); 
 player.typeLoop();
+
+monster = new Monster(gameStage, gameStage, 10, 1, 1, .90); 
+monster.typeLoop();
+monster.battleLoop();
+monster.target = player;
+player.target = monster;
 
 function typeListener(event) {
 	if(event.key.length == 1){
