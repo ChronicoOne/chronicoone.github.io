@@ -8,7 +8,7 @@
 
 .tdiv-in-progress {
 		width: fit-content;
-		min-width: 100px;
+		min-width: 60px;
 		margin: auto;
 		background-color: #e3e2a3;	
 		font-family: "sans-serif", "Tahoma";
@@ -18,7 +18,7 @@
 
 .tdiv-failure {
 		width: fit-content;
-		min-width: 100px;
+		min-width: 60px;
 		margin: auto;
 		background-color: #eb9494;	
 		font-family: "sans-serif", "Tahoma";
@@ -28,7 +28,7 @@
 
 .tdiv-success {
 		width: fit-content;
-		min-width: 100px;
+		min-width: 60px;
 		margin: auto;
 		background-color: #92e0a3;	
 		font-family: "sans-serif", "Tahoma";

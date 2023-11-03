@@ -132,35 +132,82 @@ class TypeBox {
 	
 }
 
-body = document.getElementsByTagName("body")[0];
+class Vocab {
+	wordList;
+	currentWord;
+	
+	constructor(wordList){
+		this.wordList = wordList;
+		this.newWord();
+	}
 
-playerTypeBox = new TypeBox(body, "hello");
+	newWord(){
+		const index = Math.round(Math.random() * (this.wordList.length - 1));
+		this.currentWord = this.wordList[index];
+		return this.currentWord;
+	}
+}
+
+class Typer {
+	static tickLength = 20;
+	
+	typeBox;
+	vocab;
+	timeout;
+	timer;
+	
+	constructor(masterElem){
+		this.typeBox = new TypeBox(masterElem, "Ready");
+		this.vocab = new Vocab(threeWordPhrases);
+		this.timeout = 10;
+		this.timer = this.timeout;
+	}
+	
+	typeLoop() {
+		const countDone = (this.timer == 0);
+		
+		if(this.typeBox.boxStatus == SUCCESS){
+			if(countDone){
+				this.typeBox.resetBox(this.vocab.newWord());
+				this.timer = this.timeout;
+				// Make player deal damage
+			} else {
+				this.timer--;
+			}
+		} else if(this.typeBox.boxStatus == FAIL) {
+			if(countDone){
+				this.typeBox.resetBox(this.vocab.newWord());
+				this.timer = this.timeout;
+				//Make player take damage
+			} else {
+				this.timer--;
+			}
+		}
+		
+		setTimeout( () => {this.typeLoop();}, Typer.tickLength);
+	}
+	
+	type(letter) {
+		this.typeBox.typeChar(letter);
+	}
+	
+}
+
+class Player extends Typer {
+		
+	constructor(masterElem){
+		super(masterElem);
+	}
+}
+
+body = document.getElementsByTagName("body")[0];
+player = new Player(body); 
+player.typeLoop();
 
 function typeListener(event) {
 	if(event.key.length == 1){
-		playerTypeBox.typeChar(event.key);
+		player.type(event.key);
 	}
 }
 
 document.addEventListener("keydown", typeListener);
-
-let i = 0;
-
-function checkBox(){
-	if(playerTypeBox.boxStatus == SUCCESS){
-		playerTypeBox.resetBox(threeWordPhrases[i % threeWordPhrases.length]);
-		i++;
-	} else if(playerTypeBox.boxStatus == FAIL){
-		playerTypeBox.resetBox(threeWordPhrases[i % threeWordPhrases.length]);
-		i++;
-	}
-}
-
-const timeout = 500;
-
-function checkBoxLoop(){
-	checkBox();
-	setTimeout( () => {checkBoxLoop();}, timeout);
-}
-
-checkBoxLoop();
