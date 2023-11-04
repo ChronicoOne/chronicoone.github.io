@@ -1,3 +1,8 @@
+// Author: Connor Bowman 
+// This code was written solely to be used on the chronico.one site for entertainment.
+
+// In honor of Roshan's 21st birthday
+
 const FAIL = 0;
 const SUCCESS = 1;
 const PROCEED = 2;
@@ -247,6 +252,90 @@ const fightingWords = [
   "You are no match for my skills!",
   "You will die today!",
   "Your time has come!",
+  "if it doesn't kill you",
+  "that's impossible",
+  "payment will come due",
+  "can't keep going",
+  "destruction is inevitable",
+  "take your last breath",
+  "it will be sweet",
+  "I have the launch codes",
+  "surrender, foul beast",
+  "the time has come",
+  "it's all over",
+  "about those teeth",
+  "for those toenails",
+  "so freaking ugly",
+  "get out of here",
+  "you're bound to lose",
+  "I get a little lonely",
+  "thinking about us",
+  "scoop me up",
+  "the end is near",
+  "face me IRL",
+  "I'll end you",
+  "put up your dukes",
+  "the incoming skull pound",
+  "you're gonna be shattered",
+  "into a million tiny pieces",
+  "engaging turbo drive",
+  "are you my dad?",
+  "all of these taxes",
+  "my fingers are mighty",
+  "you keyboard warrior",
+  "I'll blend you",
+  "into a charcuterie display",
+  "blasting your brain out",
+  "into the pavement",
+  "you dumb idiot",
+  "stay away, you stink",
+  "gigantic fool",
+  "you were a mistake",
+  "GGEZ",
+  "get lost bum",
+  "I could destroy you",
+  "but I'll take it easy on you",
+  "you are just",
+  "a loser and a freak",
+  "but you're just",
+  "you could do better",
+  "it's not that hard",
+  "just get good",
+  "touch grass brother",
+  "I can not believe",
+  "breathe again. I dare you.",
+  "at the end of the road pal",
+  "sorry it has to be this way",
+  "no hard feelings",
+  "you ruined my day",
+  "you deserve to rot",
+  "1990 called",
+  "the exorcist called",
+  "my backup is here",
+  "just kidding",
+  "the dinosaurs called",
+  "my grandma called",
+  "look out for losers",
+  "they want their pants back",
+  "they said you're stupid",
+  "they want their nose back",
+  "she wants her lumps back",
+  "they told me you suck",
+  "or I'll come after you",
+  "bring a weapon",
+  "but who cares",
+  "I'll call your mom",
+  "tell her you're dead",
+  "off a cliff",
+  "or something similar",
+  "I'll turn you",
+  "I'll rip you",
+  "I'll slice you",
+  "I'll stab you",
+  "I'll cook you",
+  "I'll tear you",
+  "all over your apartment",
+  "in your neighbor's yard"
 ];
 
 const fightingInsults = [
@@ -335,11 +424,8 @@ const monsterPhrases = [
   "Darkness and doom are eternal!",
 ];
 
-// You can access these phrases using monsterPhrases[index], where index is the desired phrase.
-
-
-
 const fullWordList = threeWordPhrases.concat(uniqueWordsAndPhrases).concat(fightingWords).concat(fightingInsults);
+const playerDialogue = fightingInsults.concat(uniqueWordsAndPhrases).concat(fightingWords);
 
 class TypeBox {
 	
@@ -580,8 +666,9 @@ class Player extends Typer {
 		this.typerUI.setAttribute("id", "player-ui");
 		this.healthBarOutline.setAttribute("id", "player-health-bar-outline");
 		this.healthBar.setAttribute("id", "player-health-bar");
-		
 		this.typerInfo.textContent = "Player";
+		
+		this.vocab.wordList = playerDialogue;
 	}
 	
 }
@@ -646,8 +733,22 @@ class Monster extends Typer {
 	}
 }
 
-gameArea = document.getElementById("game-area");
+class Store {
+		
+	player;
+	storeArea;
+	
+	constructor(parentElem, player){
+		this.player = player;
+		this.storeArea = document.createElement("div");
+		this.storeArea.setAttribute("id", "store-area");
+		parentElem.appendChild(this.storeArea);
+	}
+}
 
+body = document.getElementsByTagName("body")[0];
+
+gameArea = document.getElementById("game-area");
 monsterStage = document.createElement("div");
 monsterStage.setAttribute("id", "monster-stage");
 playerStage = document.createElement("div");
@@ -665,6 +766,8 @@ monster.typeLoop();
 monster.battleLoop();
 monster.target = player;
 player.target = monster;
+
+store = new Store(body, player);
 
 function typeListener(event) {
 	if(event.key.length == 1){
