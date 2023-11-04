@@ -2,6 +2,142 @@ const FAIL = 0;
 const SUCCESS = 1;
 const PROCEED = 2;
 
+const uniqueWordsAndPhrases = [
+  "about to",
+  "above all",
+  "absolutely",
+  "after all",
+  "according to",
+  "actually",
+  "add up",
+  "all of a sudden",
+  "all the best",
+  "along the way",
+  "although",
+  "almost",
+  "an amazing time",
+  "any chance",
+  "around the clock",
+  "as a matter of fact",
+  "as far as I know",
+  "as soon as possible",
+  "at first glance",
+  "at the same time",
+  "at your earliest convenience",
+  "back and forth",
+  "back to the drawing board",
+  "bear in mind",
+  "better late than never",
+  "between you and me",
+  "by all means",
+  "by chance",
+  "by the way",
+  "call it a day",
+  "can't wait",
+  "catch up",
+  "change your mind",
+  "cheer up",
+  "come to think of it",
+  "cut to the chase",
+  "did you know that",
+  "don't forget",
+  "don't worry about it",
+  "drop in the bucket",
+  "easy as pie",
+  "every now and then",
+  "fair enough",
+  "fall into place",
+  "far and wide",
+  "feel free",
+  "few and far between",
+  "figure something out",
+  "find out",
+  "for crying out loud",
+  "for good measure",
+  "for the first time",
+  "for the sake of argument",
+  "get along with",
+  "get back to you",
+  "get going",
+  "get in touch",
+  "get over it",
+  "give it a try",
+  "go ahead",
+  "go figure",
+  "go for it",
+  "go the extra mile",
+  "good luck",
+  "got it?",
+  "got to go",
+  "had a blast",
+  "hang on a minute",
+  "happy to help",
+  "hard to say",
+  "have fun",
+  "here we go",
+  "hold on",
+  "hold your breath",
+  "honest to God",
+  "how about",
+  "I couldn't agree more",
+  "I don't think so",
+  "I feel you",
+  "I see what you mean",
+  "I'm all ears",
+  "I'm in",
+  "I'm listening",
+  "I'm on it",
+  "I'm with you",
+  "in a nutshell",
+  "in case you didn't know",
+  "in other words",
+  "in the meantime",
+  "it's a good thing",
+  "it's all good",
+  "it's up to you",
+  "just kidding",
+  "keep in touch",
+  "let me know",
+  "let's face it",
+  "let's roll",
+  "likewise",
+  "listen up",
+  "long time no see",
+  "make a difference",
+  "make sense?",
+  "my bad",
+  "never mind",
+  "no problem",
+  "not at all",
+  "not to mention",
+  "now or never",
+  "no way",
+  "no worries",
+  "no wonder",
+  "off the cuff",
+  "on the other hand",
+  "on the same page",
+  "once in a while",
+  "out of the question",
+  "over and done with",
+  "piece of cake",
+  "please and thank you",
+  "point in case",
+  "put another way",
+  "right on",
+  "see you around",
+  "see you later",
+  "take care",
+  "take it easy",
+  "that's for sure",
+  "that's all folks",
+  "the best of luck",
+  "think again",
+  "this and that",
+  "to be honest",
+  "to make a long story short",
+  "to put it another"]
+  
 const threeWordPhrases = [
   "Blue sky above",
   "Peaceful river flows",
@@ -48,6 +184,162 @@ const threeWordPhrases = [
   "Wildflowers in bloom",
   // Continue adding more phrases as needed...
 ];
+
+const fightingWords = [
+  "Arise, my minions!",
+  "As I have sworn!",
+  "Avenge my family!",
+  "Beware my wrath!",
+  "Bring it on, beast!",
+  "By my power, I command you!",
+  "Cease your foulness!",
+  "Come at me, bro!",
+  "Coward! Face me!",
+  "Die, fiend, die!",
+  "Do not defy me!",
+  "Draw your weapon!",
+  "Eat my dust!",
+  "En garde, foul beast!",
+  "Enough of your games!",
+  "Experience my fury!",
+  "Face your doom!",
+  "Fall, monster!",
+  "Feel my wrath!",
+  "Fight me, you coward!",
+  "For glory!",
+  "For the kingdom!",
+  "Foul creature, be gone!",
+  "Get thee hence!",
+  "Give up now, and be spared!",
+  "Have at thee!",
+  "Heed my command!",
+  "I am not afraid of you!",
+  "I will not be defeated!",
+  "I will send you back to hell!",
+  "I'll carve you up!",
+  "I'll grind your bones to dust!",
+  "I'll make you pay!",
+  "In the name of all that is good!",
+  "It's over for you, monster!",
+  "Kneel before me!",
+  "Let the battle begin!",
+  "May the gods protect me!",
+  "My blade hungers for your blood!",
+  "My power is too great for you!",
+  "None shall escape my wrath!",
+  "On your guard!",
+  "Prepare to meet your maker!",
+  "Prepare to be vanquished!",
+  "Relish your final moments!",
+  "Repent, sinner!",
+  "Stand down, or face my wrath!",
+  "Take this!",
+  "Taste my power!",
+  "That's all you've got?",
+  "This is for all the lives you've taken!",
+  "Thou art no match for me!",
+  "Tremble before me!",
+  "Unhand me, beast!",
+  "Unleash your fury!",
+  "Very well, then. Die!",
+  "What are you waiting for? Attack!",
+  "Where is your courage now?",
+  "You are no match for my skills!",
+  "You will die today!",
+  "Your time has come!",
+];
+
+const fightingInsults = [
+  "You worthless maggot!",
+  "You hideous creature!",
+  "You foul abomination!",
+  "You despicable wretch!",
+  "You loathsome fiend!",
+  "You vile beast!",
+  "You putrid scum!",
+  "You wretched miscreant!",
+  "You miserable vermin!",
+  "You abhorrent creature!",
+  "You despicable fiend!",
+  "You disgusting maggot!",
+  "You vile monster!",
+  "You wretched scum!",
+  "You miserable vermin!",
+  "You abominable fiend!",
+  "You despicable wretch!",
+  "You foul abomination!",
+  "You hideous creature!",
+  "You loathsome miscreant!",
+  "You miserable vermin!",
+  "You putrid scum!",
+  "You vile beast!",
+  "You wretched scum!",
+  "You abhorrent creature!",
+  "You despicable fiend!",
+  "You disgusting maggot!",
+  "You vile monster!",
+  "You wretched scum!",
+  "You miserable vermin!",
+  "You contemptible cur!",
+  "You degenerate fiend!",
+  "You loathsome vermin!",
+  "You miserable maggot!",
+  "You putrid monster!",
+  "You vile creature!",
+  "You wretched wretch!",
+];
+
+const monsterPhrases = [
+  "Prepare to meet your doom, hero!",
+  "I hunger for your fear!",
+  "You can't escape the darkness!",
+  "Witness true evil's power!",
+  "Your bravery is futile!",
+  "Your fate is sealed!",
+  "This is the end for you!",
+  "I'll crush you like an insect!",
+  "I am darkness incarnate!",
+  "Your destiny ends here!",
+  "I relish your despair!",
+  "Your hope is fleeting!",
+  "I'll feast on your soul!",
+  "Your valor wanes!",
+  "You're no match for me!",
+  "Surrender, and I may spare you!",
+  "No mercy for you!",
+  "Shadows are my allies!",
+  "Escape your fate?",
+  "I'm your nightmare!",
+  "Courage is empty!",
+  "I'll enjoy tearing you apart!",
+  "Your death is my masterpiece!",
+  "Enter a realm of terror!",
+  "Darkness consumes you!",
+  "I'm amused by your struggles!",
+  "Serve as my amusement!",
+  "No hope, only despair!",
+  "Fear in your eyes!",
+  "Defiance is futile!",
+  "This battle is your last!",
+  "Bathe in your fear!",
+  "I'm the warned monster!",
+  "Unending terror!",
+  "Your presence, a mistake!",
+  "Rue the day you crossed me!",
+  "I bring ultimate demise!",
+  "No escape from fate!",
+  "Worthy opponent at last!",
+  "Your life is forfeit!",
+  "I savor your suffering!",
+  "Courage can't match my power!",
+  "Darkness and doom are eternal!",
+];
+
+// You can access these phrases using monsterPhrases[index], where index is the desired phrase.
+
+
+
+const fullWordList = threeWordPhrases.concat(uniqueWordsAndPhrases).concat(fightingWords).concat(fightingInsults);
 
 class TypeBox {
 	
@@ -194,8 +486,8 @@ class Typer {
 		this.healthText.setAttribute("class", "health-text");
 		this.updateUI();
 		
-		this.typeBox = new TypeBox(masterElem, "Ready");
-		this.vocab = new Vocab(threeWordPhrases);
+		this.typeBox = new TypeBox(masterElem, "Ready?");
+		this.vocab = new Vocab(fullWordList);
 		this.timeout = 10;
 		this.timer = this.timeout;
 	}
@@ -218,6 +510,8 @@ class Typer {
 		if(this.target){
 			this.target.restart()
 		}
+		
+		this.typeBox.resetBox("Ready?");
 		this.health = this.maxHealth;
 		this.updateUI();
 	}
@@ -225,6 +519,7 @@ class Typer {
 	restart(){
 		// resets current typer
 		this.health = this.maxHealth;
+		this.typeBox.resetBox("Ready?");
 		this.updateUI();
 	}
 	
@@ -301,6 +596,7 @@ class Monster extends Typer {
 		const health = 100 + (level * 5);
 		const attackDamage = 1 + (level / 5);
 		super(uiParent, health, attackDamage);
+		this.vocab.wordList = monsterPhrases;
 		
 		this.level = level;
 		this.typeSpeed = 1 + (level / 20);
@@ -327,6 +623,7 @@ class Monster extends Typer {
 			this.target.restart()
 		}
 		
+		this.typeBox.resetBox("Ready?");
 		this.health = this.maxHealth;
 		this.updateUI();
 	}
