@@ -8,9 +8,10 @@
 }
 
 .tdiv-in-progress {
-		width: fit-content;
+		width: 100%;
 		min-width: 60px;
 		margin: auto;
+		box-sizing: border-box;
 		background-color: #e3e2a3;	
 		font-family: "sans-serif", "Tahoma";
 		font-size: 2em;
@@ -19,9 +20,10 @@
 }
 
 .tdiv-failure {
-		width: fit-content;
+		width: 100%;
 		min-width: 60px;
 		margin: auto;
+		box-sizing: border-box;
 		background-color: #eb9494;	
 		font-family: "sans-serif", "Tahoma";
 		font-size: 2em;
@@ -30,9 +32,10 @@
 }
 
 .tdiv-success {
-		width: fit-content;
+		width: 100%;
 		min-width: 60px;
 		margin: auto;
+		box-sizing: border-box;
 		background-color: #92e0a3;	
 		font-family: "sans-serif", "Tahoma";
 		font-size: 2em;
@@ -55,8 +58,8 @@
 
 .ui {
 	margin: auto;
-	margin-top: 10px;
 	width: 100%;
+	box-sizing: border-box;
 	border-color: #5d85e3;
 	border-width: 2px;
 	border-style: solid;
@@ -91,6 +94,7 @@
 
 #player-stage {
 	width: 600px;
+	box-sizing: border-box;
 	border-style: solid;
 	border-color: black;
 	border-width: 2px;
@@ -99,6 +103,7 @@
 
 #monster-stage {
 	width: 600px;
+	box-sizing: border-box;
 	border-style: solid;
 	border-color: black;
 	border-width: 2px;
