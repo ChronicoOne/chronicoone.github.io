@@ -2,7 +2,7 @@
 .logo_main {
 	        height: 6vw;
 	        position: fixed;
-	        left: 10px;
+	        right: 10px;
 	        top: 5px;
 			z-index: 6;
 }
@@ -63,7 +63,14 @@
 	border-color: #5d85e3;
 	border-width: 2px;
 	border-style: solid;
-	padding: 10px 0px;
+	padding: 0px 0px 10px 0px;
+}
+
+.typer-info {
+	font-weight: bold;
+	font-size: 2em;
+	font-family: "Fantasy";
+	margin-left: 10px;
 }
 
 .health-bar-outline {
