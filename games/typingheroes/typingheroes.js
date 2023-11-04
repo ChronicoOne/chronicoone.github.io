@@ -162,6 +162,7 @@ class Typer {
 	typerUI;
 	healthBar;
 	healthBarOutline;
+	healthText;
 	typeBox;
 	vocab;
 	timeout;
@@ -176,13 +177,18 @@ class Typer {
 		this.typerUI = document.createElement("div");
 		this.healthBarOutline = document.createElement("div");
 		this.healthBar = document.createElement("div");
+		this.healthText = document.createElement("span");
 		this.healthBarOutline.appendChild(this.healthBar);
+
 		this.typerUI.appendChild(this.healthBarOutline);
+		this.typerUI.appendChild(this.healthText);
 		masterElem.appendChild(this.typerUI);	
 		
 		this.typerUI.setAttribute("class", "ui");
 		this.healthBarOutline.setAttribute("class", "health-bar-outline");
 		this.healthBar.setAttribute("class", "health-bar");
+		this.healthText.setAttribute("class", "health-text");
+		this.updateHealthBar();
 		
 		this.typeBox = new TypeBox(masterElem, "Ready");
 		this.vocab = new Vocab(threeWordPhrases);
@@ -197,7 +203,7 @@ class Typer {
 	}
 	
 	damage(amount){
-		this.health -= amount;
+		this.health -= Math.round(amount);
 		if(this.health <= 0){
 			this.die();
 		}
@@ -219,7 +225,8 @@ class Typer {
 	}
 	
 	updateHealthBar(){
-		this.healthBar.setAttribute("style", "width: " + (this.health * 100 / this.maxHealth) + "%");	
+		this.healthBar.setAttribute("style", "width: " + (this.health * 100 / this.maxHealth) + "%");
+		this.healthText.textContent = this.health + "/" + this.maxHealth;
 	}
 	
 	onSuccess(){
@@ -282,18 +289,33 @@ class Monster extends Typer {
 	
 	typeSpeed;
 	typeAccuracy;
+	level;
 	
-	constructor(uiParent, health, attackDamage, typeSpeed, typeAccuracy){
+	constructor(uiParent, level){
+		const health = 100 + (level * 5);
+		const attackDamage = 1 + (level / 5);
 		super(uiParent, health, attackDamage);
-		this.typeSpeed = typeSpeed;
-		this.typeAccuracy = typeAccuracy;
+		
+		this.level = level;
+		this.typeSpeed = 1 + (level / 20);
+		this.typeAccuracy = Math.min(0.95 + (level / 1000), 1);
+		
 		this.typerUI.setAttribute("id", "monster-ui");
 		this.healthBarOutline.setAttribute("id", "monster-health-bar-outline");
 		this.healthBar.setAttribute("id", "monster-health-bar");
 	}
 	
+	levelUp(){
+		this.level++;
+		this.maxHealth = 100 + (this.level * 5);
+		this.attackDamage = 1 + (this.level / 5);
+		this.typeSpeed = 1 + (this.level / 20);
+		this.typeAccuracy = Math.min(0.95 + (this.level / 1000), 1);
+	}
+	
 	die(){
-		// make this change to new monster
+		this.levelUp();
+		
 		if(this.target){
 			this.target.restart()
 		}
@@ -314,20 +336,21 @@ class Monster extends Typer {
 	}
 }
 
-body = document.getElementsByTagName("body")[0];
+gameArea = document.getElementById("game-area");
 
 monsterStage = document.createElement("div");
 monsterStage.setAttribute("id", "monster-stage");
 playerStage = document.createElement("div");
 playerStage.setAttribute("id", "player-stage");
 
-body.appendChild(monsterStage);
-body.appendChild(playerStage);
+gameArea.appendChild(playerStage);
+gameArea.appendChild(monsterStage);
+
 
 player = new Player(playerStage, 100, 1); 
 player.typeLoop();
 
-monster = new Monster(monsterStage, 100, 1, 1, .96); 
+monster = new Monster(monsterStage, 1); 
 monster.typeLoop();
 monster.battleLoop();
 monster.target = player;

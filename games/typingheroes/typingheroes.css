@@ -77,12 +77,24 @@
 	background-color: red;
 }
 
+.health-text {
+	display: block;
+	margin: auto;
+	font-family: monospace;
+	width: fit-content;
+}
+
+#game-area {
+	margin: auto;
+	width: fit-content;
+}
+
 #player-stage {
 	width: 600px;
 	border-style: solid;
 	border-color: black;
 	border-width: 2px;
-	margin: auto;
+	display: inline-block;
 }
 
 #monster-stage {
@@ -90,7 +102,7 @@
 	border-style: solid;
 	border-color: black;
 	border-width: 2px;
-	margin: auto;
+	display: inline-block;
 }
 
 #player-ui {
