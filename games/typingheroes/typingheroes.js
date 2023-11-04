@@ -546,12 +546,16 @@ class Typer {
 	vocab;
 	timeout;
 	timer;
+	timerID;
+	chat;
 	
-	constructor(masterElem, health, attackDamage){
+	constructor(masterElem, chat, health, attackDamage){
 		this.health = health;
 		this.maxHealth = health;
 		this.attackDamage = attackDamage;
 		this.target = null;
+		this.timerID = null;
+		this.chat = chat;
 		
 		this.typerUI = document.createElement("div");
 		this.typerInfo = document.createElement("div");
@@ -597,6 +601,8 @@ class Typer {
 			this.target.restart()
 		}
 		
+		clearTimeout(this.timerID);
+		this.timer = this.timeout;
 		this.typeBox.resetBox("Ready?");
 		this.health = this.maxHealth;
 		this.updateUI();
@@ -605,6 +611,8 @@ class Typer {
 	restart(){
 		// resets current typer
 		this.health = this.maxHealth;
+		clearTimeout(this.timerID);
+		this.timer = this.timeout;
 		this.typeBox.resetBox("Ready?");
 		this.updateUI();
 	}
@@ -615,6 +623,7 @@ class Typer {
 	}
 	
 	onSuccess(){
+		this.chat.post(this.typerInfo.textContent, this.typeBox.currentWord);
 		this.attack();
 	}
 	
@@ -650,7 +659,7 @@ class Typer {
 			}
 		}
 		
-		setTimeout( () => {this.typeLoop();}, Typer.tickLength);
+		this.timerID = setTimeout( () => {this.typeLoop();}, Typer.tickLength);
 	}
 	
 	type(letter) {
@@ -661,8 +670,8 @@ class Typer {
 
 class Player extends Typer {
 	
-	constructor(uiParent, health, attackDamage){
-		super(uiParent, health, attackDamage);
+	constructor(uiParent, chat, health, attackDamage){
+		super(uiParent, chat, health, attackDamage);
 		this.typerUI.setAttribute("id", "player-ui");
 		this.healthBarOutline.setAttribute("id", "player-health-bar-outline");
 		this.healthBar.setAttribute("id", "player-health-bar");
@@ -679,10 +688,10 @@ class Monster extends Typer {
 	typeAccuracy;
 	level;
 	
-	constructor(uiParent, level){
+	constructor(uiParent, chat, level){
 		const health = 100 + (level * 5);
 		const attackDamage = 1 + (level / 5);
-		super(uiParent, health, attackDamage);
+		super(uiParent, chat, health, attackDamage);
 		this.vocab.wordList = monsterPhrases;
 		
 		this.level = level;
@@ -744,11 +753,41 @@ class Store {
 		this.storeArea.setAttribute("id", "store-area");
 		parentElem.appendChild(this.storeArea);
 	}
+	
+}
+
+class Chat {
+	
+	chatArea;
+	
+	constructor(parentElem){
+		this.chatArea = document.createElement("div");
+		this.chatArea.setAttribute("id", "chat-area");
+		parentElem.appendChild(this.chatArea);
+	}
+	
+	post(user, message){
+		const usernameText = document.createElement("span");
+		const messageText = document.createElement("span");
+		const messageBox = document.createElement("div");
+		usernameText.setAttribute("class", "username-text");
+		messageText.setAttribute("class", "message-text");
+		messageBox.setAttribute("class", "message-box");
+		
+		messageText.textContent = ": " + message;
+		usernameText.textContent = user;
+		messageBox.appendChild(usernameText);
+		messageBox.appendChild(messageText);
+		
+		this.chatArea.insertBefore(messageBox, this.chatArea.children[0]);
+	}
 }
 
 body = document.getElementsByTagName("body")[0];
 
 gameArea = document.getElementById("game-area");
+chat = new Chat(gameArea);
+
 monsterStage = document.createElement("div");
 monsterStage.setAttribute("id", "monster-stage");
 playerStage = document.createElement("div");
@@ -758,10 +797,10 @@ gameArea.appendChild(playerStage);
 gameArea.appendChild(monsterStage);
 
 
-player = new Player(playerStage, 100, 1); 
+player = new Player(playerStage, chat, 100, 1); 
 player.typeLoop();
 
-monster = new Monster(monsterStage, 1); 
+monster = new Monster(monsterStage, chat, 1); 
 monster.typeLoop();
 monster.battleLoop();
 monster.target = player;

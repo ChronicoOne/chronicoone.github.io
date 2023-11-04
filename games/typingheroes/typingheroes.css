@@ -112,6 +112,16 @@ body {
 	width: fit-content;
 }
 
+#chat-area {
+	height: 5em;
+	display: flex;
+	flex-direction: column-reverse;
+	overflow-y: scroll;
+	border-style: solid;
+	border-color: black;
+	border-width: 2px;
+}
+
 #player-stage {
 	width: 600px;
 	box-sizing: border-box;
