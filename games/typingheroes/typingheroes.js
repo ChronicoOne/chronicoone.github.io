@@ -673,7 +673,8 @@ class Typer {
 
 class Player extends Typer {
 	
-	karma;
+	credits;
+	store;
 	
 	constructor(uiParent, chat, health, attackDamage){
 		super(uiParent, chat, health, attackDamage);
@@ -683,15 +684,19 @@ class Player extends Typer {
 		this.typerName = "Player";
 		this.typerInfo.textContent = this.typerName;
 		
-		this.karma = 0;
+		this.credits = 0;
 		this.vocab.wordList = playerDialogue;
+		this.store = null;
 	}
 	
 	restart(){
 		// resets current typer
 		this.health = this.maxHealth;
 		if(this.target instanceof Monster){
-			this.karma += this.target.level;
+			this.credits += this.target.level;
+		}
+		if(this.store){
+			this.store.updateUI();
 		}
 		this.typeBox.resetBox("Ready?");
 		this.updateUI();
@@ -769,26 +774,43 @@ class Store {
 	static healthPrice = 5;
 	static healthBuyAmount = 5;
 	player;
+	bankArea;
+	creditsText;
 	storeArea;
 	healthButton;
 	
 	constructor(parentElem, player){
 		this.player = player;
+		this.player.store = this;
 		this.storeArea = document.createElement("div");
 		this.storeArea.setAttribute("id", "store-area");
+		
+		this.bankArea = document.createElement("div");
+		this.bankArea.setAttribute("id", "store-bank");
+		this.creditsText = document.createElement("span");
+		this.creditsText.setAttribute("id", "store-text-credits");
+		this.bankArea.appendChild(this.creditsText);
+		
 		this.healthButton = document.createElement("div");
 		this.healthButton.setAttribute("id", "store-btn-health");
 		
 		this.healthButton.addEventListener("mousedown", this.buyHealth.bind(this));
+		this.storeArea.appendChild(this.bankArea);
 		this.storeArea.appendChild(this.healthButton);
 		parentElem.appendChild(this.storeArea);
+		
+		this.updateUI();
+	}
+	
+	updateUI() {
+		this.creditsText.textContent = this.player.credits;
 	}
 	
 	buyHealth(){
-		if(this.player.karma >= Store.healthPrice){
+		if(this.player.credits >= Store.healthPrice){
 			this.player.maxHealth += Store.healthBuyAmount;
 			this.player.health += Store.healthBuyAmount;
-			this.player.karma -= Store.healthPrice;
+			this.player.credits -= Store.healthPrice;
 			this.player.updateUI();
 		}
 	}
