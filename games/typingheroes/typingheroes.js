@@ -692,14 +692,15 @@ class Player extends Typer {
 	restart(){
 		// resets current typer
 		this.health = this.maxHealth;
-		if(this.target instanceof Monster){
-			this.credits += this.target.level;
-		}
+		this.typeBox.resetBox("Ready?");
+		this.updateUI();
+	}
+	
+	pay(amount){
+		this.credits += amount;
 		if(this.store){
 			this.store.updateUI();
 		}
-		this.typeBox.resetBox("Ready?");
-		this.updateUI();
 	}
 }
 
@@ -728,10 +729,12 @@ class Monster extends Typer {
 		this.levelDownBtn = document.createElement("div");
 		this.levelDownBtn.setAttribute("id", "level-down-btn");
 		this.levelDownBtn.textContent = "⬅️";
+		this.levelDownBtn.addEventListener("mousedown", this.switchLevelLower.bind(this));
 		
 		this.levelUpBtn = document.createElement("div");
 		this.levelUpBtn.setAttribute("id", "level-up-btn");
 		this.levelUpBtn.textContent = "➡️";
+		this.levelUpBtn.addEventListener("mousedown", this.switchLevelHigher.bind(this));
 		
 		this.typerUI.insertBefore(this.levelDownBtn, this.healthBarOutline);
 		this.typerUI.insertBefore(this.levelUpBtn, this.healthBarOutline);
@@ -743,17 +746,38 @@ class Monster extends Typer {
 	}
 	
 	switchLevelHigher() {
-		
+		if(this.level != this.maxLevel){
+			this.level++;
+			this.maxHealth = 100 + (this.level * 5);
+			this.attackDamage = 1 + (this.level / 5);
+			this.typeSpeed = 1 + (this.level / 20);
+			this.typeAccuracy = Math.min(0.95 + (this.level / 1000), 1);
+		}
+		if(this.target){
+			this.target.restart();
+		}
+		this.restart();
 	}
 	
 	switchLevelLower() {
-		
+		if(this.level > 1){
+			this.level--;
+			this.maxHealth = 100 + (this.level * 5);
+			this.attackDamage = 1 + (this.level / 5);
+			this.typeSpeed = 1 + (this.level / 20);
+			this.typeAccuracy = Math.min(0.95 + (this.level / 1000), 1);
+		}
+		if(this.target){
+			this.target.restart();
+		}
+		this.restart();
 	}
 	
 	levelUp(){
 		this.level++;
 		this.maxLevel = this.level;
 		this.maxHealth = 100 + (this.level * 5);
+		this.health = this.maxHealth;
 		this.attackDamage = 1 + (this.level / 5);
 		this.typeSpeed = 1 + (this.level / 20);
 		this.typeAccuracy = Math.min(0.95 + (this.level / 1000), 1);
@@ -763,6 +787,10 @@ class Monster extends Typer {
 		
 		if(this.target){
 			this.target.restart()
+		}
+		
+		if(this.target instanceof Player){
+			this.target.pay(this.level);
 		}
 		
 		this.typeBox.resetBox("Ready?");
@@ -835,8 +863,8 @@ class Store {
 		
 		this.healthButton = document.createElement("div");
 		this.healthButton.setAttribute("id", "store-btn-health");
-		
 		this.healthButton.addEventListener("mousedown", this.buyHealth.bind(this));
+		
 		this.storeArea.appendChild(this.bankArea);
 		this.storeArea.appendChild(this.healthButton);
 		parentElem.appendChild(this.storeArea);
@@ -854,6 +882,7 @@ class Store {
 			this.player.health += Store.healthBuyAmount;
 			this.player.credits -= Store.healthPrice;
 			this.player.updateUI();
+			this.updateUI();
 		}
 	}
 }
