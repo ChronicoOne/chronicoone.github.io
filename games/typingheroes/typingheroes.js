@@ -533,6 +533,7 @@ class Vocab {
 class Typer {
 	static tickLength = 20;
 	static failureDamage = 5;
+	typerName;
 	chatNum;
 	maxHealth;
 	health;
@@ -558,6 +559,7 @@ class Typer {
 		this.timerID = null;
 		this.chat = chat;
 		
+		this.typerName = "Typer";
 		this.typerUI = document.createElement("div");
 		this.typerInfo = document.createElement("div");
 		this.healthBarOutline = document.createElement("div");
@@ -605,6 +607,7 @@ class Typer {
 		
 		this.typeBox.resetBox("Ready?");
 		this.health = this.maxHealth;
+		this.chat.announceDeath(this);
 		this.updateUI();
 	}
 	
@@ -675,7 +678,8 @@ class Player extends Typer {
 		this.typerUI.setAttribute("id", "player-ui");
 		this.healthBarOutline.setAttribute("id", "player-health-bar-outline");
 		this.healthBar.setAttribute("id", "player-health-bar");
-		this.typerInfo.textContent = "Player";
+		this.typerName = "Player";
+		this.typerInfo.textContent = this.typerName;
 		
 		this.vocab.wordList = playerDialogue;
 	}
@@ -694,6 +698,7 @@ class Monster extends Typer {
 		super(uiParent, chat, health, attackDamage);
 		this.vocab.wordList = monsterPhrases;
 		
+		this.typerName 
 		this.chatNum = 1;
 		this.level = level;
 		this.typeSpeed = 1 + (level / 20);
@@ -722,13 +727,17 @@ class Monster extends Typer {
 		
 		this.typeBox.resetBox("Ready?");
 		this.health = this.maxHealth;
+		this.chat.announceDeath(this);
+		this.chat.announceExit(this);
 		this.updateUI();
+		this.chat.announceEntrance(this);
 	}
 	
 	updateUI(){
 		this.healthBar.setAttribute("style", "width: " + (this.health * 100 / this.maxHealth) + "%");
 		this.healthText.textContent = this.health + "/" + this.maxHealth;
-		this.typerInfo.textContent = "Monster lvl. " + this.level;
+		this.typerName = "Monster lvl. " + this.level;
+		this.typerInfo.textContent = this.typerName;
 	}
 	
 	battleLoop(){
@@ -759,6 +768,12 @@ class Store {
 
 class Chat {
 	
+	static deathMessages = ["has been slain!",
+							"is knocked out!",
+							"had no chance!",
+							"couldn't hold out.",
+							"got splattered.",
+							"died :("];
 	chatArea;
 	
 	constructor(parentElem){
@@ -786,6 +801,42 @@ class Chat {
 		messageBox.appendChild(usernameText);
 		messageBox.appendChild(messageText);
 		
+		this.chatArea.insertBefore(messageBox, this.chatArea.children[0]);
+	}
+	
+	announceDeath(user){
+		const messageBox = document.createElement("div");
+		const messageText = document.createElement("span");
+		messageText.className = "death-announce-text";
+		messageBox.className = "death-announce-box";
+		
+		const deathMessage = Chat.deathMessages[Math.round(Math.random() * (Chat.deathMessages.length - 1 ))];
+		messageText.textContent = user.typerName + " " + deathMessage;
+		messageBox.appendChild(messageText);
+		this.chatArea.insertBefore(messageBox, this.chatArea.children[0]);
+	}
+	
+	announceExit(user){
+		const messageBox = document.createElement("div");
+		const messageText = document.createElement("span");
+		messageText.className = "exit-announce-text";
+		messageBox.className = "exit-announce-box";
+		
+		const exitMessage = "has left the lobby.";
+		messageText.textContent = user.typerName + " " + exitMessage;
+		messageBox.appendChild(messageText);
+		this.chatArea.insertBefore(messageBox, this.chatArea.children[0]);
+	}
+	
+	announceEntrance(user){
+		const messageBox = document.createElement("div");
+		const messageText = document.createElement("span");
+		messageText.className = "entrance-announce-text";
+		messageBox.className = "entrance-announce-box";
+		
+		const entranceMessage = "has entered the lobby.";
+		messageText.textContent = user.typerName + " " + entranceMessage;
+		messageBox.appendChild(messageText);
 		this.chatArea.insertBefore(messageBox, this.chatArea.children[0]);
 	}
 }

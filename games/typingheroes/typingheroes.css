@@ -115,6 +115,22 @@ body {
 	
 }
 
+.death-announce-text {
+	color: red;
+	font-weight: bold;
+}
+
+.exit-announce-text {
+	color: #a2d923;
+	font-weight: bold;
+}
+
+.entrance-announce-text {
+	color: #0bde43;
+	font-weight: bold;
+}
+
+
 #store-area {
   position: fixed;
   bottom: 0;
