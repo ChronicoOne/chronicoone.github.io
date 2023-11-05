@@ -601,8 +601,6 @@ class Typer {
 			this.target.restart()
 		}
 		
-		clearTimeout(this.timerID);
-		this.timer = this.timeout;
 		this.typeBox.resetBox("Ready?");
 		this.health = this.maxHealth;
 		this.updateUI();
@@ -611,8 +609,6 @@ class Typer {
 	restart(){
 		// resets current typer
 		this.health = this.maxHealth;
-		clearTimeout(this.timerID);
-		this.timer = this.timeout;
 		this.typeBox.resetBox("Ready?");
 		this.updateUI();
 	}
@@ -657,6 +653,8 @@ class Typer {
 				}
 				this.timer--;
 			}
+		} else {
+			this.timer = this.timeout;
 		}
 		
 		this.timerID = setTimeout( () => {this.typeLoop();}, Typer.tickLength);
