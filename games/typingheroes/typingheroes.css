@@ -70,6 +70,7 @@ body {
 }
 
 .typer-info {
+	display: inline-block;
 	font-weight: bold;
 	font-size: 2em;
 	font-family: "Fantasy";
@@ -150,14 +151,20 @@ body {
 }
 
 #store-text-credits {
+	display: inline-flex;
 	font-family: "sans-serif", "Tahoma";
-	font-size: 2.5em;
+	font-size: 3.5em;
 	font-weight: bold;
 	display: inline-block;
 }
 
-#store-text-credits:after {
-	content: '🤑';
+#store-img-credits:after {
+	display: inline-flex;
+	width: 5em;
+	height: 5em;
+	content: '';
+	background-size: 5em 5em;
+	background-image: url('svg/monster_finger.svg');
 }
 
 #store-btn-health {
@@ -201,6 +208,17 @@ body {
 	border-color: black;
 	border-width: 2px;
 	display: inline-block;
+}
+
+#level-down-btn {
+	display: inline-block;
+	margin-left: 20px;
+	font-size: 1.5em;
+}
+
+#level-up-btn {
+	display: inline-block;
+	font-size: 1.5em;
 }
 
 #player-ui {

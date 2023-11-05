@@ -577,7 +577,6 @@ class Typer {
 		this.healthBarOutline.setAttribute("class", "health-bar-outline");
 		this.healthBar.setAttribute("class", "health-bar");
 		this.healthText.setAttribute("class", "health-text");
-		this.updateUI();
 		
 		this.typeBox = new TypeBox(masterElem, "Ready?");
 		this.vocab = new Vocab(fullWordList);
@@ -687,6 +686,7 @@ class Player extends Typer {
 		this.credits = 0;
 		this.vocab.wordList = playerDialogue;
 		this.store = null;
+		this.updateUI();
 	}
 	
 	restart(){
@@ -708,6 +708,9 @@ class Monster extends Typer {
 	typeSpeed;
 	typeAccuracy;
 	level;
+	maxLevel;
+	levelDownBtn;
+	levelUpBtn;
 	
 	constructor(uiParent, chat, level){
 		const health = 100 + (level * 5);
@@ -718,8 +721,20 @@ class Monster extends Typer {
 		this.typerName 
 		this.chatNum = 1;
 		this.level = level;
+		this.maxLevel = level;
 		this.typeSpeed = 1 + (level / 20);
 		this.typeAccuracy = Math.min(0.95 + (level / 1000), 1);
+		
+		this.levelDownBtn = document.createElement("div");
+		this.levelDownBtn.setAttribute("id", "level-down-btn");
+		this.levelDownBtn.textContent = "⬅️";
+		
+		this.levelUpBtn = document.createElement("div");
+		this.levelUpBtn.setAttribute("id", "level-up-btn");
+		this.levelUpBtn.textContent = "➡️";
+		
+		this.typerUI.insertBefore(this.levelDownBtn, this.healthBarOutline);
+		this.typerUI.insertBefore(this.levelUpBtn, this.healthBarOutline);
 		
 		this.typerUI.setAttribute("id", "monster-ui");
 		this.healthBarOutline.setAttribute("id", "monster-health-bar-outline");
@@ -727,8 +742,17 @@ class Monster extends Typer {
 		this.updateUI();
 	}
 	
+	switchLevelHigher() {
+		
+	}
+	
+	switchLevelLower() {
+		
+	}
+	
 	levelUp(){
 		this.level++;
+		this.maxLevel = this.level;
 		this.maxHealth = 100 + (this.level * 5);
 		this.attackDamage = 1 + (this.level / 5);
 		this.typeSpeed = 1 + (this.level / 20);
@@ -745,7 +769,9 @@ class Monster extends Typer {
 		this.health = this.maxHealth;
 		this.chat.announceDeath(this);
 		this.chat.announceExit(this);
-		this.levelUp();
+		if(this.level == this.maxLevel){
+			this.levelUp();
+		}
 		this.updateUI();
 		this.chat.announceEntrance(this);
 	}
@@ -755,6 +781,19 @@ class Monster extends Typer {
 		this.healthText.textContent = this.health + "/" + this.maxHealth;
 		this.typerName = "Monster lvl. " + this.level;
 		this.typerInfo.textContent = this.typerName;
+		
+		if(this.level == this.maxLevel){
+			this.levelUpBtn.textContent = "🚫";
+		} else {
+			this.levelUpBtn.textContent = "➡️";
+		}
+		
+		if(this.level == 1){
+			this.levelDownBtn.textContent = "🚫";
+		} else {
+			this.levelDownBtn.textContent = "⬅️";
+		}
+		
 	}
 	
 	battleLoop(){
@@ -789,7 +828,10 @@ class Store {
 		this.bankArea.setAttribute("id", "store-bank");
 		this.creditsText = document.createElement("span");
 		this.creditsText.setAttribute("id", "store-text-credits");
+		this.creditsImg = document.createElement("span");
+		this.creditsImg.setAttribute("id", "store-img-credits");
 		this.bankArea.appendChild(this.creditsText);
+		this.bankArea.appendChild(this.creditsImg);
 		
 		this.healthButton = document.createElement("div");
 		this.healthButton.setAttribute("id", "store-btn-health");
