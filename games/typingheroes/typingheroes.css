@@ -97,6 +97,24 @@ body {
 	width: fit-content;
 }
 
+.player-user-text {
+	color: blue;
+	font-weight: bold;
+}
+
+.enemy-user-text {
+	color: red;
+	font-weight: bold;
+}
+
+.message-text {
+	
+}
+
+.message-box {
+	
+}
+
 #store-area {
   position: fixed;
   bottom: 0;

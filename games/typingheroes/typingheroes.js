@@ -533,6 +533,7 @@ class Vocab {
 class Typer {
 	static tickLength = 20;
 	static failureDamage = 5;
+	chatNum;
 	maxHealth;
 	health;
 	attackDamage;
@@ -580,6 +581,7 @@ class Typer {
 		this.vocab = new Vocab(fullWordList);
 		this.timeout = 10;
 		this.timer = this.timeout;
+		this.chatNum = 0;
 	}
 	
 	attack(){
@@ -619,7 +621,7 @@ class Typer {
 	}
 	
 	onSuccess(){
-		this.chat.post(this.typerInfo.textContent, this.typeBox.currentWord);
+		this.chat.post(this.typerInfo.textContent, this.typeBox.currentWord, this.chatNum);
 		this.attack();
 	}
 	
@@ -692,6 +694,7 @@ class Monster extends Typer {
 		super(uiParent, chat, health, attackDamage);
 		this.vocab.wordList = monsterPhrases;
 		
+		this.chatNum = 1;
 		this.level = level;
 		this.typeSpeed = 1 + (level / 20);
 		this.typeAccuracy = Math.min(0.95 + (level / 1000), 1);
@@ -764,11 +767,17 @@ class Chat {
 		parentElem.appendChild(this.chatArea);
 	}
 	
-	post(user, message){
+	post(user, message, userNum){
 		const usernameText = document.createElement("span");
 		const messageText = document.createElement("span");
 		const messageBox = document.createElement("div");
-		usernameText.setAttribute("class", "username-text");
+		
+		let userClass = "player-user-text";
+		if(userNum != 0){
+			userClass = "enemy-user-text";
+		}
+		
+		usernameText.setAttribute("class", userClass);
 		messageText.setAttribute("class", "message-text");
 		messageBox.setAttribute("class", "message-box");
 		
