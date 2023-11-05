@@ -673,6 +673,8 @@ class Typer {
 
 class Player extends Typer {
 	
+	karma;
+	
 	constructor(uiParent, chat, health, attackDamage){
 		super(uiParent, chat, health, attackDamage);
 		this.typerUI.setAttribute("id", "player-ui");
@@ -681,9 +683,19 @@ class Player extends Typer {
 		this.typerName = "Player";
 		this.typerInfo.textContent = this.typerName;
 		
+		this.karma = 0;
 		this.vocab.wordList = playerDialogue;
 	}
 	
+	restart(){
+		// resets current typer
+		this.health = this.maxHealth;
+		if(this.target instanceof Monster){
+			this.karma += this.target.level;
+		}
+		this.typeBox.resetBox("Ready?");
+		this.updateUI();
+	}
 }
 
 class Monster extends Typer {
@@ -719,7 +731,6 @@ class Monster extends Typer {
 	}
 	
 	die(){
-		this.levelUp();
 		
 		if(this.target){
 			this.target.restart()
@@ -729,6 +740,7 @@ class Monster extends Typer {
 		this.health = this.maxHealth;
 		this.chat.announceDeath(this);
 		this.chat.announceExit(this);
+		this.levelUp();
 		this.updateUI();
 		this.chat.announceEntrance(this);
 	}
@@ -753,17 +765,33 @@ class Monster extends Typer {
 }
 
 class Store {
-		
+	
+	static healthPrice = 5;
+	static healthBuyAmount = 5;
 	player;
 	storeArea;
+	healthButton;
 	
 	constructor(parentElem, player){
 		this.player = player;
 		this.storeArea = document.createElement("div");
 		this.storeArea.setAttribute("id", "store-area");
+		this.healthButton = document.createElement("div");
+		this.healthButton.setAttribute("id", "store-btn-health");
+		
+		this.healthButton.addEventListener("mousedown", this.buyHealth.bind(this));
+		this.storeArea.appendChild(this.healthButton);
 		parentElem.appendChild(this.storeArea);
 	}
 	
+	buyHealth(){
+		if(this.player.karma >= Store.healthPrice){
+			this.player.maxHealth += Store.healthBuyAmount;
+			this.player.health += Store.healthBuyAmount;
+			this.player.karma -= Store.healthPrice;
+			this.player.updateUI();
+		}
+	}
 }
 
 class Chat {

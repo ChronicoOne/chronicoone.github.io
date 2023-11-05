@@ -141,6 +141,17 @@ body {
   border-top: 1px solid #ccc;
 }
 
+#store-btn-health {
+	height: 100px;
+	width: 100px;
+	box-sizing: border-box;
+	border-style: solid;
+	border-color: black;
+	border-width: 2px;
+	display: inline-block;
+	background-color: red;
+}
+
 #game-area {
 	margin: auto;
 	width: fit-content;
