@@ -424,6 +424,35 @@ const monsterPhrases = [
   "Darkness and doom are eternal!",
 ];
 
+function svgFromXml(xmlString){
+	const parser = new DOMParser();
+	const xmlDoc = parser.parseFromString(xmlString, 'image/svg+xml');
+	const svgElement = xmlDoc.querySelector('svg');
+	return svgElement;
+}
+
+const heartSvgString = '<svg id="Layer_1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 210.47 168.73">' +
+  '<defs>' +
+    '<style>' +
+      '.cls-1{fill:#6a1054;}.cls-1,.cls-2,.cls-3,.cls-4,.cls-5{stroke-width:0px;}.cls-3{fill:#f8f6c2;}.cls-4{fill:#624da0;}.cls-5{fill:#8a181a;}.cls-6{fill:#231f20;}.cls-6,.cls-7{stroke:#000;stroke-linejoin:round;stroke-width:8px;}.cls-7{fill:none;}' +
+    '</style>' +
+  '</defs>' +
+  '<g id="heart">' +
+    '<path class="cls-5" d="m104.96,164.73c-.91,0-1.83-.31-2.57-.94L22.63,96.8C4.84,81.76-.79,57.53,8.29,35.06,15.03,18.37,35.37,4.45,53.62,4.03c1-.02,1.99-.03,2.98-.03,24.79,0,41.45,7.53,48.62,21.57,7.17-14.04,23.83-21.57,48.62-21.57,1,0,2,.01,3.01.04,17.72.41,37.75,13.64,44.65,29.51,10.89,25.02,3.21,52.54-18.67,66.99l-75.3,63.26c-.74.62-1.66.94-2.57.94Z"/>' +
+    '<path class="cls-2" d="m153.84,8c.97,0,1.94.01,2.92.03,16,.37,34.69,12.42,41.08,27.1,11.00,25.29,1.25,49.98-17.40,62.18l-75.48,63.41L26.03,94.43l-.82-.69c-15.12-12.78-22.32-34.64-13.21-57.18,6.22-15.40,25.11-28.14,41.71-28.52.97-.02,1.93-.03,2.89-.03,26.85,0,48.62,8.85,48.62,35.70,0-26.85,21.77-35.70,48.62-35.70m0-8h0c-16.19,0-29.20,3.04-38.66,9.02-3.96,2.51-7.29,5.53-9.96,9.02-2.68-3.49-6-6.51-9.96-9.02C85.80,3.04,72.79,0,56.60,0c-1.01,0-2.04.01-3.07.04C33.49.49,11.99,15.22,4.58,33.56c-9.74,24.10-3.67,50.12,15.46,66.29l.83.70,78.94,66.30c1.49,1.25,3.32,1.87,5.15,1.87s3.66-.62,5.15-1.87l75.13-63.12c10.77-7.19,18.81-17.90,22.66-30.22,4.20-13.45,3.26-27.82-2.72-41.57C197.58,14.50,176.40,0.48,156.94,0.04c-1.04-.02-2.09-.04-3.10-.04h0Z"/>' +
+  '</g>' +
+  '<path id="eye_white" class="cls-3" d="m164.38,76.28c-1.83,2.60-20.75,20.51-58.84,20.03-35.23-.44-56.42-17.18-58.84-20.36,2.42-3.18,22.76-28.93,57.99-29.37,38.09-.48,57.86,26.45,59.70,29.05"/>' +
+  '<ellipse id="eye_iris" class="cls-4" cx="118.06" cy="64.56" rx="21.65" ry="17.98"/>' +
+  '<circle id="eye_pupil" class="cls-6" cx="118.03" cy="63.72" r="8.51"/>' +
+  '<path id="eye_lid" class="cls-7" d="m164.38,73.51c-8.29-9.23-21.47-29.40-59.70-29.05-35.23.33-55.56,26.19-57.99,29.37"/>' +
+  '<path id="heart_shadow" class="cls-1" d="m104.72,160.73l59.10-49.65s-60.38,49.01-119.80-1.33"/>' +
+'</svg>';
+
+function animateHeart(heartSvg) {
+	//pass
+}
+
+
 const fullWordList = threeWordPhrases.concat(uniqueWordsAndPhrases).concat(fightingWords).concat(fightingInsults);
 const playerDialogue = fightingInsults.concat(uniqueWordsAndPhrases).concat(fightingWords);
 
@@ -566,10 +595,18 @@ class Typer {
 		this.healthBar = document.createElement("div");
 		this.healthText = document.createElement("span");
 		this.healthBarOutline.appendChild(this.healthBar);
+		this.healthDiv = document.createElement("div");
+		this.healthDiv.setAttribute("class", "health-div");
+		this.heartSvg = svgFromXml(heartSvgString);
+		this.heartSvg.setAttribute("class", "heart-svg");
+		this.healthDiv.appendChild(this.heartSvg);
+		this.healthDiv.appendChild(this.healthBarOutline);
+		this.healthDiv.appendChild(this.healthText);
 		
 		this.typerUI.appendChild(this.typerInfo);
-		this.typerUI.appendChild(this.healthBarOutline);
-		this.typerUI.appendChild(this.healthText);
+		this.typerUI.appendChild(this.healthDiv);
+
+		
 		masterElem.appendChild(this.typerUI);	
 		
 		this.typerUI.setAttribute("class", "ui");
@@ -712,6 +749,7 @@ class Monster extends Typer {
 	maxLevel;
 	levelDownBtn;
 	levelUpBtn;
+	heartSvg;
 	
 	constructor(uiParent, chat, level){
 		const health = 100 + (level * 5);
@@ -736,10 +774,11 @@ class Monster extends Typer {
 		this.levelUpBtn.textContent = "➡️";
 		this.levelUpBtn.addEventListener("mousedown", this.switchLevelHigher.bind(this));
 		
-		this.typerUI.insertBefore(this.levelDownBtn, this.healthBarOutline);
-		this.typerUI.insertBefore(this.levelUpBtn, this.healthBarOutline);
+		this.typerUI.insertBefore(this.levelDownBtn, this.healthDiv);
+		this.typerUI.insertBefore(this.levelUpBtn, this.healthDiv);
 		
 		this.typerUI.setAttribute("id", "monster-ui");
+		
 		this.healthBarOutline.setAttribute("id", "monster-health-bar-outline");
 		this.healthBar.setAttribute("id", "monster-health-bar");
 		this.updateUI();
@@ -784,6 +823,7 @@ class Monster extends Typer {
 	}
 	
 	die(){
+		
 		
 		if(this.target){
 			this.target.restart()

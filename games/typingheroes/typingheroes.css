@@ -80,25 +80,38 @@ body {
 	margin-left: 10px;
 }
 
+
+.health-div {
+	padding: 10px 0px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.heart-svg {
+	width: 50px;
+	display: inline-flex;
+}
+
 .health-bar-outline {
+	margin: 0px 20px;
 	width: 300px;
 	border-style: solid;
 	border-color: black;
 	border-width: 2px;
-	margin: auto;
 }
 
 .health-bar {
 	width: 300px;
-	height: 1em;
+	height: 1.5em;
 	background-color: red;
 }
 
 .health-text {
 	display: block;
-	margin: auto;
 	font-family: monospace;
 	width: fit-content;
+	font-size: 1.5em;
 }
 
 .player-user-text {
