@@ -836,11 +836,6 @@ class Monster extends Typer {
 	
 	die(){
 		
-		
-		if(this.target){
-			this.target.restart()
-		}
-		
 		if(this.target instanceof Player){
 			this.target.pay(this.level);
 		}
@@ -851,6 +846,9 @@ class Monster extends Typer {
 		this.chat.announceExit(this);
 		if(this.level == this.maxLevel){
 			this.levelUp();
+		}
+		if(this.target){
+			this.target.restart()
 		}
 		this.updateUI();
 		this.chat.announceEntrance(this);
