@@ -755,7 +755,7 @@ class Monster extends Typer {
 	heartSvg;
 	
 	constructor(uiParent, chat, level){
-		const health = 100 + (level * 5);
+		const health = 100 + (level * level);
 		const attackDamage = 1 + (level / 5);
 		super(uiParent, chat, health, attackDamage);
 		this.vocab.wordList = monsterPhrases;
@@ -787,9 +787,8 @@ class Monster extends Typer {
 		this.updateUI();
 	}
 	
-	setMaxLevel(level) {
-		this.level = level;
-		this.maxHealth = 100 + (this.level * 5);
+	setStats(){
+		this.maxHealth = 100 + (this.level * this.level);
 		this.attackDamage = 1 + (this.level / 5);
 		this.typeSpeed = 1 + (this.level / 20);
 		this.typeAccuracy = Math.min(0.95 + (this.level / 1000), 1);
@@ -798,10 +797,7 @@ class Monster extends Typer {
 	switchLevelHigher() {
 		if(this.level != this.maxLevel){
 			this.level++;
-			this.maxHealth = 100 + (this.level * 5);
-			this.attackDamage = 1 + (this.level / 5);
-			this.typeSpeed = 1 + (this.level / 20);
-			this.typeAccuracy = Math.min(0.95 + (this.level / 1000), 1);
+			this.setStats();
 			if(this.target){
 				this.target.restart();
 			}
@@ -812,10 +808,7 @@ class Monster extends Typer {
 	switchLevelLower() {
 		if(this.level > 1){
 			this.level--;
-			this.maxHealth = 100 + (this.level * 5);
-			this.attackDamage = 1 + (this.level / 5);
-			this.typeSpeed = 1 + (this.level / 20);
-			this.typeAccuracy = Math.min(0.95 + (this.level / 1000), 1);
+			this.setStats();
 			if(this.target){
 				this.target.restart();
 			}
@@ -824,14 +817,10 @@ class Monster extends Typer {
 		
 	}
 	
-	levelUp(){
+	maxLevelUp(){
 		this.level++;
 		this.maxLevel = this.level;
-		this.maxHealth = 100 + (this.level * 5);
-		this.health = this.maxHealth;
-		this.attackDamage = 1 + (this.level / 5);
-		this.typeSpeed = 1 + (this.level / 20);
-		this.typeAccuracy = Math.min(0.95 + (this.level / 1000), 1);
+		this.setStats();
 	}
 	
 	die(){
@@ -845,7 +834,7 @@ class Monster extends Typer {
 		this.chat.announceDeath(this);
 		this.chat.announceExit(this);
 		if(this.level == this.maxLevel){
-			this.levelUp();
+			this.maxLevelUp();
 		}
 		if(this.target){
 			this.target.restart()
