@@ -1072,7 +1072,7 @@ class TypingHeroesGame {
 	}
 	
 	save(){
-		localStorage.setItem('player-karma', this.player.karma.toString());
+		localStorage.setItem('player-credits', this.player.credits.toString());
 		localStorage.setItem('player-health', this.player.maxHealth.toString());
 		localStorage.setItem('player-damage', this.player.attackDamage.toString());
 		
@@ -1081,10 +1081,10 @@ class TypingHeroesGame {
 	
 	loadPlayer(){
 		const healthStr = localStorage.getItem('player-health');
-		const karmaStr = localStorage.getItem('player-karma');
+		const creditsStr = localStorage.getItem('player-credits');
 		const damageStr = localStorage.getItem('player-damage');
 		let health = null;
-		let karma = null;
+		let credits = null;
 		let damage = null;
 		
 		if(healthStr == null){
@@ -1093,10 +1093,10 @@ class TypingHeroesGame {
 			health = Number(healthStr);
 		}
 		
-		if(karmaStr == null){
-			karma = 0;
+		if(creditsStr == null){
+			credits = 0;
 		} else {
-			karma = Number(karmaStr);
+			credits = Number(creditsStr);
 		}
 		
 		if(damageStr == null){
@@ -1106,7 +1106,7 @@ class TypingHeroesGame {
 		}
 		
 		this.player = new Player(this, this.playerStage, this.chat, health, damage);
-		this.player.karma = karma;
+		this.player.credits = credits;
 	}
 	
 	loadMonster(){
