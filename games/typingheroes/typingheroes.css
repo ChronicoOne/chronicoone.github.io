@@ -182,7 +182,8 @@ body {
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	width: 150px;
+	width: fit-content;
+	padding: 0px 10px;
 }
 
 #store-text-credits {

@@ -544,18 +544,28 @@ class TypeBox {
 }
 
 class Vocab {
-	wordList;
+	
+	numParts;
+	currentPart;
+	wordLists;
 	currentWord;
 	
-	constructor(wordList){
-		this.wordList = wordList;
+	constructor(wordLists){
+		this.numParts = wordLists.length;
+		this.currentPart = 0;
+		this.wordLists = wordLists;
 		this.newWord();
 	}
 
 	newWord(){
-		const index = Math.round(Math.random() * (this.wordList.length - 1));
-		this.currentWord = this.wordList[index];
+		const index = Math.round(Math.random() * (this.wordLists[this.currentPart].length - 1));
+		this.currentWord = this.wordLists[this.currentPart][index];
+		this.currentPart = (this.currentPart + 1) % this.numParts;
 		return this.currentWord;
+	}
+	
+	restart() {
+		this.currentPart = 0;
 	}
 }
 
@@ -616,7 +626,7 @@ class Typer {
 		this.healthText.setAttribute("class", "health-text");
 		
 		this.typeBox = new TypeBox(masterElem, "Ready?");
-		this.vocab = new Vocab(fullWordList);
+		this.vocab = new Vocab([fullWordList]);
 		this.timeout = 10;
 		this.timer = this.timeout;
 		this.chatNum = 0;
@@ -642,6 +652,7 @@ class Typer {
 		}
 		
 		this.typeBox.resetBox("Ready?");
+		this.vocab.restart();
 		this.health = this.maxHealth;
 		this.chat.announceDeath(this);
 		this.updateUI();
@@ -651,6 +662,7 @@ class Typer {
 		// resets current typer
 		this.health = this.maxHealth;
 		this.typeBox.resetBox("Ready?");
+		this.vocab.restart();
 		this.updateUI();
 	}
 	
@@ -723,7 +735,7 @@ class Player extends Typer {
 		this.typerInfo.textContent = this.typerName;
 		
 		this.credits = 0;
-		this.vocab.wordList = playerDialogue;
+		this.vocab.wordLists = [playerDialogue];
 		this.store = null;
 		this.updateUI();
 	}
@@ -733,6 +745,7 @@ class Player extends Typer {
 		this.game.save();
 		this.health = this.maxHealth;
 		this.typeBox.resetBox("Ready?");
+		this.vocab.restart();
 		this.updateUI();
 	}
 	
@@ -758,7 +771,7 @@ class Monster extends Typer {
 		const health = 100 + (level * level);
 		const attackDamage = 1 + (level / 50);
 		super(uiParent, chat, health, attackDamage);
-		this.vocab.wordList = monsterPhrases;
+		this.vocab.wordLists = [monsterPhrases];
 		
 		this.typerName 
 		this.chatNum = 1;
@@ -796,23 +809,27 @@ class Monster extends Typer {
 	
 	switchLevelHigher() {
 		if(this.level != this.maxLevel){
+			this.chat.announceExit(this);
 			this.level++;
 			this.setStats();
 			if(this.target){
 				this.target.restart();
 			}
 			this.restart();
+			this.chat.announceEntrance(this);
 		}
 	}
 	
 	switchLevelLower() {
 		if(this.level > 1){
+			this.chat.announceExit(this);
 			this.level--;
 			this.setStats();
 			if(this.target){
 				this.target.restart();
 			}
 			this.restart();
+			this.chat.announceEntrance(this);
 		}
 		
 	}
@@ -830,6 +847,7 @@ class Monster extends Typer {
 		}
 		
 		this.typeBox.resetBox("Ready?");
+		this.vocab.restart();
 		this.health = this.maxHealth;
 		this.chat.announceDeath(this);
 		this.chat.announceExit(this);
