@@ -756,7 +756,7 @@ class Monster extends Typer {
 	
 	constructor(uiParent, chat, level){
 		const health = 100 + (level * level);
-		const attackDamage = 1 + (level / 5);
+		const attackDamage = 1 + (level / 50);
 		super(uiParent, chat, health, attackDamage);
 		this.vocab.wordList = monsterPhrases;
 		
@@ -789,7 +789,7 @@ class Monster extends Typer {
 	
 	setStats(){
 		this.maxHealth = 100 + (this.level * this.level);
-		this.attackDamage = 1 + (this.level / 5);
+		this.attackDamage = 1 + (this.level / 50);
 		this.typeSpeed = 1 + (this.level / 20);
 		this.typeAccuracy = Math.min(0.95 + (this.level / 1000), 1);
 	}
@@ -1044,15 +1044,14 @@ class TypingHeroesGame {
 		this.chat = new Chat(this.gameArea);
 		this.gameArea.appendChild(this.playerStage);
 		this.gameArea.appendChild(this.monsterStage);
-		this.body.appendChild(this.gameArea);
-
+		
 		this.loadPlayer();
 		this.loadMonster();
 		this.monster.target = this.player;
 		this.player.target = this.monster;
 
 		this.store = new Store(this.body, this.player);
-		
+		this.body.appendChild(this.gameArea);
 	}
 	
 	play(){
