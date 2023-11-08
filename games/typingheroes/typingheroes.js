@@ -1081,7 +1081,7 @@ class TypingHeroesGame {
 	
 	loadPlayer(){
 		const healthStr = localStorage.getItem('player-health');
-		const karmaStr = localStorage.getItem('player-health');
+		const karmaStr = localStorage.getItem('player-karma');
 		const damageStr = localStorage.getItem('player-damage');
 		let health = null;
 		let karma = null;
