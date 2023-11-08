@@ -948,6 +948,7 @@ class Store {
 			this.player.maxHealth += Store.healthBuyAmount;
 			this.player.health += Store.healthBuyAmount;
 			this.player.credits -= Store.healthPrice;
+			this.player.game.save()
 			this.player.updateUI();
 			this.updateUI();
 		}
