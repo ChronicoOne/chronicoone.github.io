@@ -147,6 +147,26 @@ body {
 	font-weight: bold;
 }
 
+.store-price-box {
+	display: flex;
+	flex-direction: row;
+	margin: auto;
+	margin-bottom: 0;
+}
+
+.store-price-span {
+	font-family: monospace;
+	font-weight: bold;
+	font-size: 2em;
+}
+
+.store-price-img {
+	display: inline-flex;
+	width: 2em;
+	height: 2em;
+	background-size: 2em 2em;
+	background-image: url('svg/monster_finger.svg');
+}
 
 #store-area {
   position: fixed;
@@ -174,23 +194,35 @@ body {
 	display: inline-block;
 }
 
-#store-img-credits:after {
+#store-img-credits{
 	display: inline-flex;
 	width: 5em;
 	height: 5em;
-	content: '';
 	background-size: 5em 5em;
 	background-image: url('svg/monster_finger.svg');
 }
 
 #store-btn-health {
+	box-sizing: border-box;
 	height: 100px;
 	width: 100px;
 	border-style: solid;
-	border-color: black;
-	border-width: 2px;
-	display: inline-block;
-	background-color: red;
+	border-color: #D2D2D2;
+	border-width: 10px;
+	border-radius: 20px;
+	display: inline-flex;
+	flex-direction: column;
+	background-color: #DADADA;
+}
+
+#store-btn-health:active {
+	border-color: #C9C9C9;
+	background-color: #DDDDDD;
+}
+
+#store-heart-svg {
+	margin: auto;
+	margin-top: 10px;
 }
 
 #game-area {

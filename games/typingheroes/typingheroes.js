@@ -711,9 +711,11 @@ class Player extends Typer {
 	
 	credits;
 	store;
+	game;
 	
-	constructor(uiParent, chat, health, attackDamage){
+	constructor(game, uiParent, chat, health, attackDamage){
 		super(uiParent, chat, health, attackDamage);
+		this.game = game;
 		this.typerUI.setAttribute("id", "player-ui");
 		this.healthBarOutline.setAttribute("id", "player-health-bar-outline");
 		this.healthBar.setAttribute("id", "player-health-bar");
@@ -728,6 +730,7 @@ class Player extends Typer {
 	
 	restart(){
 		// resets current typer
+		this.game.save();
 		this.health = this.maxHealth;
 		this.typeBox.resetBox("Ready?");
 		this.updateUI();
@@ -784,6 +787,14 @@ class Monster extends Typer {
 		this.updateUI();
 	}
 	
+	setMaxLevel(level) {
+		this.level = level;
+		this.maxHealth = 100 + (this.level * 5);
+		this.attackDamage = 1 + (this.level / 5);
+		this.typeSpeed = 1 + (this.level / 20);
+		this.typeAccuracy = Math.min(0.95 + (this.level / 1000), 1);
+	}
+	
 	switchLevelHigher() {
 		if(this.level != this.maxLevel){
 			this.level++;
@@ -791,11 +802,11 @@ class Monster extends Typer {
 			this.attackDamage = 1 + (this.level / 5);
 			this.typeSpeed = 1 + (this.level / 20);
 			this.typeAccuracy = Math.min(0.95 + (this.level / 1000), 1);
+			if(this.target){
+				this.target.restart();
+			}
+			this.restart();
 		}
-		if(this.target){
-			this.target.restart();
-		}
-		this.restart();
 	}
 	
 	switchLevelLower() {
@@ -805,11 +816,12 @@ class Monster extends Typer {
 			this.attackDamage = 1 + (this.level / 5);
 			this.typeSpeed = 1 + (this.level / 20);
 			this.typeAccuracy = Math.min(0.95 + (this.level / 1000), 1);
+			if(this.target){
+				this.target.restart();
+			}
+			this.restart();
 		}
-		if(this.target){
-			this.target.restart();
-		}
-		this.restart();
+		
 	}
 	
 	levelUp(){
@@ -885,6 +897,10 @@ class Store {
 	creditsText;
 	storeArea;
 	healthButton;
+	heartSvg;
+	healthPriceSpan;
+	healthPriceImg;
+	healthPriceBox;
 	
 	constructor(parentElem, player){
 		this.player = player;
@@ -904,7 +920,20 @@ class Store {
 		this.healthButton = document.createElement("div");
 		this.healthButton.setAttribute("id", "store-btn-health");
 		this.healthButton.addEventListener("mousedown", this.buyHealth.bind(this));
-		
+		this.heartSvg = svgFromXml(heartSvgString);
+		this.heartSvg.setAttribute("class", "heart-svg");
+		this.heartSvg.setAttribute("id", "store-heart-svg");
+		this.healthButton.appendChild(this.heartSvg);
+		this.healthPriceBox = document.createElement("span");
+		this.healthPriceBox.className = "store-price-box";
+		this.healthPriceSpan = document.createElement("span");
+		this.healthPriceSpan.className = "store-price-span";
+		this.healthPriceSpan.textContent = Store.healthPrice.toString();
+		this.healthPriceImg = document.createElement("div");
+		this.healthPriceImg.className = "store-price-img";
+		this.healthPriceBox.appendChild(this.healthPriceSpan);
+		this.healthPriceBox.appendChild(this.healthPriceImg);
+		this.healthButton.appendChild(this.healthPriceBox);
 		this.storeArea.appendChild(this.bankArea);
 		this.storeArea.appendChild(this.healthButton);
 		parentElem.appendChild(this.storeArea);
@@ -1002,35 +1031,108 @@ class Chat {
 	}
 }
 
-body = document.getElementsByTagName("body")[0];
+class TypingHeroesGame {
+	static startHealth = 100;
+	static startDamage = 1;
+	
+	player;
+	monster;
+	store;
+	chat;
+	
+	monsterStage;
+	playerStage;
+	gameArea;
+	body;
+	
+	constructor(){
+		this.monsterStage = document.createElement("div");
+		this.monsterStage.setAttribute("id", "monster-stage");
+		this.playerStage = document.createElement("div");
+		this.playerStage.setAttribute("id", "player-stage");
+		this.body = document.getElementsByTagName("body")[0];
+		this.gameArea = document.createElement("div");
+		this.gameArea.setAttribute("id", "game-area");
+		this.chat = new Chat(this.gameArea);
+		this.gameArea.appendChild(this.playerStage);
+		this.gameArea.appendChild(this.monsterStage);
+		this.body.appendChild(this.gameArea);
 
-gameArea = document.getElementById("game-area");
-chat = new Chat(gameArea);
+		this.loadPlayer();
+		this.loadMonster();
+		this.monster.target = this.player;
+		this.player.target = this.monster;
 
-monsterStage = document.createElement("div");
-monsterStage.setAttribute("id", "monster-stage");
-playerStage = document.createElement("div");
-playerStage.setAttribute("id", "player-stage");
+		this.store = new Store(this.body, this.player);
+		
+	}
+	
+	play(){
+		this.player.typeLoop();
+		this.monster.typeLoop();
+		this.monster.battleLoop();
+	}
+	
+	save(){
+		localStorage.setItem('player-karma', this.player.karma.toString());
+		localStorage.setItem('player-health', this.player.maxHealth.toString());
+		localStorage.setItem('player-damage', this.player.attackDamage.toString());
+		
+		localStorage.setItem('monster-level', this.monster.maxLevel.toString());
+	}
+	
+	loadPlayer(){
+		const healthStr = localStorage.getItem('player-health');
+		const karmaStr = localStorage.getItem('player-health');
+		const damageStr = localStorage.getItem('player-damage');
+		let health = null;
+		let karma = null;
+		let damage = null;
+		
+		if(healthStr == null){
+			health = TypingHeroesGame.startHealth;
+		} else {
+			health = Number(healthStr);
+		}
+		
+		if(karmaStr == null){
+			karma = 0;
+		} else {
+			karma = Number(karmaStr);
+		}
+		
+		if(damageStr == null){
+			damage = TypingHeroesGame.startDamage;
+		} else {
+			damage = Number(damageStr);
+		}
+		
+		this.player = new Player(this, this.playerStage, this.chat, health, damage);
+		this.player.karma = karma;
+	}
+	
+	loadMonster(){
+		const levelStr = localStorage.getItem("monster-level");
+		let level = null;
+		if(levelStr == null){
+			level = 1;
+		} else {
+			level = Number(levelStr);
+		}
+		
+		this.monster = new Monster(this.monsterStage, this.chat, level);
+	}
+}
 
-gameArea.appendChild(playerStage);
-gameArea.appendChild(monsterStage);
 
-
-player = new Player(playerStage, chat, 100, 1); 
-player.typeLoop();
-
-monster = new Monster(monsterStage, chat, 1); 
-monster.typeLoop();
-monster.battleLoop();
-monster.target = player;
-player.target = monster;
-
-store = new Store(body, player);
+game = new TypingHeroesGame();
 
 function typeListener(event) {
 	if(event.key.length == 1){
-		player.type(event.key);
+		game.player.type(event.key);
 	}
 }
 
 document.addEventListener("keydown", typeListener);
+
+game.play();
