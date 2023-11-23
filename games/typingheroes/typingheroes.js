@@ -448,6 +448,48 @@ const heartSvgString = '<svg id="Layer_1" xmlns="http://www.w3.org/2000/svg" vie
   '<path id="heart_shadow" class="cls-1" d="m104.72,160.73l59.10-49.65s-60.38,49.01-119.80-1.33"/>' +
 '</svg>';
 
+const part1Dialogue = [
+	"Your stupid mom",
+	"Your mom",
+	"Your ugly mother",
+	"Ur dumb cousin",
+	"Your fat uncle",
+	"That pungent odor",
+	"The way you look",
+	"That stanky breath",
+	"Boy, your shoe",
+	"Man, your face",
+	"Dang! You",
+	"Your ugly dog",
+];
+
+const part2Dialogue = [
+	"smells like",
+	"stinks of",
+	"looks like",
+	"is broke like",
+	"is as fat as",
+	"makes me drink",
+	"cries like",
+];
+
+const part3Dialogue = [
+	"oil spills.",
+	"a dirty toilet.",
+	"my wallet!",
+	"Donald Trump.",
+	"Joe Biden.",
+	"a crusty sock.",
+	"a burning building.",
+	"the bottom of a shoe.",
+	"a piece of chewed gum.",
+	"a used diaper.",
+	"my dead cat.",
+	"moldy swiss cheese.",
+	"a clogged drain!",
+	"my butt mole.",
+];
+
 function animateHeart(heartSvg) {
 	//pass
 }
@@ -560,12 +602,25 @@ class Vocab {
 	newWord(){
 		const index = Math.round(Math.random() * (this.wordLists[this.currentPart].length - 1));
 		this.currentWord = this.wordLists[this.currentPart][index];
+	}
+	
+	success(){
 		this.currentPart = (this.currentPart + 1) % this.numParts;
-		return this.currentWord;
+		this.newWord();
+	}
+	
+	fail(){
+		this.restart();
 	}
 	
 	restart() {
 		this.currentPart = 0;
+		this.newWord();
+	}
+	
+	setList(wordLists){
+		this.wordLists = wordLists;
+		this.numParts = this.wordLists.length;
 	}
 }
 
@@ -673,10 +728,18 @@ class Typer {
 	
 	onSuccess(){
 		this.chat.post(this.typerInfo.textContent, this.typeBox.currentWord, this.chatNum);
+		
+		// Change this when ready is added to typebox
+		if(this.typeBox.currentWord != "Ready?"){
+			this.vocab.success();
+		} else {
+			this.vocab.newWord();
+		}
 		this.attack();
 	}
 	
 	onFailure(){
+		this.vocab.fail();
 		this.damage(Typer.failureDamage);
 	}
 	
@@ -686,7 +749,7 @@ class Typer {
 		
 		if(this.typeBox.boxStatus == SUCCESS){
 			if(countDone){
-				this.typeBox.resetBox(this.vocab.newWord());
+				this.typeBox.resetBox(this.vocab.currentWord);
 				this.timer = this.timeout;
 				// Make player deal damage
 			} else {
@@ -697,7 +760,7 @@ class Typer {
 			}
 		} else if(this.typeBox.boxStatus == FAIL) {
 			if(countDone){
-				this.typeBox.resetBox(this.vocab.newWord());
+				this.typeBox.resetBox(this.vocab.currentWord);
 				this.timer = this.timeout;
 				//Make player take damage
 			} else {
@@ -735,7 +798,7 @@ class Player extends Typer {
 		this.typerInfo.textContent = this.typerName;
 		
 		this.credits = 0;
-		this.vocab.wordLists = [playerDialogue];
+		this.vocab.setList([part1Dialogue, part2Dialogue, part3Dialogue]);
 		this.store = null;
 		this.updateUI();
 	}
@@ -848,12 +911,15 @@ class Monster extends Typer {
 		
 		this.typeBox.resetBox("Ready?");
 		this.vocab.restart();
-		this.health = this.maxHealth;
 		this.chat.announceDeath(this);
 		this.chat.announceExit(this);
+		
+		// Only change levels if dying at maxLevel
 		if(this.level == this.maxLevel){
 			this.maxLevelUp();
 		}
+		this.health = this.maxHealth;
+		
 		if(this.target){
 			this.target.restart()
 		}
